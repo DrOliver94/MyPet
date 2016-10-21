@@ -460,7 +460,7 @@ public class LoginActivity extends AppCompatActivity {
                 //##### Loading post nel DB
                 JSONObject jPosts = jObj.getJSONObject("_posts");
                 //TODO qualquadra non cosa qui
-                JSONArray idPosts = jPets.names();                  //recupera elenco ID dei post
+                JSONArray idPosts = jPosts.names();                  //recupera elenco ID dei post
                 for (int i = 0; i < idPosts.length(); i++) {        //per ogni post nell'obj
                     String idPost = (String) idPosts.get(i);        //recupera ID
                     JSONObject jPost = jPosts.getJSONObject(idPost);//recupera post

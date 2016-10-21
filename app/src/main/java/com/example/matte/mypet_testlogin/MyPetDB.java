@@ -223,30 +223,42 @@ public class MyPetDB {
             db.execSQL(CREATE_USERSANIMALS_TABLE);
 
             //insert sample post
+            Log.d("MyPet", "INSERT Samples");
+
             db.execSQL("INSERT INTO post " +
                        "VALUES (1, 28, '', 'Ceci nest pas un post', '', '')");
             db.execSQL("INSERT INTO post " +
                     "VALUES (2, 29, '', 'Gatti ^^', '', '')");
-            db.execSQL("INSERT INTO users " +
-                    "VALUES (28, 'DrOliver', '', 'Matteo', 'Oliveri', 'male', '1994-07-08')");
+//            Log.d("MyPet", "INSERT DrOliver");
+//            db.execSQL("INSERT INTO users " +
+//                    "VALUES (28, 'DrOliver', '', 'Matteo', 'Oliveri', 'male', '1994-07-08')");
+//            Log.d("MyPet", "INSERT Sissy");
             db.execSQL("INSERT INTO users " +
                     "VALUES (29, 'Sissy', '', 'Silvia', 'Lombardo', 'female', '1993-12-08')");
+//            Log.d("MyPet", "INSERT Axel");
+//            db.execSQL("INSERT INTO animals " +
+//                    "VALUES (8, 'Axel2121', 'Cane', 'male', '', '2012-06-15')");
+//            Log.d("MyPet", "INSERT Robin");
             db.execSQL("INSERT INTO animals " +
-                    "VALUES (8, 'Axel', 'Cane', 'male', '', '2012-06-15')");
+                    "VALUES (12, 'Robin2121', 'Gatto', 'male', '', '2013-03-31')");
+//            Log.d("MyPet", "INSERT Happy");
             db.execSQL("INSERT INTO animals " +
-                    "VALUES (12, 'Robin', 'Gatto', 'male', '', '2013-03-31')");
+                    "VALUES (98, 'Happy2121', 'Cane', 'male', '', '2012-06-15')");
+//            Log.d("MyPet", "INSERT Jerry");
             db.execSQL("INSERT INTO animals " +
-                    "VALUES (9, 'Happy', 'Cane', 'male', '', '2012-06-15')");
-            db.execSQL("INSERT INTO animals " +
-                    "VALUES (13, 'Jerry', 'Gatto', 'male', '', '2013-03-31')");
+                    "VALUES (134, 'Jerry221', 'Gatto', 'male', '', '2013-03-31')");
+//            Log.d("MyPet", "INSERT Link Axel");
             db.execSQL("INSERT INTO usersanimals " +
                     "VALUES (28, 8)");
+//            Log.d("MyPet", "INSERT Link Robin");
             db.execSQL("INSERT INTO usersanimals " +
                     "VALUES (29, 12)");
+//            Log.d("MyPet", "INSERT Link Happy");
             db.execSQL("INSERT INTO usersanimals " +
-                    "VALUES (28, 9)");
+                    "VALUES (28, 98)");
+//            Log.d("MyPet", "INSERT LInk Jerry");
             db.execSQL("INSERT INTO usersanimals " +
-                    "VALUES (29, 13)");
+                    "VALUES (29, 134)");
         }
 
         @Override
@@ -288,22 +300,45 @@ public class MyPetDB {
             db.close();
     }
 
+    /**
+     * Inserisce un utente nel DB. Se già presente, aggiorna i dati
+     *
+     * @param u utente da inserire nel DB
+     * @return riga in cui si trova l'utente <br/>
+     *         -1 in caso di errore
+     */
     public long insertUser(User u) {
-        ContentValues cv = new ContentValues();
-        cv.put(USERS_ID, u.id);
-        cv.put(USERS_NAME, u.name);
-        cv.put(USERS_USERNAME, u.username);
-        cv.put(USERS_SURNAME, u.surname);
-        cv.put(USERS_BIRTHDATE, u.birthDate);
-        cv.put(USERS_GENDER, u.gender);
+        Log.d("MyPet", "Insert/update user " + u.id + ", " + u.surname);
+        //Controlla se l'utente è già nel DB
+        String where = USERS_ID + "= ?";
+        String[] whereArgs = { u.id };
 
-        this.openWriteableDB();
-        long rowID = db.insert(USERS_TABLE, null, cv);
+        openReadableDB();
+        Cursor cursor = db.query(USERS_TABLE, null,
+                where, whereArgs, null, null, null);
+
+        int presence = cursor.getCount();
+        cursor.close();
         this.closeDB();
 
-        Log.d("MyPet", "Insert user " + u.id + ", " + u.surname);
+        if(presence > 0){        //Se l'utente è nel DB
+            return updateUser(u);
+        } else {
+            ContentValues cv = new ContentValues();
+            cv.put(USERS_ID, u.id);
+            cv.put(USERS_NAME, u.name);
+            cv.put(USERS_USERNAME, u.username);
+            cv.put(USERS_SURNAME, u.surname);
+            cv.put(USERS_BIRTHDATE, u.birthDate);
+            cv.put(USERS_GENDER, u.gender);
+            cv.put(USERS_PROFILEPIC, u.profilepic);
 
-        return rowID;
+            this.openWriteableDB();
+            long rowID = db.insert(USERS_TABLE, null, cv);
+            this.closeDB();
+
+            return rowID;
+        }
     }
 
     public User getUser(String idUser) {
@@ -338,7 +373,9 @@ public class MyPetDB {
         ContentValues cv = new ContentValues();
         cv.put(USERS_ID, user.id);
         cv.put(USERS_NAME, user.name);
-        //TODO completare
+        cv.put(USERS_SURNAME, user.surname);
+        cv.put(USERS_GENDER, user.gender);
+        cv.put(USERS_BIRTHDATE, user.birthDate);
 
         String where = USERS_ID + "= ?";
         String[] whereArgs = { String.valueOf(user.id) };
@@ -383,7 +420,7 @@ public class MyPetDB {
         Cursor cursor = qb.query(db, null, where, whereArgs, null, null, null);
 
         while (cursor.moveToNext()) {
-            String idCurrUser = cursor.getString(USERS_ID_COL); //TODO Probabile non funzioni
+            String idCurrUser = cursor.getString(cursor.getColumnIndex(USERS_ID)); //TODO Probabile funzioni
             if(!idCurrUser.equals(idUser)) {  //se l'utente della riga selezionata è un amico
                 User user = new User();
 
@@ -500,7 +537,8 @@ public class MyPetDB {
         //indichiamo le tabelle su cui lavorare
         qb.setTables(USERS_TABLE + " JOIN " + USERSANIMALS_TABLE +
                 " ON (" + USERS_TABLE + "." + USERS_ID + "=" + USERSANIMALS_TABLE + "." + USERSANIMALS_IDUSER + ")"
-                + " JOIN " + ANIMALS_TABLE + " ON (" + USERSANIMALS_TABLE + "." + USERSANIMALS_IDANIMAL + "=" + ANIMALS_TABLE + "." + ANIMALS_ID + ")");
+                + " JOIN " + ANIMALS_TABLE +
+                " ON (" + USERSANIMALS_TABLE + "." + USERSANIMALS_IDANIMAL + "=" + ANIMALS_TABLE + "." + ANIMALS_ID + ")");
 
         String where = USERS_TABLE + "." + USERS_ID + "=?";
         String[] whereArgs = { idOwner };
@@ -540,32 +578,69 @@ public class MyPetDB {
      *
      * @param a animale da inserire
      * @return Numero della riga inserita. <br>
-     *          -1 in caso di errore nell'inserimento
+     *         -1 in caso di errore nell'inserimento
      */
     public long insertAnimal(Animal a, String userId) {
+        Log.d("MyPet", "Insert/update animal " + a.id + ", " + a.name);
+
+        String where = ANIMALS_ID + "= ?";
+        String[] whereArgs = { a.id };
+
+        openReadableDB();
+        Cursor cursor = db.query(ANIMALS_TABLE, null,
+                where, whereArgs, null, null, null);
+
+        int presence = cursor.getCount();
+        cursor.close();
+        this.closeDB();
+
+        long rowIDAnim = -1;
+
+        if(presence > 0) {   //animale già presente nel DB
+            rowIDAnim = updateAnimal(a);
+        } else {
+            ContentValues cv = new ContentValues();
+            cv.put(ANIMALS_ID, a.id);
+            cv.put(ANIMALS_NAME, a.name);
+            cv.put(ANIMALS_GENDER, a.gender);
+            cv.put(ANIMALS_BIRTHDATE, a.birthdate);
+            cv.put(ANIMALS_SPECIES, a.species);
+
+            this.openWriteableDB();
+            rowIDAnim = db.insert(ANIMALS_TABLE, null, cv);
+
+            if(rowIDAnim != -1){    //Se l'insert va a buon fine
+                cv = new ContentValues();
+                cv.put(USERSANIMALS_IDANIMAL, a.id);
+                cv.put(USERSANIMALS_IDUSER, userId);
+                long rowIDUserAnim = db.insert(USERSANIMALS_TABLE, null, cv);
+            }
+        }
+
+
+        this.closeDB();
+
+        return rowIDAnim;
+    }
+
+
+    public int updateAnimal(Animal a) {
         ContentValues cv = new ContentValues();
         cv.put(ANIMALS_ID, a.id);
         cv.put(ANIMALS_NAME, a.name);
         cv.put(ANIMALS_GENDER, a.gender);
-        cv.put(ANIMALS_BIRTHDATE, a.birthdate);
         cv.put(ANIMALS_SPECIES, a.species);
+        cv.put(ANIMALS_BIRTHDATE, a.birthdate);
+        cv.put(ANIMALS_PROFILEPIC, a.profilepic);
+
+        String where = ANIMALS_ID + "= ?";
+        String[] whereArgs = { String.valueOf(a.id) };
 
         this.openWriteableDB();
-        long rowIDAnim = db.insert(ANIMALS_TABLE, null, cv);
-
-        //TODO aggiungere padrone in usersanimals (controlla -1 in caso di errore di insert)
-        if(rowIDAnim != -1){
-            cv = new ContentValues();
-            cv.put(USERSANIMALS_IDANIMAL, a.id);
-            cv.put(USERSANIMALS_IDUSER, userId);
-            long rowIDUserAnim = db.insert(USERSANIMALS_TABLE, null, cv);
-        }
-
+        int rowCount = db.update(ANIMALS_TABLE, cv, where, whereArgs);
         this.closeDB();
 
-        Log.d("MyPet", "Insert animal " + a.id + ", " + a.name);
-
-        return rowIDAnim;
+        return rowCount;
     }
 
 //    public ArrayList<Task> getTasks(String listName) {
@@ -679,8 +754,10 @@ public class MyPetDB {
         SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 
         //indichiamo le tabelle su cui lavorare
-        qb.setTables(POSTS_TABLE + " NATURAL JOIN " + POSTANIMALS_TABLE +
-                " NATURAL JOIN " + ANIMALS_TABLE);
+        qb.setTables(POSTS_TABLE + " JOIN " + POSTANIMALS_TABLE +
+                " ON (" + POSTS_TABLE+"."+POSTS_ID + "=" + POSTANIMALS_TABLE+"."+POSTANIMALS_IDPOST + ")" +
+                " JOIN " + ANIMALS_TABLE +
+                " ON (" + POSTANIMALS_TABLE+"."+POSTANIMALS_IDANIMAL + "=" + ANIMALS_TABLE+"."+ANIMALS_ID + ")");
 
         String where = ANIMALS_ID + "=?";
         String[] whereArgs = { idAnimal };
