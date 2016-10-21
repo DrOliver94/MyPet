@@ -9,12 +9,12 @@
         android:id="@+id/post_id"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Ididididid"/>
+        android:text="Id"/>
 
     <TextView
         android:id="@+id/post_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Testo post Testo post Testo post Testo post"/>
+        android:text="Testo post"/>
 
 </LinearLayout>
