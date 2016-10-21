@@ -329,7 +329,7 @@ public class MyPetDB {
             cv.put(USERS_NAME, u.name);
             cv.put(USERS_USERNAME, u.username);
             cv.put(USERS_SURNAME, u.surname);
-            cv.put(USERS_BIRTHDATE, u.birthDate);
+            cv.put(USERS_BIRTHDATE, u.birthdate);
             cv.put(USERS_GENDER, u.gender);
             cv.put(USERS_PROFILEPIC, u.profilepic);
 
@@ -357,7 +357,7 @@ public class MyPetDB {
         user.name = cursor.getString(USERS_NAME_COL);
         user.surname = cursor.getString(USERS_SURNAME_COL);
         user.gender = cursor.getString(USERS_GENDER_COL);
-        user.birthDate = cursor.getString(USERS_BIRTHDATE_COL);
+        user.birthdate = cursor.getString(USERS_BIRTHDATE_COL);
         user.profilepic = cursor.getString(USERS_PROFILEPIC_COL);
 
         //TODO controllare per errori
@@ -375,7 +375,7 @@ public class MyPetDB {
         cv.put(USERS_NAME, user.name);
         cv.put(USERS_SURNAME, user.surname);
         cv.put(USERS_GENDER, user.gender);
-        cv.put(USERS_BIRTHDATE, user.birthDate);
+        cv.put(USERS_BIRTHDATE, user.birthdate);
 
         String where = USERS_ID + "= ?";
         String[] whereArgs = { String.valueOf(user.id) };
@@ -734,7 +734,7 @@ public class MyPetDB {
             post.text = cursor.getString(POSTS_TEXT_COL);
             post.place = cursor.getString(POSTS_PLACE_COL);
             post.date = cursor.getString(POSTS_DATE_COL);
-            post.idAuthor = cursor.getString(POSTS_IDAUTHOR_COL);
+            post.idauthor = cursor.getString(POSTS_IDAUTHOR_COL);
             post.picture = cursor.getString(POSTS_PICTURE_COL);
 
             posts.add(post);
@@ -782,7 +782,7 @@ public class MyPetDB {
     public long insertPost(Post p) {
         ContentValues cv = new ContentValues();
         cv.put(POSTS_ID, p.id);
-        cv.put(POSTS_IDAUTHOR, p.idAuthor);
+        cv.put(POSTS_IDAUTHOR, p.idauthor);
         cv.put(POSTS_TEXT, p.text);
         cv.put(POSTS_DATE, p.date);
         cv.put(POSTS_PLACE, p.place);
@@ -792,15 +792,11 @@ public class MyPetDB {
         long rowID = db.insert(POSTS_TABLE, null, cv);
         this.closeDB();
 
-        Log.d("MyPet", "Insert post " + p.id + ", by " + p.idAuthor);
+        Log.d("MyPet", "Insert post " + p.id + ", by " + p.idauthor);
 
         return rowID;
     }
 
-
-
-
-//
 //    public int updateTask(Task task) {
 //        ContentValues cv = new ContentValues();
 //        cv.put(TASK_LIST_ID, task.getListId());

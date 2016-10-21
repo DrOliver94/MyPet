@@ -86,7 +86,7 @@ public class ProfileFragment extends Fragment {
         userNameText.setText(currUser.name);
         userSurnameText.setText(currUser.surname);
         userGenderText.setText(currUser.gender);
-        userBirthDateText.setText(currUser.birthDate);
+        userBirthDateText.setText(currUser.birthdate);
 
         itemsListView = (ListView) view.findViewById(R.id.profile_postsListView);
 

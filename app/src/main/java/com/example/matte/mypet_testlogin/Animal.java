@@ -22,7 +22,7 @@ public class Animal {
             species = jObjPet.getString("species");
             gender = jObjPet.getString("gender");
             birthdate = jObjPet.getString("birthdate");
-            //TODO pic
+            profilepic = jObjPet.getString("profilePic");
         } catch (Exception e) {
             e.printStackTrace();
         }
