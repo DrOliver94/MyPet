@@ -151,7 +151,7 @@ public class AnimalsListFragment extends Fragment {
             HashMap<String, String> map = new HashMap<>();
             map.put("id", a.id);
             map.put("name", a.name);
-            //TODO complete
+            map.put("profilepic", a.profilepic);
             data.add(map);
             Log.d("MyPet", a.name + "in arrayList");
         }
