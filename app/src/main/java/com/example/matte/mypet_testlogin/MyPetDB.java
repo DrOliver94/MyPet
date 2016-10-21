@@ -1,0 +1,786 @@
+package com.example.matte.mypet_testlogin;
+
+import android.content.Context;
+import android.content.ContentValues;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteDatabase.CursorFactory;
+import android.database.sqlite.SQLiteOpenHelper;
+import android.database.sqlite.SQLiteQueryBuilder;
+import android.util.Log;
+
+import java.util.ArrayList;
+
+public class MyPetDB {
+
+    // database constants
+    public static final String DB_NAME = "mypetdb.db";
+    public static final int    DB_VERSION = 1;
+
+    //################### USERS table constants ######################
+    public static final String USERS_TABLE = "users";
+
+    public static final String USERS_ID = "IdUser";
+    public static final int    USERS_ID_COL = 0;
+
+    public static final String USERS_USERNAME = "UserName";
+    public static final int    USERS_USERNAME_COL = 1;
+
+    //meglio lasciarle sul server...
+//    public static final String USERS_PASSWORD = "Password";
+//    public static final int    USERS_PASSWORD_COL = 2;
+
+    public static final String USERS_PROFILEPIC = "ProfilePic";
+    public static final int    USERS_PROFILEPIC_COL = 2;
+
+    public static final String USERS_NAME = "Name";
+    public static final int    USERS_NAME_COL = 3;
+
+    public static final String USERS_SURNAME = "Surname";
+    public static final int    USERS_SURNAME_COL = 4;
+
+    public static final String USERS_GENDER = "Gender";
+    public static final int    USERS_GENDER_COL = 5;
+
+    public static final String USERS_BIRTHDATE = "BirthDate";
+    public static final int    USERS_BIRTHDATE_COL = 6;
+
+    //##################### POSTS table #############################
+    public static final String POSTS_TABLE = "post";
+
+    public static final String POSTS_ID = "IdPost";
+    public static final int    POSTS_ID_COL = 0;
+
+    public static final String POSTS_IDAUTHOR = "IdAuthor";
+    public static final int    POSTS_IDAUTHOR_COL = 1;
+
+    public static final String POSTS_PICTURE = "Picture";
+    public static final int    POSTS_PICTURE_COL = 2;
+
+    public static final String POSTS_TEXT = "Text";
+    public static final int    POSTS_TEXT_COL = 3;
+
+    public static final String POSTS_PLACE = "Place";
+    public static final int    POSTS_PLACE_COL = 4;
+
+    public static final String POSTS_DATE = "Date";
+    public static final int    POSTS_DATE_COL = 5;
+
+    //##################### ANIMALS table #############################
+    public static final String ANIMALS_TABLE = "animals";
+
+    public static final String ANIMALS_ID = "IdAnim";
+    public static final int    ANIMALS_ID_COL = 0;
+
+    public static final String ANIMALS_NAME = "AnimName";
+    public static final int    ANIMALS_NAME_COL = 1;
+
+    public static final String ANIMALS_SPECIES = "Species";
+    public static final int    ANIMALS_SPECIES_COL = 2;
+
+    public static final String ANIMALS_GENDER = "Gender";
+    public static final int    ANIMALS_GENDER_COL = 3;
+
+    public static final String ANIMALS_PROFILEPIC = "ProfilePic";
+    public static final int    ANIMALS_PROFILEPIC_COL = 4;
+
+    public static final String ANIMALS_BIRTHDATE = "BirthDate";
+    public static final int    ANIMALS_BIRTHDATE_COL = 5;
+
+    //##################### FRIENDSHIP table #############################
+    public static final String FRIENDSHIP_TABLE = "friendship";
+
+    public static final String FRIENDSHIP_ID = "IdFriendship";
+    public static final int    FRIENDSHIP_ID_COL = 0;
+
+    public static final String FRIENDSHIP_USERSENDER = "IdUserSender";
+    public static final int    FRIENDSHIP_USERSENDER_COL = 1;
+
+    public static final String FRIENDSHIP_USERRECEIVER = "IdUserReceiver";
+    public static final int    FRIENDSHIP_USERRECEIVER_COL = 2;
+
+    public static final String FRIENDSHIP_STATUS = "Status";
+    public static final int    FRIENDSHIP_STATUS_COL = 3;
+
+    //##################### POSTS-ANIMALS table #############################
+    public static final String POSTANIMALS_TABLE = "postanimals";
+
+    public static final String POSTANIMALS_IDPOST = "IdPost";
+    public static final int    POSTANIMALS_IDPOST_COL = 0;
+
+    public static final String POSTANIMALS_IDANIMAL = "IdAnim";
+    public static final int    POSTANIMALS_IDANIMAL_COL = 1;
+
+    //##################### POSTS-USERS table #############################
+    public static final String POSTUSERS_TABLE = "postusers";
+
+    public static final String POSTUSERS_IDPOST = "IdPost";
+    public static final int    POSTUSERS_IDPOST_COL = 0;
+
+    public static final String POSTUSERS_IDUSER = "IdUser";
+    public static final int    POSTUSERS_IDUSER_COL = 1;
+
+    //##################### USERS-ANIMALS table #############################
+    public static final String USERSANIMALS_TABLE = "usersanimals";
+
+    public static final String USERSANIMALS_IDUSER = "IdUser";
+    public static final int    USERSANIMALS_IDUSER_COL = 0;
+
+    public static final String USERSANIMALS_IDANIMAL = "IdAnim";
+    public static final int    USERSANIMALS_IDANIMAL_COL = 1;
+
+    //TODO fai tabella promemoria
+
+    //##################### CREATE DROP statements ##################
+    public static final String CREATE_USERS_TABLE =
+            "CREATE TABLE " + USERS_TABLE + " (" +
+                    USERS_ID         + " INTEGER PRIMARY KEY," +
+                    USERS_USERNAME   + " TEXT    NOT NULL UNIQUE," +
+                    USERS_PROFILEPIC + " TEXT," +
+                    USERS_NAME       + " TEXT    NOT NULL," +
+                    USERS_SURNAME    + " TEXT    NOT NULL," +
+                    USERS_GENDER     + " TEXT," +
+                    USERS_BIRTHDATE  + " TEXT    NOT NULL)";
+
+    public static final String CREATE_POSTS_TABLE =
+            "CREATE TABLE " + POSTS_TABLE + " (" +
+                    POSTS_ID       + " INTEGER PRIMARY KEY," +
+                    POSTS_IDAUTHOR + " TEXT NOT NULL," +
+                    POSTS_PICTURE  + " TEXT," +
+                    POSTS_TEXT     + " TEXT," +
+                    POSTS_PLACE    + " TEXT," +
+                    POSTS_DATE     + " TEXT NOT NULL)";
+
+    public static final String CREATE_ANIMALS_TABLE =
+            "CREATE TABLE " + ANIMALS_TABLE + " (" +
+                    ANIMALS_ID         + " INTEGER PRIMARY KEY," +
+                    ANIMALS_NAME       + " TEXT    NOT NULL," +
+                    ANIMALS_SPECIES    + " TEXT," +
+                    ANIMALS_GENDER     + " TEXT," +
+                    ANIMALS_PROFILEPIC + " TEXT," +
+                    ANIMALS_BIRTHDATE  + " TEXT)";
+
+    public static final String CREATE_FRIENDSHIP_TABLE =
+            "CREATE TABLE " + FRIENDSHIP_TABLE + " (" +
+                    FRIENDSHIP_ID           + " INTEGER PRIMARY KEY," +
+                    FRIENDSHIP_USERSENDER   + " TEXT    NOT NULL," +
+                    FRIENDSHIP_USERRECEIVER + " TEXT    NOT NULL," +
+                    FRIENDSHIP_STATUS       + " TEXT    NOT NULL)";
+
+    public static final String CREATE_POSTANIMALS_TABLE =
+            "CREATE TABLE " + POSTANIMALS_TABLE + " (" +
+                    POSTANIMALS_IDPOST   + " TEXT NOT NULL," +
+                    POSTANIMALS_IDANIMAL + " TEXT NOT NULL)";
+
+    public static final String CREATE_POSTUSERS_TABLE =
+            "CREATE TABLE " + POSTUSERS_TABLE + " (" +
+                    POSTUSERS_IDPOST + " TEXT NOT NULL," +
+                    POSTUSERS_IDUSER + " TEXT NOT NULL)";
+
+    public static final String CREATE_USERSANIMALS_TABLE =
+            "CREATE TABLE " + USERSANIMALS_TABLE + " (" +
+                    USERSANIMALS_IDUSER   + " TEXT NOT NULL," +
+                    USERSANIMALS_IDANIMAL + " TEXT NOT NULL)";
+
+    public static final String DROP_USERS_TABLE =
+            "DROP TABLE IF EXISTS " + USERS_TABLE;
+
+    public static final String DROP_POSTS_TABLE =
+            "DROP TABLE IF EXISTS " + POSTS_TABLE;
+
+    public static final String DROP_ANIMALS_TABLE =
+            "DROP TABLE IF EXISTS " + ANIMALS_TABLE;
+
+    public static final String DROP_FRIENDSHIP_TABLE =
+            "DROP TABLE IF EXISTS " + FRIENDSHIP_TABLE;
+
+    public static final String DROP_POSTANIMALS_TABLE =
+            "DROP TABLE IF EXISTS " + FRIENDSHIP_TABLE;
+
+    public static final String DROP_POSTUSERS_TABLE =
+            "DROP TABLE IF EXISTS " + FRIENDSHIP_TABLE;
+
+    public static final String DROP_USERSANIMALS_TABLE =
+            "DROP TABLE IF EXISTS " + FRIENDSHIP_TABLE;
+
+
+    private static class DBHelper extends SQLiteOpenHelper {
+
+        public DBHelper(Context context, String name,
+                        CursorFactory factory, int version) {
+            super(context, name, factory, version);
+        }
+
+        @Override
+        public void onCreate(SQLiteDatabase db) {
+            // create tables
+            db.execSQL(CREATE_USERS_TABLE);
+            db.execSQL(CREATE_POSTS_TABLE);
+            db.execSQL(CREATE_ANIMALS_TABLE);
+            db.execSQL(CREATE_FRIENDSHIP_TABLE);
+            db.execSQL(CREATE_POSTANIMALS_TABLE);
+            db.execSQL(CREATE_POSTUSERS_TABLE);
+            db.execSQL(CREATE_USERSANIMALS_TABLE);
+
+            //insert sample post
+            db.execSQL("INSERT INTO post " +
+                       "VALUES (1, 28, '', 'Ceci nest pas un post', '', '')");
+            db.execSQL("INSERT INTO post " +
+                    "VALUES (2, 29, '', 'Gatti ^^', '', '')");
+            db.execSQL("INSERT INTO users " +
+                    "VALUES (28, 'DrOliver', '', 'Matteo', 'Oliveri', 'male', '1994-07-08')");
+            db.execSQL("INSERT INTO users " +
+                    "VALUES (29, 'Sissy', '', 'Silvia', 'Lombardo', 'female', '1993-12-08')");
+            db.execSQL("INSERT INTO animals " +
+                    "VALUES (8, 'Axel', 'Cane', 'male', '', '2012-06-15')");
+            db.execSQL("INSERT INTO animals " +
+                    "VALUES (12, 'Robin', 'Gatto', 'male', '', '2013-03-31')");
+            db.execSQL("INSERT INTO animals " +
+                    "VALUES (9, 'Happy', 'Cane', 'male', '', '2012-06-15')");
+            db.execSQL("INSERT INTO animals " +
+                    "VALUES (13, 'Jerry', 'Gatto', 'male', '', '2013-03-31')");
+            db.execSQL("INSERT INTO usersanimals " +
+                    "VALUES (28, 8)");
+            db.execSQL("INSERT INTO usersanimals " +
+                    "VALUES (29, 12)");
+            db.execSQL("INSERT INTO usersanimals " +
+                    "VALUES (28, 9)");
+            db.execSQL("INSERT INTO usersanimals " +
+                    "VALUES (29, 13)");
+        }
+
+        @Override
+        public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+            Log.d("Task list", "Upgrading db from version "
+                    + oldVersion + " to " + newVersion);
+
+            db.execSQL(MyPetDB.DROP_USERS_TABLE);
+            db.execSQL(MyPetDB.DROP_ANIMALS_TABLE);
+            db.execSQL(MyPetDB.DROP_POSTS_TABLE);
+            db.execSQL(MyPetDB.DROP_FRIENDSHIP_TABLE);
+            db.execSQL(MyPetDB.DROP_POSTANIMALS_TABLE);
+            db.execSQL(MyPetDB.DROP_POSTUSERS_TABLE);
+            db.execSQL(MyPetDB.DROP_USERSANIMALS_TABLE);
+            onCreate(db);
+        }
+    }
+
+    // database and database helper objects
+    private SQLiteDatabase db;
+    private DBHelper dbHelper;
+
+    // constructor
+    public MyPetDB(Context context) {
+        dbHelper = new DBHelper(context, DB_NAME, null, DB_VERSION);
+    }
+
+    // private methods
+    private void openReadableDB() {
+        db = dbHelper.getReadableDatabase();
+    }
+
+    private void openWriteableDB() {
+        db = dbHelper.getWritableDatabase();
+    }
+
+    private void closeDB() {
+        if (db != null)
+            db.close();
+    }
+
+    public long insertUser(User u) {
+        ContentValues cv = new ContentValues();
+        cv.put(USERS_ID, u.id);
+        cv.put(USERS_NAME, u.name);
+        cv.put(USERS_USERNAME, u.username);
+        cv.put(USERS_SURNAME, u.surname);
+        cv.put(USERS_BIRTHDATE, u.birthDate);
+        cv.put(USERS_GENDER, u.gender);
+
+        this.openWriteableDB();
+        long rowID = db.insert(USERS_TABLE, null, cv);
+        this.closeDB();
+
+        Log.d("MyPet", "Insert user " + u.id + ", " + u.surname);
+
+        return rowID;
+    }
+
+    public User getUser(String idUser) {
+        String where = USERS_ID + "= ?";
+        String[] whereArgs = { idUser };
+
+        openReadableDB();
+        Cursor cursor = db.query(USERS_TABLE, null,
+                where, whereArgs, null, null, null);
+
+        //lettura dei dati dell'utente
+        cursor.moveToFirst();
+        User user = new User();
+        user.id = cursor.getString(USERS_ID_COL);
+        user.username = cursor.getString(USERS_USERNAME_COL);
+        user.name = cursor.getString(USERS_NAME_COL);
+        user.surname = cursor.getString(USERS_SURNAME_COL);
+        user.gender = cursor.getString(USERS_GENDER_COL);
+        user.birthDate = cursor.getString(USERS_BIRTHDATE_COL);
+        user.profilepic = cursor.getString(USERS_PROFILEPIC_COL);
+
+        //TODO controllare per errori
+
+        if (cursor != null)
+            cursor.close();
+        this.closeDB();
+
+        return user;
+    }
+
+    public int updateUser(User user) {
+        ContentValues cv = new ContentValues();
+        cv.put(USERS_ID, user.id);
+        cv.put(USERS_NAME, user.name);
+        //TODO completare
+
+        String where = USERS_ID + "= ?";
+        String[] whereArgs = { String.valueOf(user.id) };
+
+        this.openWriteableDB();
+        int rowCount = db.update(USERS_TABLE, cv, where, whereArgs);
+        this.closeDB();
+
+        return rowCount;
+    }
+
+    public long insertFriendship(String idFriendship, String idUser1, String idUser2) {
+        //TODO controllare se l'amicizia è già presente (IDfriend funziona?)
+        ContentValues cv = new ContentValues();
+        cv.put(FRIENDSHIP_ID, idFriendship);
+        cv.put(FRIENDSHIP_USERSENDER, idUser1);
+        cv.put(FRIENDSHIP_USERRECEIVER, idUser2);
+
+        this.openWriteableDB();
+        long rowID = db.insert(FRIENDSHIP_TABLE, null, cv);
+        this.closeDB();
+
+        return rowID;
+    }
+
+    public ArrayList<User> getFriendsByUser(String idUser) {
+        ArrayList<User> friends = new ArrayList<>();
+        openReadableDB();
+
+        //Serve un join: usiamo QueryBuilder
+        SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
+
+        //indichiamo le tabelle su cui lavorare
+        qb.setTables(USERS_TABLE + " JOIN " + FRIENDSHIP_TABLE +
+                "ON (" + USERS_TABLE + "." + USERS_ID + "=" + FRIENDSHIP_TABLE + "." + FRIENDSHIP_USERSENDER +
+                " OR " + USERS_TABLE + "." + USERS_ID + "=" + FRIENDSHIP_TABLE + "." + FRIENDSHIP_USERRECEIVER + ")");
+
+        String where = FRIENDSHIP_USERSENDER + "=? OR " + FRIENDSHIP_USERRECEIVER + "=?";
+        String[] whereArgs = { idUser, idUser };
+
+        //richiesta al DB
+        Cursor cursor = qb.query(db, null, where, whereArgs, null, null, null);
+
+        while (cursor.moveToNext()) {
+            String idCurrUser = cursor.getString(USERS_ID_COL); //TODO Probabile non funzioni
+            if(!idCurrUser.equals(idUser)) {  //se l'utente della riga selezionata è un amico
+                User user = new User();
+
+                //TODO fare il resto
+                user.id = idCurrUser;
+                user.name = cursor.getString(USERS_NAME_COL);
+
+                friends.add(user);
+            }
+        }
+        if (cursor != null)
+            cursor.close();
+        closeDB();
+
+        return friends;
+    }
+
+//    public List getList(String name) {
+//        String where = LIST_NAME + "= ?";
+//        String[] whereArgs = { name };
+//
+//        openReadableDB();
+//        Cursor cursor = db.query(LIST_TABLE, null,
+//                where, whereArgs, null, null, null);
+//        List list = null;
+//        cursor.moveToFirst();
+//        list = new List(cursor.getInt(LIST_ID_COL), cursor.getString(LIST_NAME_COL));
+//        if (cursor != null)
+//            cursor.close();
+//        this.closeDB();
+//
+//        return list;
+//    }
+
+    public Animal getAnimal(String idAnimal) {
+        String where = ANIMALS_ID + "= ?";
+        String[] whereArgs = { idAnimal };
+
+        openReadableDB();
+        Cursor cursor = db.query(ANIMALS_TABLE, null,
+                where, whereArgs, null, null, null);
+
+        cursor.moveToFirst();
+        Animal animal = new Animal();
+        animal.id = cursor.getString(ANIMALS_ID_COL);
+        animal.name = cursor.getString(ANIMALS_NAME_COL);
+        animal.species = cursor.getString(ANIMALS_SPECIES_COL);
+        animal.birthdate = cursor.getString(ANIMALS_BIRTHDATE_COL);
+        animal.gender = cursor.getString(ANIMALS_GENDER_COL);
+
+        if (cursor != null)
+            cursor.close();
+        this.closeDB();
+
+        return animal;
+    }
+
+//    public ArrayList<Animal> getAnimalsByOwner(String idOwner) {
+//        ArrayList<Animal> animals = new ArrayList<>();
+//        openReadableDB();
+//
+//        //Serve un join: usiamo QueryBuilder
+//        SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
+//
+//        //indichiamo le tabelle su cui lavorare
+//        qb.setTables(USERS_TABLE + ", " + USERSANIMALS_TABLE + ", " + ANIMALS_TABLE);
+//
+////        qb.setTables("(" + USERS_TABLE + " JOIN " + USERSANIMALS_TABLE +
+////                " ON " + USERS_TABLE + "." + USERS_ID + "=" + USERSANIMALS_TABLE + "." + USERSANIMALS_IDUSER + ")"
+////                + " JOIN " + ANIMALS_TABLE + " ON " + USERSANIMALS_TABLE + "." + USERSANIMALS_IDANIMAL + "=" + ANIMALS_TABLE + "." + ANIMALS_ID);
+//
+//        String where = USERS_TABLE + "." + USERS_ID + "=?";
+////                +
+////                " AND " + USERS_TABLE + "." + USERS_ID + "=" + USERSANIMALS_TABLE + "." + USERSANIMALS_IDUSER;
+//// +
+////                " AND " + USERSANIMALS_TABLE + "." + USERSANIMALS_IDANIMAL + "=" + ANIMALS_TABLE + "." + ANIMALS_ID;
+//        String[] whereArgs = { idOwner };
+////        String where = null;
+////        String[] whereArgs = null;
+//
+//        Cursor cursor = qb.query(db, null, where, whereArgs, null, null, null);
+//
+//        cursor.moveToFirst();
+//        while (cursor.moveToNext()) {
+//            Animal animal = new Animal();
+//
+//            //TODO fare il resto
+//            animal.name = cursor.getString(cursor.getColumnIndex(ANIMALS_NAME));
+//            animal.id = cursor.getString(cursor.getColumnIndex(ANIMALS_TABLE+"."+ANIMALS_ID)) + " " +
+//                        cursor.getString(cursor.getColumnIndex(USERSANIMALS_TABLE+"."+USERSANIMALS_IDANIMAL)) + ", " +
+//                        cursor.getString(cursor.getColumnIndex(USERSANIMALS_TABLE+"."+USERSANIMALS_IDUSER)) + " " +
+//                        cursor.getString(cursor.getColumnIndex(USERS_TABLE+"."+USERS_ID));
+//            for(int i=0; i<cursor.getColumnNames().length; i++){
+//                animal.id += " " + cursor.getColumnNames()[i];
+//            }
+//
+//            animals.add(animal);
+//        }
+//        if (cursor != null)
+//            cursor.close();
+//        closeDB();
+//
+//        return animals;
+//    }
+
+
+    public ArrayList<Animal> getAnimalsByOwner(String idOwner) {
+        ArrayList<Animal> animals = new ArrayList<>();
+        openReadableDB();
+
+        //Serve un join: usiamo QueryBuilder
+        SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
+
+        //indichiamo le tabelle su cui lavorare
+        qb.setTables(USERS_TABLE + " JOIN " + USERSANIMALS_TABLE +
+                " ON (" + USERS_TABLE + "." + USERS_ID + "=" + USERSANIMALS_TABLE + "." + USERSANIMALS_IDUSER + ")"
+                + " JOIN " + ANIMALS_TABLE + " ON (" + USERSANIMALS_TABLE + "." + USERSANIMALS_IDANIMAL + "=" + ANIMALS_TABLE + "." + ANIMALS_ID + ")");
+
+        String where = USERS_TABLE + "." + USERS_ID + "=?";
+        String[] whereArgs = { idOwner };
+
+        Cursor cursor = qb.query(db, null, where, whereArgs, null, null, null);
+
+//        cursor.moveToFirst();
+        while (cursor.moveToNext()) {
+            Animal animal = new Animal();
+
+//            animal.id = cursor.getString(cursor.getColumnIndex(ANIMALS_TABLE+"."+ANIMALS_ID)) + " " +
+//                    cursor.getString(cursor.getColumnIndex(USERSANIMALS_TABLE+"."+USERSANIMALS_IDANIMAL)) + ", " +
+//                    cursor.getString(cursor.getColumnIndex(USERSANIMALS_TABLE+"."+USERSANIMALS_IDUSER)) + " " +
+//                    cursor.getString(cursor.getColumnIndex(USERS_TABLE+"."+USERS_ID));
+//            for(int i=0; i<cursor.getColumnNames().length; i++){
+//                animal.id += " " + cursor.getColumnNames()[i];
+//            }
+            animal.name = cursor.getString(cursor.getColumnIndex(ANIMALS_NAME));
+            animal.id = cursor.getString(cursor.getColumnIndex(ANIMALS_ID));
+            animal.species = cursor.getString(cursor.getColumnIndex(ANIMALS_SPECIES));
+            animal.gender = cursor.getString(cursor.getColumnIndex(ANIMALS_GENDER));
+            animal.birthdate = cursor.getString(cursor.getColumnIndex(ANIMALS_BIRTHDATE));
+            animal.profilepic = cursor.getString(cursor.getColumnIndex(ANIMALS_PROFILEPIC));
+
+            animals.add(animal);
+        }
+        if (cursor != null)
+            cursor.close();
+        closeDB();
+
+        return animals;
+    }
+
+
+    /**
+     * Inserisce un animale nel DB
+     *
+     * @param a animale da inserire
+     * @return Numero della riga inserita. <br>
+     *          -1 in caso di errore nell'inserimento
+     */
+    public long insertAnimal(Animal a, String userId) {
+        ContentValues cv = new ContentValues();
+        cv.put(ANIMALS_ID, a.id);
+        cv.put(ANIMALS_NAME, a.name);
+        cv.put(ANIMALS_GENDER, a.gender);
+        cv.put(ANIMALS_BIRTHDATE, a.birthdate);
+        cv.put(ANIMALS_SPECIES, a.species);
+
+        this.openWriteableDB();
+        long rowIDAnim = db.insert(ANIMALS_TABLE, null, cv);
+
+        //TODO aggiungere padrone in usersanimals (controlla -1 in caso di errore di insert)
+        if(rowIDAnim != -1){
+            cv = new ContentValues();
+            cv.put(USERSANIMALS_IDANIMAL, a.id);
+            cv.put(USERSANIMALS_IDUSER, userId);
+            long rowIDUserAnim = db.insert(USERSANIMALS_TABLE, null, cv);
+        }
+
+        this.closeDB();
+
+        Log.d("MyPet", "Insert animal " + a.id + ", " + a.name);
+
+        return rowIDAnim;
+    }
+
+//    public ArrayList<Task> getTasks(String listName) {
+//        String where =
+//                TASK_LIST_ID + "= ? AND " +
+//                        TASK_HIDDEN + "!='1'";
+//        int listID = getList(listName).getId();
+//        String[] whereArgs = { Integer.toString(listID) };
+//
+//        this.openReadableDB();
+//        Cursor cursor = db.query(TASK_TABLE, null,
+//                where, whereArgs,
+//                null, null, null);
+//        ArrayList<Task> tasks = new ArrayList<Task>();
+//        while (cursor.moveToNext()) {
+//            tasks.add(getTaskFromCursor(cursor));
+//        }
+//        if (cursor != null)
+//            cursor.close();
+//        this.closeDB();
+//
+//        return tasks;
+//    }
+//
+//    public Task getTask(int id) {
+//        String where = TASK_ID + "= ?";
+//        String[] whereArgs = { Integer.toString(id) };
+//
+//        this.openReadableDB();
+//        Cursor cursor = db.query(TASK_TABLE,
+//                null, where, whereArgs, null, null, null);
+//        cursor.moveToFirst();
+//        Task task = getTaskFromCursor(cursor);
+//        if (cursor != null)
+//            cursor.close();
+//        this.closeDB();
+//
+//        return task;
+//    }
+//
+//    private static Task getTaskFromCursor(Cursor cursor) {
+//        if (cursor == null || cursor.getCount() == 0){
+//            return null;
+//        }
+//        else {
+//            try {
+//                Task task = new Task(
+//                        cursor.getInt(TASK_ID_COL),
+//                        cursor.getInt(TASK_LIST_ID_COL),
+//                        cursor.getString(TASK_NAME_COL),
+//                        cursor.getString(TASK_NOTES_COL),
+//                        cursor.getString(TASK_COMPLETED_COL),
+//                        cursor.getString(TASK_HIDDEN_COL));
+//                return task;
+//            }
+//            catch(Exception e) {
+//                return null;
+//            }
+//        }
+//    }
+//
+//    public long insertTask(Task task) {
+//        ContentValues cv = new ContentValues();
+//        cv.put(TASK_LIST_ID, task.getListId());
+//        cv.put(TASK_NAME, task.getName());
+//        cv.put(TASK_NOTES, task.getNotes());
+//        cv.put(TASK_COMPLETED, task.getCompletedDate());
+//        cv.put(TASK_HIDDEN, task.getHidden());
+//
+//        this.openWriteableDB();
+//        long rowID = db.insert(TASK_TABLE, null, cv);
+//        this.closeDB();
+//
+//        return rowID;
+//    }
+
+    public ArrayList<Post> getPostsByAuthor(String idAuthor) {
+        ArrayList<Post> posts = new ArrayList<>();
+        openReadableDB();
+
+        String where = POSTS_IDAUTHOR + "=?";
+        String[] whereArgs = { idAuthor };
+
+        Cursor cursor = db.query(POSTS_TABLE,
+                null, where, whereArgs, null, null, null);
+        while (cursor.moveToNext()) {
+            Post post = new Post();
+
+            //TODO fare il resto
+            post.id = cursor.getString(POSTS_ID_COL);
+            post.text = cursor.getString(POSTS_TEXT_COL);
+            post.place = cursor.getString(POSTS_PLACE_COL);
+            post.date = cursor.getString(POSTS_DATE_COL);
+            post.idAuthor = cursor.getString(POSTS_IDAUTHOR_COL);
+            post.picture = cursor.getString(POSTS_PICTURE_COL);
+
+            posts.add(post);
+        }
+        if (cursor != null)
+            cursor.close();
+        closeDB();
+
+        return posts;
+    }
+
+    public ArrayList<Post> getPostsByAnimal(String idAnimal) {
+        ArrayList<Post> posts = new ArrayList<>();
+        openReadableDB();
+
+        //Serve un join: usiamo QueryBuilder
+        SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
+
+        //indichiamo le tabelle su cui lavorare
+        qb.setTables(POSTS_TABLE + " NATURAL JOIN " + POSTANIMALS_TABLE +
+                " NATURAL JOIN " + ANIMALS_TABLE);
+
+        String where = ANIMALS_ID + "=?";
+        String[] whereArgs = { idAnimal };
+
+        Cursor cursor = qb.query(db, null, where, whereArgs, null, null, null);
+
+        while (cursor.moveToNext()) {
+            Post post = new Post();
+
+            //TODO fare il resto
+            post.text = cursor.getString(POSTS_TEXT_COL);
+
+            posts.add(post);
+        }
+        if (cursor != null)
+            cursor.close();
+        closeDB();
+
+        return posts;
+    }
+
+    public long insertPost(Post p) {
+        ContentValues cv = new ContentValues();
+        cv.put(POSTS_ID, p.id);
+        cv.put(POSTS_IDAUTHOR, p.idAuthor);
+        cv.put(POSTS_TEXT, p.text);
+        cv.put(POSTS_DATE, p.date);
+        cv.put(POSTS_PLACE, p.place);
+        //TODO aggiornare lista animali e utenti taggati
+
+        this.openWriteableDB();
+        long rowID = db.insert(POSTS_TABLE, null, cv);
+        this.closeDB();
+
+        Log.d("MyPet", "Insert post " + p.id + ", by " + p.idAuthor);
+
+        return rowID;
+    }
+
+
+
+
+//
+//    public int updateTask(Task task) {
+//        ContentValues cv = new ContentValues();
+//        cv.put(TASK_LIST_ID, task.getListId());
+//        cv.put(TASK_NAME, task.getName());
+//        cv.put(TASK_NOTES, task.getNotes());
+//        cv.put(TASK_COMPLETED, task.getCompletedDate());
+//        cv.put(TASK_HIDDEN, task.getHidden());
+//
+//        String where = TASK_ID + "= ?";
+//        String[] whereArgs = { String.valueOf(task.getId()) };
+//
+//        this.openWriteableDB();
+//        int rowCount = db.update(TASK_TABLE, cv, where, whereArgs);
+//        this.closeDB();
+//
+//        return rowCount;
+//    }
+//
+//    public int deleteTask(long id) {
+//        String where = TASK_ID + "= ?";
+//        String[] whereArgs = { String.valueOf(id) };
+//
+//        this.openWriteableDB();
+//        int rowCount = db.delete(TASK_TABLE, where, whereArgs);
+//        this.closeDB();
+//
+//        return rowCount;
+//    }
+
+    public ArrayList<String> debugUsersAnimals() {
+        ArrayList<String> strs = new ArrayList<>();
+        openReadableDB();
+
+        //Serve un join: usiamo QueryBuilder
+        SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
+
+        //indichiamo le tabelle su cui lavorare
+        qb.setTables(USERSANIMALS_TABLE);
+        String where = null;
+        String[] whereArgs = null;
+
+        Cursor cursor = qb.query(db, null, where, whereArgs, null, null, null);
+
+//        cursor.moveToFirst();
+        while (cursor.moveToNext()) {
+            String str ="";
+            for(int i=0; i<cursor.getColumnNames().length; i++){
+                str += cursor.getColumnNames()[i] + ":" + cursor.getString(cursor.getColumnIndex(cursor.getColumnNames()[i])) + " ";
+            }
+            strs.add(str);
+        }
+        if (cursor != null)
+            cursor.close();
+        closeDB();
+
+        return strs;
+    }
+
+
+}
