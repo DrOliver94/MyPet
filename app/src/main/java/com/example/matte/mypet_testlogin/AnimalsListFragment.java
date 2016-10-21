@@ -85,6 +85,8 @@ public class AnimalsListFragment extends Fragment {
         animalsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                //adapterView.getItemAtPosition(i); //TODO si casta a Animal e funziona? Testare
+
                 Animal a = animals.get(i);
 
                 getFragmentManager()

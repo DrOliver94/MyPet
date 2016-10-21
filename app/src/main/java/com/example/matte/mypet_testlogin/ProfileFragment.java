@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
@@ -90,6 +91,11 @@ public class ProfileFragment extends Fragment {
 
         itemsListView = (ListView) view.findViewById(R.id.profile_postsListView);
 
+        View header = getActivity().getLayoutInflater().inflate(R.layout.listview_post, null);
+        itemsListView.addHeaderView(header);
+
+        //itemsListView.setScrollContainer(false);
+
         showPostsByAuthor(idUser);
 
         if (mListener != null) {
@@ -97,6 +103,28 @@ public class ProfileFragment extends Fragment {
         }
 
         return view;
+    }
+
+    public static void justifyListViewHeightBasedOnChildren(ListView listView) {
+        ListAdapter adapter = listView.getAdapter();
+
+        if (adapter == null) {
+            return;
+        }
+        ViewGroup vg = listView;
+        int totalHeight = 0;
+        int measure =0;
+        for (int i = 0; i < adapter.getCount(); i++) {
+            View listItem = adapter.getView(i, null, vg);
+            listItem.measure(0, 0);
+            measure = listItem.getMeasuredHeight();
+            totalHeight += measure;
+        }
+        //totalHeight+=measure/2;
+        ViewGroup.LayoutParams par = listView.getLayoutParams();
+        par.height = totalHeight + (listView.getDividerHeight() * (adapter.getCount() - 1));
+        listView.setLayoutParams(par);
+        listView.requestLayout();
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -167,6 +195,7 @@ public class ProfileFragment extends Fragment {
         SimpleAdapter adapter = new SimpleAdapter(getActivity(), data, res, from, to);
         adapter.getCount();
         itemsListView.setAdapter(adapter);
+        //justifyListViewHeightBasedOnChildren(itemsListView);
     }
 
 }
