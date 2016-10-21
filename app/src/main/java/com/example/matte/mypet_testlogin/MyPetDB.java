@@ -195,13 +195,13 @@ public class MyPetDB {
             "DROP TABLE IF EXISTS " + FRIENDSHIP_TABLE;
 
     public static final String DROP_POSTANIMALS_TABLE =
-            "DROP TABLE IF EXISTS " + FRIENDSHIP_TABLE;
+            "DROP TABLE IF EXISTS " + POSTANIMALS_TABLE;
 
     public static final String DROP_POSTUSERS_TABLE =
-            "DROP TABLE IF EXISTS " + FRIENDSHIP_TABLE;
+            "DROP TABLE IF EXISTS " + POSTUSERS_TABLE;
 
     public static final String DROP_USERSANIMALS_TABLE =
-            "DROP TABLE IF EXISTS " + FRIENDSHIP_TABLE;
+            "DROP TABLE IF EXISTS " + USERSANIMALS_TABLE;
 
 
     private static class DBHelper extends SQLiteOpenHelper {
@@ -387,12 +387,13 @@ public class MyPetDB {
         return rowCount;
     }
 
-    public long insertFriendship(String idFriendship, String idUser1, String idUser2) {
-        //TODO controllare se l'amicizia è già presente (IDfriend funziona?)
+    public long insertFriendship(String idFriendship, String idUser1, String idUser2, String status) {
+        //TODO controllare se l'amicizia è già presente (IDfriend funzionerà)
         ContentValues cv = new ContentValues();
         cv.put(FRIENDSHIP_ID, idFriendship);
         cv.put(FRIENDSHIP_USERSENDER, idUser1);
         cv.put(FRIENDSHIP_USERRECEIVER, idUser2);
+        cv.put(FRIENDSHIP_STATUS, status);
 
         this.openWriteableDB();
         long rowID = db.insert(FRIENDSHIP_TABLE, null, cv);
@@ -595,6 +596,7 @@ public class MyPetDB {
         this.closeDB();
 
         long rowIDAnim = -1;
+        long rowIDUserAnim = -1;
 
         if(presence > 0) {   //animale già presente nel DB
             rowIDAnim = updateAnimal(a);
@@ -613,7 +615,7 @@ public class MyPetDB {
                 cv = new ContentValues();
                 cv.put(USERSANIMALS_IDANIMAL, a.id);
                 cv.put(USERSANIMALS_IDUSER, userId);
-                long rowIDUserAnim = db.insert(USERSANIMALS_TABLE, null, cv);
+                rowIDUserAnim = db.insert(USERSANIMALS_TABLE, null, cv);
             }
         }
 

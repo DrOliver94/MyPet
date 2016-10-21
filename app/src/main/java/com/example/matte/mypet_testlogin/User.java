@@ -12,7 +12,7 @@ public class User {
     public String name;
     public String surname;
     public String gender;
-    public String birthdate; //TODO salvare in formato decente
+    public String birthdate; //TODO salvare in formato decente (SimpleDateFormat. suppressLint potrebbe servire)
     public String profilepic;
 
     public User(){}

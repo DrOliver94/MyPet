@@ -480,7 +480,8 @@ public class LoginActivity extends AppCompatActivity {
                         JSONObject jFriend = jFriends.getJSONObject(idFriend);  //recupera utente
                         User f = new User(idFriend, jFriend);                   //Crea obj
                         dbHand.insertUser(f);                                   //Inserisce nel DB
-                        dbHand.insertFriendship(jFriend.getString("idfriendship"), idUser, f.id);
+                        String status = jFriend.getString("status");
+                        dbHand.insertFriendship(jFriend.getString("idfriendship"), idUser, f.id, status);
                     }
                 }
             } catch (Exception e) {
