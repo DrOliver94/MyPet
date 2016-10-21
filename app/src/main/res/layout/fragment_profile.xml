@@ -2,7 +2,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#ffffff"
     tools:context=".ProfileFragment">
 
@@ -163,11 +162,11 @@
 
         <!--</GridLayout>-->
     <!--</ScrollView>-->
-            <ListView
-                android:id="@+id/profile_postsListView"
-                android:padding="0dp"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scrollbars="none" />
+    <ListView
+        android:id="@+id/profile_postsListView"
+        android:padding="0dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none" />
 
 </FrameLayout>

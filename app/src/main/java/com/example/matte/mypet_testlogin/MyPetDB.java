@@ -137,10 +137,10 @@ public class MyPetDB {
                     USERS_ID         + " INTEGER PRIMARY KEY," +
                     USERS_USERNAME   + " TEXT    NOT NULL UNIQUE," +
                     USERS_PROFILEPIC + " TEXT," +
-                    USERS_NAME       + " TEXT    NOT NULL," +
-                    USERS_SURNAME    + " TEXT    NOT NULL," +
+                    USERS_NAME       + " TEXT," +
+                    USERS_SURNAME    + " TEXT," +
                     USERS_GENDER     + " TEXT," +
-                    USERS_BIRTHDATE  + " TEXT    NOT NULL)";
+                    USERS_BIRTHDATE  + " TEXT)";
 
     public static final String CREATE_POSTS_TABLE =
             "CREATE TABLE " + POSTS_TABLE + " (" +
@@ -225,8 +225,8 @@ public class MyPetDB {
             //insert sample post
             Log.d("MyPet", "INSERT Samples");
 
-            db.execSQL("INSERT INTO post " +
-                       "VALUES (1, 28, '', 'Ceci nest pas un post', '', '')");
+//            db.execSQL("INSERT INTO post " +
+//                       "VALUES (1, 28, '', 'Ceci nest pas un post', '', '')");
             db.execSQL("INSERT INTO post " +
                     "VALUES (2, 29, '', 'Gatti ^^', '', '')");
 //            Log.d("MyPet", "INSERT DrOliver");

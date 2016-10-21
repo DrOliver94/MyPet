@@ -3,6 +3,7 @@ package com.example.matte.mypet_testlogin;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
@@ -31,20 +32,23 @@ public class Post {
     }
 
     public Post(String idPost, JSONObject jObjPost) {
+        users = new ArrayList<User>();
+        animals = new ArrayList<Animal>();
+
         try {
             id = idPost;
             idauthor = jObjPost.getString("author");
             nameauthor = jObjPost.getString("nameauthor");
             //TODO picAuthor
             //TODO pic
-            if(jObjPost.has("text"))
+            if(!jObjPost.isNull("text"))
                 text = jObjPost.getString("text");
-            if(jObjPost.has("date"))
+            if(!jObjPost.isNull("date"))
                 date = jObjPost.getString("date");
-            if(jObjPost.has("place"))
+            if(!jObjPost.isNull("place"))
                 place = jObjPost.getString("place");
 
-            if(jObjPost.has("users")) { //TODO non fa quello per cui è qui (getJSONobject continua a ravanare nei null...)
+            if(!jObjPost.isNull("users")) { //TODO non fa quello per cui è qui (getJSONobject continua a ravanare nei null...)
                 JSONObject jUsers = jObjPost.getJSONObject("users");
                 JSONArray idUsers = jUsers.names();                 //recupera elenco ID degli utenti
                 for (int i = 0; i < idUsers.length(); i++) {        //per ogni utente nell'obj
@@ -55,7 +59,7 @@ public class Post {
                 }
             }
 
-            if(jObjPost.has("users")) {
+            if(!jObjPost.isNull("pets")) {
                 JSONObject jPets = jObjPost.getJSONObject("pets");
                 JSONArray idPets = jPets.names();                   //recupera elenco ID degli animali
                 for (int i = 0; i < idPets.length(); i++) {         //per ogni animale nell'obj

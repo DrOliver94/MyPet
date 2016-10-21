@@ -448,35 +448,40 @@ public class LoginActivity extends AppCompatActivity {
                 dbHand.insertUser(u);
 
                 //##### Loading animali nel DB
-                JSONObject jPets = jObj.getJSONObject("_pets");
-                JSONArray idPets = jPets.names();                   //recupera elenco ID degli animali
-                for (int i = 0; i < idPets.length(); i++) {         //per ogni animale nell'obj
-                    String idPet = (String) idPets.get(i);          //recupera ID
-                    JSONObject jPet = jPets.getJSONObject(idPet);   //recupera animale
-                    Animal p = new Animal(idPet, jPet);             //Crea obj
-                    dbHand.insertAnimal(p, u.id);                         //Inserisce nel DB
+                if(!jObj.isNull("_pets")) {
+                    JSONObject jPets = jObj.getJSONObject("_pets");
+                    JSONArray idPets = jPets.names();                   //recupera elenco ID degli animali
+                    for (int i = 0; i < idPets.length(); i++) {         //per ogni animale nell'obj
+                        String idPet = (String) idPets.get(i);          //recupera ID
+                        JSONObject jPet = jPets.getJSONObject(idPet);   //recupera animale
+                        Animal p = new Animal(idPet, jPet);             //Crea obj
+                        dbHand.insertAnimal(p, u.id);                         //Inserisce nel DB
+                    }
                 }
-
                 //##### Loading post nel DB
-                JSONObject jPosts = jObj.getJSONObject("_posts");
-                //TODO qualquadra non cosa qui
-                JSONArray idPosts = jPosts.names();                  //recupera elenco ID dei post
-                for (int i = 0; i < idPosts.length(); i++) {        //per ogni post nell'obj
-                    String idPost = (String) idPosts.get(i);        //recupera ID
-                    JSONObject jPost = jPosts.getJSONObject(idPost);//recupera post
-                    Post p = new Post(idPost, jPost);               //Crea obj
-                    dbHand.insertPost(p);                           //Inserisce nel DB
+                if(!jObj.isNull("_pets")) {
+                    JSONObject jPosts = jObj.getJSONObject("_posts");
+                    //TODO qualquadra non cosa qui
+                    JSONArray idPosts = jPosts.names();                  //recupera elenco ID dei post
+                    for (int i = 0; i < idPosts.length(); i++) {        //per ogni post nell'obj
+                        String idPost = (String) idPosts.get(i);        //recupera ID
+                        JSONObject jPost = jPosts.getJSONObject(idPost);//recupera post
+                        Post p = new Post(idPost, jPost);               //Crea obj
+                        dbHand.insertPost(p);                           //Inserisce nel DB
+                    }
                 }
 
                 //##### Loading amici nel DB
-                JSONObject jFriends = jObj.getJSONObject("_friends");
-                JSONArray idFriends = jPets.names();                        //recupera elenco ID degli amici
-                for (int i = 0; i < idFriends.length(); i++) {              //per ogni utente nell'obj
-                    String idFriend = (String) idFriends.get(i);            //recupera ID
-                    JSONObject jFriend = jFriends.getJSONObject(idFriend);  //recupera utente
-                    User f = new User(idFriend, jFriend);                   //Crea obj
-                    dbHand.insertUser(f);                                   //Inserisce nel DB
-                    dbHand.insertFriendship(jFriend.getString("idfriendship"), idUser, f.id);
+                if(!jObj.isNull("_pets")) {
+                    JSONObject jFriends = jObj.getJSONObject("_friends");
+                    JSONArray idFriends = jFriends.names();                        //recupera elenco ID degli amici
+                    for (int i = 0; i < idFriends.length(); i++) {              //per ogni utente nell'obj
+                        String idFriend = (String) idFriends.get(i);            //recupera ID
+                        JSONObject jFriend = jFriends.getJSONObject(idFriend);  //recupera utente
+                        User f = new User(idFriend, jFriend);                   //Crea obj
+                        dbHand.insertUser(f);                                   //Inserisce nel DB
+                        dbHand.insertFriendship(jFriend.getString("idfriendship"), idUser, f.id);
+                    }
                 }
             } catch (Exception e) {
                 e.printStackTrace();
