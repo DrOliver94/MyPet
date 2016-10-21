@@ -41,7 +41,7 @@ public class AnimalProfileFragment extends Fragment {
     public AnimalProfileFragment() {
         // Required empty public constructor
     }
-
+// s was here
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
