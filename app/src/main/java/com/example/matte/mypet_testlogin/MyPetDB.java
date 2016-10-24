@@ -129,7 +129,26 @@ public class MyPetDB {
     public static final String USERSANIMALS_IDANIMAL = "IdAnim";
     public static final int    USERSANIMALS_IDANIMAL_COL = 1;
 
-    //TODO fai tabella promemoria
+    //##################### REMINDERS table #############################
+    public static final String REMINDERS_TABLE = "reminder";
+
+    public static final String REMINDERS_IDREMINDER = "IdReminder";
+    public static final int    REMINDERS_IDREMINDER_COL = 0;
+
+    public static final String REMINDERS_IDUSER = "IdUser";
+    public static final int    REMINDERS_IDUSER_COL = 1;
+
+    public static final String REMINDERS_IDANIM = "IdAnim";
+    public static final int    REMINDERS_IDANIM_COL = 2;
+
+    public static final String REMINDERS_EVENTNAME = "EventName";
+    public static final int    REMINDERS_EVENTNAME_COL = 3;
+
+    public static final String REMINDERS_EVENTPLACE = "EventPlace";
+    public static final int    REMINDERS_EVENTPLACE_COL = 4;
+
+    public static final String REMINDERS_EVENTTIME = "EventTime";
+    public static final int    REMINDERS_EVENTTIME_COL = 5;
 
     //##################### CREATE DROP statements ##################
     public static final String CREATE_USERS_TABLE =
@@ -308,7 +327,7 @@ public class MyPetDB {
      *         -1 in caso di errore
      */
     public long insertUser(User u) {
-        Log.d("MyPet", "Insert/update user " + u.id + ", " + u.surname);
+        Log.d("MyPet", "Insert user " + u.id + ", " + u.surname);
         //Controlla se l'utente è già nel DB
         String where = USERS_ID + "= ?";
         String[] whereArgs = { u.id };
@@ -583,7 +602,7 @@ public class MyPetDB {
      *         -1 in caso di errore nell'inserimento
      */
     public long insertAnimal(Animal a, String userId) {
-        Log.d("MyPet", "Insert/update animal " + a.id + ", " + a.name);
+        Log.d("MyPet", "Insert animal " + a.id + ", " + a.name);
 
         String where = ANIMALS_ID + "= ?";
         String[] whereArgs = { a.id };
@@ -896,6 +915,43 @@ public class MyPetDB {
         this.closeDB();
 
         return rowID;
+    }
+
+    public long insertReminder(Reminder r) {
+        Log.d("MyPet", "Insert reminder " + r.id + ", " + r.eventname);
+
+        String where = REMINDERS_IDREMINDER + "= ?";
+        String[] whereArgs = {r.id};
+
+        openReadableDB();
+        Cursor cursor = db.query(REMINDERS_TABLE, null,
+                where, whereArgs, null, null, null);
+
+        int presence = cursor.getCount();
+        cursor.close();
+        this.closeDB();
+
+        long rowIDRem = -1;
+
+        if (presence > 0) {   //animale già presente nel DB
+//            rowIDAnim = updateAnimal(a);
+            return presence;    //Altrimenti si rischia di cancellare dati inseriti.
+            // Usare updateAnimal per aggiornare i dati dell'animale
+        } else {
+            ContentValues cv = new ContentValues();
+            cv.put(REMINDERS_IDREMINDER, r.id);
+            cv.put(REMINDERS_IDUSER, r.iduser);
+            cv.put(REMINDERS_IDANIM, r.idanim);
+            cv.put(REMINDERS_EVENTNAME, r.eventname);
+            cv.put(REMINDERS_EVENTPLACE, r.eventplace);
+            cv.put(REMINDERS_EVENTTIME, r.eventtime);
+
+            this.openWriteableDB();
+            rowIDRem = db.insert(REMINDERS_TABLE, null, cv);
+
+        }
+
+        return rowIDRem;
     }
 
 //    public int updateTask(Task task) {

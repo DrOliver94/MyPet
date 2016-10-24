@@ -394,8 +394,6 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-
-    //TODO fare tutta sta roba...
     public class dbPairingTask extends AsyncTask<String, Integer, JSONObject> {
         private final String mToken;
         private final String mIdUser;
@@ -482,6 +480,17 @@ public class LoginActivity extends AppCompatActivity {
                         dbHand.insertUser(f);                                   //Inserisce nel DB
                         String status = jFriend.getString("status");
                         dbHand.insertFriendship(jFriend.getString("idfriendship"), idUser, f.id, status);
+                    }
+                }
+
+                //##### Loading reminder nel DB
+                if(!jObj.isNull("_reminder")) {
+                    JSONObject jReminders = jObj.getJSONObject("_reminder");
+                    JSONArray idReminders = jReminders.names();                 //recupera elenco ID degli amici
+                    for (int i = 0; i < idReminders.length(); i++) {            //per ogni utente nell'obj
+                        JSONObject jReminder = jReminders.getJSONObject((String) idReminders.get(i));  //recupera utente
+                        Reminder r = new Reminder(jReminder);                       //Crea obj
+                        dbHand.insertReminder(r);                               //Inserisce nel DB
                     }
                 }
             } catch (Exception e) {
