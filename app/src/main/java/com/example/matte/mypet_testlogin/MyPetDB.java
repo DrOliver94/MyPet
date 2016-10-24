@@ -227,38 +227,38 @@ public class MyPetDB {
 
 //            db.execSQL("INSERT INTO post " +
 //                       "VALUES (1, 28, '', 'Ceci nest pas un post', '', '')");
-            db.execSQL("INSERT INTO post " +
-                    "VALUES (2, 29, '', 'Gatti ^^', '', '')");
+//            db.execSQL("INSERT INTO post " +
+//                    "VALUES (2, 29, '', 'Gatti ^^', '', '')");
 //            Log.d("MyPet", "INSERT DrOliver");
 //            db.execSQL("INSERT INTO users " +
 //                    "VALUES (28, 'DrOliver', '', 'Matteo', 'Oliveri', 'male', '1994-07-08')");
 //            Log.d("MyPet", "INSERT Sissy");
-            db.execSQL("INSERT INTO users " +
-                    "VALUES (29, 'Sissy', '', 'Silvia', 'Lombardo', 'female', '1993-12-08')");
+//            db.execSQL("INSERT INTO users " +
+//                    "VALUES (29, 'Sissy', '', 'Silvia', 'Lombardo', 'female', '1993-12-08')");
 //            Log.d("MyPet", "INSERT Axel");
 //            db.execSQL("INSERT INTO animals " +
 //                    "VALUES (8, 'Axel2121', 'Cane', 'male', '', '2012-06-15')");
 //            Log.d("MyPet", "INSERT Robin");
-            db.execSQL("INSERT INTO animals " +
-                    "VALUES (12, 'Robin2121', 'Gatto', 'male', '', '2013-03-31')");
+//            db.execSQL("INSERT INTO animals " +
+//                    "VALUES (12, 'Robin2121', 'Gatto', 'male', '', '2013-03-31')");
 //            Log.d("MyPet", "INSERT Happy");
-            db.execSQL("INSERT INTO animals " +
-                    "VALUES (98, 'Happy2121', 'Cane', 'male', '', '2012-06-15')");
+//            db.execSQL("INSERT INTO animals " +
+//                    "VALUES (98, 'Happy2121', 'Cane', 'male', '', '2012-06-15')");
 //            Log.d("MyPet", "INSERT Jerry");
-            db.execSQL("INSERT INTO animals " +
-                    "VALUES (134, 'Jerry221', 'Gatto', 'male', '', '2013-03-31')");
+//            db.execSQL("INSERT INTO animals " +
+//                    "VALUES (134, 'Jerry221', 'Gatto', 'male', '', '2013-03-31')");
 //            Log.d("MyPet", "INSERT Link Axel");
-            db.execSQL("INSERT INTO usersanimals " +
-                    "VALUES (28, 8)");
+//            db.execSQL("INSERT INTO usersanimals " +
+//                    "VALUES (28, 8)");
 //            Log.d("MyPet", "INSERT Link Robin");
-            db.execSQL("INSERT INTO usersanimals " +
-                    "VALUES (29, 12)");
+//            db.execSQL("INSERT INTO usersanimals " +
+//                    "VALUES (29, 12)");
 //            Log.d("MyPet", "INSERT Link Happy");
-            db.execSQL("INSERT INTO usersanimals " +
-                    "VALUES (28, 98)");
+//            db.execSQL("INSERT INTO usersanimals " +
+//                    "VALUES (28, 98)");
 //            Log.d("MyPet", "INSERT LInk Jerry");
-            db.execSQL("INSERT INTO usersanimals " +
-                    "VALUES (29, 134)");
+//            db.execSQL("INSERT INTO usersanimals " +
+//                    "VALUES (29, 134)");
         }
 
         @Override
@@ -322,7 +322,8 @@ public class MyPetDB {
         this.closeDB();
 
         if(presence > 0){        //Se l'utente è nel DB
-            return updateUser(u);
+//            return updateUser(u);
+            return presence;    //Si rischia di cancellare info. Usare updateUser per aggiornare un utente.
         } else {
             ContentValues cv = new ContentValues();
             cv.put(USERS_ID, u.id);
@@ -599,7 +600,9 @@ public class MyPetDB {
         long rowIDUserAnim = -1;
 
         if(presence > 0) {   //animale già presente nel DB
-            rowIDAnim = updateAnimal(a);
+//            rowIDAnim = updateAnimal(a);
+            return presence;    //Altrimenti si rischia di cancellare dati inseriti.
+                                // Usare updateAnimal per aggiornare i dati dell'animale
         } else {
             ContentValues cv = new ContentValues();
             cv.put(ANIMALS_ID, a.id);
@@ -800,7 +803,7 @@ public class MyPetDB {
                 " JOIN " + USERS_TABLE +
                 " ON (" + POSTUSERS_TABLE+"."+POSTUSERS_IDUSER + "=" + USERS_TABLE+"."+USERS_ID + ")");
 
-        String where = USERS_ID + "=?";
+        String where = USERS_TABLE+"."+USERS_ID + "=?";
         String[] whereArgs = { idUser };
 
         Cursor cursor = qb.query(db, null, where, whereArgs, null, null, null);
