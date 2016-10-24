@@ -794,6 +794,7 @@ public class MyPetDB {
         ArrayList<Post> posts = new ArrayList<>();
         openReadableDB();
 
+        //########### POST in cui si è TAGGATI ##############à
         //Serve un join: usiamo QueryBuilder
         SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 
@@ -818,9 +819,17 @@ public class MyPetDB {
 
             posts.add(post);
         }
+
         if (cursor != null)
             cursor.close();
         closeDB();
+
+        //########## POST in cui si è AUTORE ##########
+        ArrayList<Post> authPost = getPostsByAuthor(idUser);
+
+        posts.addAll(authPost);
+
+        //TODO ordinare per data
 
         return posts;
     }

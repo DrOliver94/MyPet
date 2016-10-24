@@ -185,7 +185,7 @@ public class FeedFragment extends Fragment {
 
         //caricamento dei dati nell'adapter
         SimpleAdapter adapter = new SimpleAdapter(getActivity(), data, res, from, to);
-        adapter.getCount();
+        //adapter.getCount();
         feedListView.setAdapter(adapter);
     }
 
