@@ -27,8 +27,8 @@ public class MyPetDB {
     public static final int    USERS_USERNAME_COL = 1;
 
     //meglio lasciarle sul server...
-//    public static final String USERS_PASSWORD = "Password";
-//    public static final int    USERS_PASSWORD_COL = 2;
+    //public static final String USERS_PASSWORD = "Password";
+    //public static final int    USERS_PASSWORD_COL = 2;
 
     public static final String USERS_PROFILEPIC = "ProfilePic";
     public static final int    USERS_PROFILEPIC_COL = 2;
@@ -611,7 +611,7 @@ public class MyPetDB {
             this.openWriteableDB();
             rowIDAnim = db.insert(ANIMALS_TABLE, null, cv);
 
-            if(rowIDAnim != -1){    //Se l'insert va a buon fine
+            if(userId != null && rowIDAnim != -1){    //Se l'insert va a buon fine
                 cv = new ContentValues();
                 cv.put(USERSANIMALS_IDANIMAL, a.id);
                 cv.put(USERSANIMALS_IDUSER, userId);
@@ -770,7 +770,48 @@ public class MyPetDB {
             Post post = new Post();
 
             //TODO fare il resto
-            post.text = cursor.getString(POSTS_TEXT_COL);
+            post.text = cursor.getString(cursor.getColumnIndex(POSTS_TEXT));
+
+            posts.add(post);
+        }
+        if (cursor != null)
+            cursor.close();
+        closeDB();
+
+        return posts;
+    }
+
+    /**
+     * Recupera tutti i post in cui l'utente figura taggato o è autore
+     *
+     * @param idUser id dell'utente da ricercare nel DB
+     * @return ArrayList dei post cercati
+     */
+    public ArrayList<Post> getPostsByUser(String idUser) {
+        ArrayList<Post> posts = new ArrayList<>();
+        openReadableDB();
+
+        //Serve un join: usiamo QueryBuilder
+        SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
+
+        //indichiamo le tabelle su cui lavorare
+        qb.setTables(POSTS_TABLE + " JOIN " + POSTUSERS_TABLE +
+                " ON (" + POSTS_TABLE+"."+POSTS_ID + "=" + POSTUSERS_TABLE+"."+POSTUSERS_IDPOST + ")" +
+                " JOIN " + USERS_TABLE +
+                " ON (" + POSTUSERS_TABLE+"."+POSTUSERS_IDUSER + "=" + USERS_TABLE+"."+USERS_ID + ")");
+
+        String where = USERS_ID + "=?";
+        String[] whereArgs = { idUser };
+
+        Cursor cursor = qb.query(db, null, where, whereArgs, null, null, null);
+
+        while (cursor.moveToNext()) {
+            Post post = new Post();
+
+            //TODO fare il resto
+            post.id = cursor.getString(cursor.getColumnIndex(POSTS_ID));
+            post.text = cursor.getString(cursor.getColumnIndex(POSTS_TEXT));
+            post.date = cursor.getString(cursor.getColumnIndex(POSTS_DATE));
 
             posts.add(post);
         }
@@ -782,19 +823,65 @@ public class MyPetDB {
     }
 
     public long insertPost(Post p) {
-        ContentValues cv = new ContentValues();
-        cv.put(POSTS_ID, p.id);
-        cv.put(POSTS_IDAUTHOR, p.idauthor);
-        cv.put(POSTS_TEXT, p.text);
-        cv.put(POSTS_DATE, p.date);
-        cv.put(POSTS_PLACE, p.place);
-        //TODO aggiornare lista animali e utenti taggati
+        Log.d("MyPet", "Insert post " + p.id + ", by " + p.idauthor);
+        //Controlla se l'utente è già nel DB
+        String where = POSTS_ID + "= ?";
+        String[] whereArgs = { p.id };
 
-        this.openWriteableDB();
-        long rowID = db.insert(POSTS_TABLE, null, cv);
+        openReadableDB();
+        Cursor cursor = db.query(POSTS_TABLE, null,
+                where, whereArgs, null, null, null);
+
+        int presence = cursor.getCount();
+        cursor.close();
         this.closeDB();
 
-        Log.d("MyPet", "Insert post " + p.id + ", by " + p.idauthor);
+        long rowID = -1;
+        if(presence == 0) {        //Se il post non è nel DB
+            ContentValues cv = new ContentValues();
+            cv.put(POSTS_ID, p.id);
+            cv.put(POSTS_IDAUTHOR, p.idauthor);
+            cv.put(POSTS_TEXT, p.text);
+            cv.put(POSTS_DATE, p.date);
+            cv.put(POSTS_PLACE, p.place);
+            //Agginta di animali e utenti taggati
+            for(User u : p.users){
+                insertUser(u);
+                linkUserPost(u.id, p.id);
+            }
+            for(Animal a : p.animals){
+                insertAnimal(a, null);
+                linkAnimalPost(a.id, p.id);
+            }
+
+            this.openWriteableDB();
+            rowID = db.insert(POSTS_TABLE, null, cv);
+            this.closeDB();
+        }
+
+        return rowID;
+    }
+
+    public long linkUserPost(String idUser, String idPost) {
+        ContentValues cv = new ContentValues();
+        cv.put(POSTUSERS_IDUSER, idUser);
+        cv.put(POSTUSERS_IDPOST, idPost);
+
+        this.openWriteableDB();
+        long rowID = db.insert(POSTUSERS_TABLE, null, cv);
+        this.closeDB();
+
+        return rowID;
+    }
+
+    public long linkAnimalPost(String idAnimal, String idPost) {
+        ContentValues cv = new ContentValues();
+        cv.put(POSTANIMALS_IDANIMAL, idAnimal);
+        cv.put(POSTUSERS_IDPOST, idPost);
+
+        this.openWriteableDB();
+        long rowID = db.insert(POSTANIMALS_TABLE, null, cv);
+        this.closeDB();
 
         return rowID;
     }
