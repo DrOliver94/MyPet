@@ -12,8 +12,7 @@ public class User {
     public String name;
     public String surname;
     public String gender;
-    public String birthDate; //TODO salvare in formato decente
-    //TODO pic
+    public String birthdate; //TODO salvare in formato decente (SimpleDateFormat. suppressLint potrebbe servire)
     public String profilepic;
 
     public User(){}
@@ -22,10 +21,16 @@ public class User {
         try {
             id = idUser;
             username = jObjUser.getString("username");
-            name = jObjUser.getString("name");
-            surname = jObjUser.getString("surname");
-            gender = jObjUser.getString("gender");
-            birthDate = jObjUser.getString("birthDate");
+            if(!jObjUser.isNull("name"))
+                name = jObjUser.getString("name");
+            if(!jObjUser.isNull("surname"))
+                surname = jObjUser.getString("surname");
+            if(!jObjUser.isNull("gender"))
+                gender = jObjUser.getString("gender");
+            if(!jObjUser.isNull("birthDate"))
+                birthdate = jObjUser.getString("birthDate");
+            if(!jObjUser.isNull("profilePic"))
+                profilepic = jObjUser.getString("profilePic");
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -12,10 +12,14 @@ import android.os.StrictMode;
 import android.util.Log;
 import android.net.Uri;
 import android.widget.Button;
+import android.widget.ListView;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 
 /**
@@ -36,9 +40,11 @@ public class FeedFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
+    private ListView feedListView;
     private OnFragmentInteractionListener mListener;
 
     private SharedPreferences shPref;
+    private MyPetDB dbHandler;
 
     private ServerComm srv;
 
@@ -72,6 +78,8 @@ public class FeedFragment extends Fragment {
 
         //Recupero delle SharedPreferences
         shPref = getActivity().getSharedPreferences("MyPetPrefs", Context.MODE_PRIVATE);
+
+        dbHandler = new MyPetDB(getActivity());
     }
 
     @Override
@@ -79,6 +87,9 @@ public class FeedFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_feed, container, false);
+
+        feedListView = (ListView) view.findViewById(R.id.feed_postsListView);
+        getFeedPost(shPref.getString("IdUser", ""));
 
         if (mListener != null) {
             mListener.onFragmentInteraction("Feed");
@@ -151,10 +162,31 @@ public class FeedFragment extends Fragment {
     }
 
 
-    public void getFeedPost() {
+    public void getFeedPost(String idUser) {
+        //recupero elenco dei post dal DB
+        ArrayList<Post> posts = HomeActivity.dbManager.getPostsByUser(idUser);
 
+        Log.d("MyPet", feedListView.toString());
 
+        //caricamento dei post in un array di HashMap
+        ArrayList<HashMap<String, String>> data = new ArrayList<>();
+        for(Post p : posts) {
+            HashMap<String, String> map = new HashMap<>();
+            map.put("id", p.id);
+            map.put("text", p.text);
+            data.add(map);
+            Log.d("MyPet", p.text);
+        }
 
+        //risorse
+        int res = R.layout.listview_post;
+        String [] from = {"id", "text"};
+        int[] to = {R.id.post_id, R.id.post_text};
+
+        //caricamento dei dati nell'adapter
+        SimpleAdapter adapter = new SimpleAdapter(getActivity(), data, res, from, to);
+        //adapter.getCount();
+        feedListView.setAdapter(adapter);
     }
 
 }

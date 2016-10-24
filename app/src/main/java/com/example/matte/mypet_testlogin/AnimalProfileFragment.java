@@ -15,7 +15,6 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
@@ -41,7 +40,7 @@ public class AnimalProfileFragment extends Fragment {
     public AnimalProfileFragment() {
         // Required empty public constructor
     }
-// s was here
+
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.

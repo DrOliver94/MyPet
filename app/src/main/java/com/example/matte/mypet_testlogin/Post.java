@@ -3,6 +3,7 @@ package com.example.matte.mypet_testlogin;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
@@ -11,8 +12,8 @@ import java.util.ArrayList;
  */
 public class Post {
     public String id;
-    public String idAuthor;
-    public String nameAuthor;
+    public String idauthor;
+    public String nameauthor;
     public String picture;
     public String text;
     public String date;
@@ -31,32 +32,42 @@ public class Post {
     }
 
     public Post(String idPost, JSONObject jObjPost) {
+        users = new ArrayList<User>();
+        animals = new ArrayList<Animal>();
+
         try {
             id = idPost;
-            idAuthor = jObjPost.getString("author");
-            nameAuthor = jObjPost.getString("nameauthor");
+            idauthor = jObjPost.getString("author");
+            nameauthor = jObjPost.getString("nameauthor");
             //TODO picAuthor
             //TODO pic
-            text = jObjPost.getString("text");
-            date = jObjPost.getString("date");
-            place = jObjPost.getString("place");
+            if(!jObjPost.isNull("text"))
+                text = jObjPost.getString("text");
+            if(!jObjPost.isNull("date"))
+                date = jObjPost.getString("date");
+            if(!jObjPost.isNull("place"))
+                place = jObjPost.getString("place");
 
-            JSONObject jUsers = jObjPost.getJSONObject("users");
-            JSONArray idUsers = jUsers.names();                 //recupera elenco ID degli utenti
-            for (int i = 0; i < idUsers.length(); i++) {        //per ogni utente nell'obj
-                String idUser = (String) idUsers.get(i);        //recupera ID
-                JSONObject jUser = jUsers.getJSONObject(idUser);//recupera utente
-                User u = new User(idUser, jUser);               //Crea obj
-                users.add(u);                                   //Inserisce nell'arrayList
+            if(!jObjPost.isNull("users")) { //TODO non fa quello per cui è qui (getJSONobject continua a ravanare nei null...)
+                JSONObject jUsers = jObjPost.getJSONObject("users");
+                JSONArray idUsers = jUsers.names();                 //recupera elenco ID degli utenti
+                for (int i = 0; i < idUsers.length(); i++) {        //per ogni utente nell'obj
+                    String idUser = (String) idUsers.get(i);        //recupera ID
+                    JSONObject jUser = jUsers.getJSONObject(idUser);//recupera utente
+                    User u = new User(idUser, jUser);               //Crea obj
+                    users.add(u);                                   //Inserisce nell'arrayList
+                }
             }
 
-            JSONObject jPets = jObjPost.getJSONObject("pets");
-            JSONArray idPets = jPets.names();                   //recupera elenco ID degli animali
-            for (int i = 0; i < idPets.length(); i++) {         //per ogni animale nell'obj
-                String idPet = (String) idPets.get(i);          //recupera ID
-                JSONObject jPet = jPets.getJSONObject(idPet);   //recupera animale
-                Animal p = new Animal(idPet, jPet);             //Crea obj
-                animals.add(p);                                 //Inserisce nel l'arrayList
+            if(!jObjPost.isNull("pets")) {
+                JSONObject jPets = jObjPost.getJSONObject("pets");
+                JSONArray idPets = jPets.names();                   //recupera elenco ID degli animali
+                for (int i = 0; i < idPets.length(); i++) {         //per ogni animale nell'obj
+                    String idPet = (String) idPets.get(i);          //recupera ID
+                    JSONObject jPet = jPets.getJSONObject(idPet);   //recupera animale
+                    Animal p = new Animal(idPet, jPet);             //Crea obj
+                    animals.add(p);                                 //Inserisce nel l'arrayList
+                }
             }
 
         } catch (Exception e) {

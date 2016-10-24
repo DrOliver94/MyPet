@@ -19,10 +19,14 @@ public class Animal {
         try {
             id = idPet;
             name = jObjPet.getString("name");
-            species = jObjPet.getString("species");
-            gender = jObjPet.getString("gender");
-            birthdate = jObjPet.getString("birthdate");
-            //TODO pic
+            if(!jObjPet.isNull("species"))
+                species = jObjPet.getString("species");
+            if(!jObjPet.isNull("gender"))
+                gender = jObjPet.getString("gender");
+            if(!jObjPet.isNull("birthdate"))
+                birthdate = jObjPet.getString("birthdate");
+            if(!jObjPet.isNull("profilePic"))
+                profilepic = jObjPet.getString("profilePic");
         } catch (Exception e) {
             e.printStackTrace();
         }

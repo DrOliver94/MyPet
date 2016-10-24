@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
@@ -35,6 +36,7 @@ public class ProfileFragment extends Fragment {
     private MyPetDB dbHandler;
 
     private ListView itemsListView;
+    private View header;
 
     private OnFragmentInteractionListener mListener;
 
@@ -73,22 +75,26 @@ public class ProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
+        header = getActivity().getLayoutInflater().inflate(R.layout.fragment_profile_header, null);
 
         User currUser = dbHandler.getUser(idUser);
 
-        TextView userUserNameProfileText = (TextView) view.findViewById(R.id.userUsernameTextView);
-        TextView userNameText = (TextView) view.findViewById(R.id.userNameTextView);
-        TextView userSurnameText = (TextView) view.findViewById(R.id.userSurnameTextView);
-        TextView userGenderText = (TextView) view.findViewById(R.id.userGenderTextView);
-        TextView userBirthDateText = (TextView) view.findViewById(R.id.userBirthDateTextView);
+        TextView userUserNameProfileText = (TextView) header.findViewById(R.id.userUsernameTextView);
+        TextView userNameText = (TextView) header.findViewById(R.id.userNameTextView);
+        TextView userSurnameText = (TextView) header.findViewById(R.id.userSurnameTextView);
+        TextView userGenderText = (TextView) header.findViewById(R.id.userGenderTextView);
+        TextView userBirthDateText = (TextView) header.findViewById(R.id.userBirthDateTextView);
 
         userUserNameProfileText.setText(shPref.getString("Username", "No Username"));//TODO leggi da db
         userNameText.setText(currUser.name);
         userSurnameText.setText(currUser.surname);
         userGenderText.setText(currUser.gender);
-        userBirthDateText.setText(currUser.birthDate);
+        userBirthDateText.setText(currUser.birthdate);
 
         itemsListView = (ListView) view.findViewById(R.id.profile_postsListView);
+        itemsListView.addHeaderView(header);
+
+        //itemsListView.setScrollContainer(false);
 
         showPostsByAuthor(idUser);
 
@@ -97,6 +103,28 @@ public class ProfileFragment extends Fragment {
         }
 
         return view;
+    }
+
+    public static void justifyListViewHeightBasedOnChildren(ListView listView) {
+        ListAdapter adapter = listView.getAdapter();
+
+        if (adapter == null) {
+            return;
+        }
+        ViewGroup vg = listView;
+        int totalHeight = 0;
+        int measure =0;
+        for (int i = 0; i < adapter.getCount(); i++) {
+            View listItem = adapter.getView(i, null, vg);
+            listItem.measure(0, 0);
+            measure = listItem.getMeasuredHeight();
+            totalHeight += measure;
+        }
+        //totalHeight+=measure/2;
+        ViewGroup.LayoutParams par = listView.getLayoutParams();
+        par.height = totalHeight + (listView.getDividerHeight() * (adapter.getCount() - 1));
+        listView.setLayoutParams(par);
+        listView.requestLayout();
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -167,6 +195,7 @@ public class ProfileFragment extends Fragment {
         SimpleAdapter adapter = new SimpleAdapter(getActivity(), data, res, from, to);
         adapter.getCount();
         itemsListView.setAdapter(adapter);
+        //justifyListViewHeightBasedOnChildren(itemsListView);
     }
 
 }
