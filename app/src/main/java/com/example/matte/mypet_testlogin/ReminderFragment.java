@@ -31,6 +31,7 @@ public class ReminderFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
 
     private SharedPreferences shPref;
+    private MyPetDB dbHandler;
 
     public ReminderFragment() {
         // Required empty public constructor
