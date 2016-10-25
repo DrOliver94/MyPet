@@ -484,8 +484,8 @@ public class LoginActivity extends AppCompatActivity {
                 }
 
                 //##### Loading reminder nel DB
-                if(!jObj.isNull("_reminder")) {
-                    JSONObject jReminders = jObj.getJSONObject("_reminder");
+                if(!jObj.isNull("_reminders")) {
+                    JSONObject jReminders = jObj.getJSONObject("_reminders");
                     JSONArray idReminders = jReminders.names();                 //recupera elenco ID degli amici
                     for (int i = 0; i < idReminders.length(); i++) {            //per ogni utente nell'obj
                         JSONObject jReminder = jReminders.getJSONObject((String) idReminders.get(i));  //recupera utente

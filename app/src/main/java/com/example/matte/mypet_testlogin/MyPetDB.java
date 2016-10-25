@@ -150,7 +150,7 @@ public class MyPetDB {
     public static final String REMINDERS_EVENTTIME = "EventTime";
     public static final int    REMINDERS_EVENTTIME_COL = 5;
 
-    //##################### CREATE DROP statements ##################
+    //##################### CREATE and DROP statements ##################
     public static final String CREATE_USERS_TABLE =
             "CREATE TABLE " + USERS_TABLE + " (" +
                     USERS_ID         + " INTEGER PRIMARY KEY," +
@@ -201,6 +201,15 @@ public class MyPetDB {
                     USERSANIMALS_IDUSER   + " TEXT NOT NULL," +
                     USERSANIMALS_IDANIMAL + " TEXT NOT NULL)";
 
+    public static final String CREATE_REMINDERS_TABLE =
+            "CREATE TABLE " + REMINDERS_TABLE + " (" +
+                    REMINDERS_IDREMINDER + " INTEGER PRIMARY KEY," +
+                    REMINDERS_IDUSER     + " TEXT NOT NULL," +
+                    REMINDERS_IDANIM     + " TEXT NOT NULL," +
+                    REMINDERS_EVENTNAME  + " TEXT NOT NULL," +
+                    REMINDERS_EVENTPLACE + " TEXT NOT NULL," +
+                    REMINDERS_EVENTTIME  + " TEXT NOT NULL)";
+
     public static final String DROP_USERS_TABLE =
             "DROP TABLE IF EXISTS " + USERS_TABLE;
 
@@ -222,6 +231,8 @@ public class MyPetDB {
     public static final String DROP_USERSANIMALS_TABLE =
             "DROP TABLE IF EXISTS " + USERSANIMALS_TABLE;
 
+    public static final String DROP_REMINDERS_TABLE =
+            "DROP TABLE IF EXISTS " + REMINDERS_TABLE;
 
     private static class DBHelper extends SQLiteOpenHelper {
 
@@ -240,6 +251,7 @@ public class MyPetDB {
             db.execSQL(CREATE_POSTANIMALS_TABLE);
             db.execSQL(CREATE_POSTUSERS_TABLE);
             db.execSQL(CREATE_USERSANIMALS_TABLE);
+            db.execSQL(CREATE_REMINDERS_TABLE);
 
             //insert sample post
             Log.d("MyPet", "INSERT Samples");
@@ -292,6 +304,7 @@ public class MyPetDB {
             db.execSQL(MyPetDB.DROP_POSTANIMALS_TABLE);
             db.execSQL(MyPetDB.DROP_POSTUSERS_TABLE);
             db.execSQL(MyPetDB.DROP_USERSANIMALS_TABLE);
+            db.execSQL(MyPetDB.DROP_REMINDERS_TABLE);
             onCreate(db);
         }
     }
@@ -792,6 +805,7 @@ public class MyPetDB {
             Post post = new Post();
 
             //TODO fare il resto
+            post.id = cursor.getString(cursor.getColumnIndex(POSTS_ID));
             post.text = cursor.getString(cursor.getColumnIndex(POSTS_TEXT));
 
             posts.add(post);
@@ -952,6 +966,42 @@ public class MyPetDB {
         }
 
         return rowIDRem;
+    }
+
+    public ArrayList<Reminder> getRemindersByUser(String idUser) {
+        ArrayList<Reminder> reminders = new ArrayList<>();
+        openReadableDB();
+
+        //Serve un join: usiamo QueryBuilder
+        SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
+
+        //indichiamo le tabelle su cui lavorare
+        qb.setTables(REMINDERS_TABLE + " JOIN " + ANIMALS_TABLE +
+                " ON (" + REMINDERS_TABLE+"."+REMINDERS_IDANIM + "=" + ANIMALS_TABLE+"."+ANIMALS_ID + ")");
+
+        String where = REMINDERS_IDUSER + "=?";
+        String[] whereArgs = { idUser };
+
+        Cursor cursor = qb.query(db, null, where, whereArgs, null, null, null);
+
+        while (cursor.moveToNext()) {
+            Reminder r = new Reminder();
+
+            r.id = cursor.getString(cursor.getColumnIndex(REMINDERS_IDREMINDER));
+            r.idanim = cursor.getString(cursor.getColumnIndex(REMINDERS_IDANIM));
+            r.eventname = cursor.getString(cursor.getColumnIndex(REMINDERS_EVENTNAME));
+            r.eventplace = cursor.getString(cursor.getColumnIndex(REMINDERS_EVENTPLACE));
+            r.eventtime = cursor.getString(cursor.getColumnIndex(REMINDERS_EVENTTIME));
+            r.animname = cursor.getString(cursor.getColumnIndex(ANIMALS_NAME));
+            r.animpic = cursor.getString(cursor.getColumnIndex(ANIMALS_PROFILEPIC));
+
+            reminders.add(r);
+        }
+        if (cursor != null)
+            cursor.close();
+        closeDB();
+
+        return reminders;
     }
 
 //    public int updateTask(Task task) {

@@ -13,6 +13,8 @@ public class Reminder {
     String eventname;
     String eventplace;
     String eventtime;
+    String animname;
+    String animpic;
 
     public Reminder(){}
 

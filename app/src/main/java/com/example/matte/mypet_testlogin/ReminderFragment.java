@@ -5,10 +5,16 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -28,6 +34,7 @@ public class ReminderFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
+    private ListView remindersListView;
     private OnFragmentInteractionListener mListener;
 
     private SharedPreferences shPref;
@@ -65,6 +72,8 @@ public class ReminderFragment extends Fragment {
 
         //Recupero delle SharedPreferences
         shPref = getActivity().getSharedPreferences("MyPetPrefs", Context.MODE_PRIVATE);
+
+        dbHandler = new MyPetDB(getActivity());
     }
 
     @Override
@@ -73,16 +82,47 @@ public class ReminderFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_reminder, container, false);
 
-        TextView reminderText = (TextView) view.findViewById(R.id.text_reminder);
-        reminderText.setText(shPref.getString("IdUser", "No User") + " "
-                            + shPref.getString("Name", "No Name") + " "
-                            + shPref.getString("Surname", "No surname"));
+//        TextView reminderText = (TextView) view.findViewById(R.id.text_reminder);
+//        reminderText.setText(shPref.getString("IdUser", "No User") + " "
+//                            + shPref.getString("Name", "No Name") + " "
+//                            + shPref.getString("Surname", "No surname"));
+
+        remindersListView = (ListView) view.findViewById(R.id.remindersListView);
+        getReminders(shPref.getString("IdUser", ""));
 
         if (mListener != null) {
             mListener.onFragmentInteraction("Promemoria");
         }
 
         return view;
+
+    }
+
+    private void getReminders(String idUser) {
+        //recupero elenco dei post dal DB
+        ArrayList<Reminder> reminders = HomeActivity.dbManager.getRemindersByUser(idUser);
+
+//        Log.d("MyPet", remindersListView.toString());
+
+        //caricamento dei post in un array di HashMap
+        ArrayList<HashMap<String, String>> data = new ArrayList<>();
+        for(Reminder r : reminders) {
+            HashMap<String, String> map = new HashMap<>();
+            map.put("id", r.id);
+            map.put("eventname", r.eventname);
+            data.add(map);
+            Log.d("Event in map ", r.eventname);
+        }
+
+        //risorse
+        int res = R.layout.listview_reminder;
+        String [] from = {"id", "eventname"};
+        int[] to = {R.id.reminder_id, R.id.reminder_eventname};
+
+        //caricamento dei dati nell'adapter
+        SimpleAdapter adapter = new SimpleAdapter(getActivity(), data, res, from, to);
+        //adapter.getCount();
+        remindersListView.setAdapter(adapter);
 
     }
 

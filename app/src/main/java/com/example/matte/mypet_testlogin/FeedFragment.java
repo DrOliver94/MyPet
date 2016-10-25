@@ -7,20 +7,19 @@ import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import android.os.StrictMode;
 import android.util.Log;
-import android.net.Uri;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import android.os.StrictMode;
+import android.net.Uri;
+import android.widget.Button;
 import android.widget.TextView;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-
 
 /**
  * A simple {@link Fragment} subclass.
@@ -79,6 +78,7 @@ public class FeedFragment extends Fragment {
         //Recupero delle SharedPreferences
         shPref = getActivity().getSharedPreferences("MyPetPrefs", Context.MODE_PRIVATE);
 
+        //Creazione handler database
         dbHandler = new MyPetDB(getActivity());
     }
 
@@ -166,7 +166,7 @@ public class FeedFragment extends Fragment {
         //recupero elenco dei post dal DB
         ArrayList<Post> posts = HomeActivity.dbManager.getPostsByUser(idUser);
 
-        Log.d("MyPet", feedListView.toString());
+//        Log.d("MyPet", feedListView.toString());
 
         //caricamento dei post in un array di HashMap
         ArrayList<HashMap<String, String>> data = new ArrayList<>();
