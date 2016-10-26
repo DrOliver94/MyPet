@@ -66,9 +66,10 @@ public class ProfileFragment extends Fragment {
         if (getArguments() != null) {
             idUser = getArguments().getString(ARG_PARAM1);
         }
+
         //Recupero delle SharedPreferences
         shPref = getActivity().getSharedPreferences("MyPetPrefs", Context.MODE_PRIVATE);
-//        dbHandler = new MyPetDB(getActivity());
+
         setHasOptionsMenu(true);
     }
 
@@ -116,7 +117,6 @@ public class ProfileFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         switch (item.getItemId()) {
             case R.id.menuEditUserProfile:
                 getFragmentManager()

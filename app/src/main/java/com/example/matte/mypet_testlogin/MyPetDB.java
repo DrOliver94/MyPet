@@ -656,7 +656,6 @@ public class MyPetDB {
             }
         }
 
-
         this.closeDB();
 
         return rowIDAnim;

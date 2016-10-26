@@ -4,7 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -75,8 +75,14 @@ public class AnimalDataFragment extends Fragment {
 
         if(isEdit){ //Se si modifica un animal => caricare negli edittext i dati dell'animal
 
+            if (mListener != null) {
+                mListener.onFragmentInteraction("Modifica animale");
+            }
         } else {    //Si crea un nuovo animale
 
+            if (mListener != null) {
+                mListener.onFragmentInteraction("Nuovo animale");
+            }
         }
 
         return view;

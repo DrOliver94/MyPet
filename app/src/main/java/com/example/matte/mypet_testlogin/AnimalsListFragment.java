@@ -8,6 +8,9 @@ import android.os.Bundle;
 import android.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -72,6 +75,8 @@ public class AnimalsListFragment extends Fragment {
 
         //recupero elenco dei post dal DB
         animals = HomeActivity.dbManager.getAnimalsByOwner(idUser);
+
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -99,6 +104,7 @@ public class AnimalsListFragment extends Fragment {
 
         showAnimalsByUser(idUser);
 //        debugUsersAnim();
+
         if (mListener != null) {
             mListener.onFragmentInteraction("Elenco animali");
         }
@@ -106,12 +112,27 @@ public class AnimalsListFragment extends Fragment {
         return view;
     }
 
-//    // TODO: Rename method, update argument and hook method into UI event
-//    public void onButtonPressed(Uri uri) {
-//        if (mListener != null) {
-//            mListener.onFragmentInteraction(uri);
-//        }
-//    }
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.clear();
+        inflater.inflate(R.menu.menu_animal_list, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menuAddAnimal:
+                getFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.main_fragment, AnimalDataFragment.newInstance("0", false))
+                        .addToBackStack(null)
+                        .commit();
+                return true;
+            default: break;
+        }
+        return false;
+    }
 
     @Override
     public void onAttach(Context context) {
@@ -129,6 +150,8 @@ public class AnimalsListFragment extends Fragment {
         super.onDetach();
         mListener = null;
     }
+
+
 
     /**
      * This interface must be implemented by activities that contain this

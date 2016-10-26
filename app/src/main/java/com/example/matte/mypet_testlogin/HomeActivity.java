@@ -19,7 +19,9 @@ public class HomeActivity extends AppCompatActivity
                     ProfileFragment.OnFragmentInteractionListener,
                     AnimalsListFragment.OnFragmentInteractionListener,
                     AnimalProfileFragment.OnFragmentInteractionListener,
-                    FriendsFragment.OnFragmentInteractionListener{
+                    FriendsFragment.OnFragmentInteractionListener,
+                    UserDataFragment.OnFragmentInteractionListener,
+                    AnimalDataFragment.OnFragmentInteractionListener{
 
     public static MyPetDB dbManager;
     public static SharedPreferences shPref;
