@@ -108,7 +108,7 @@ public class HomeActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        //TODO aggiungere link all'elenco amici (FriendsFragment)
+        //TODO aggiungere link all'elenco amici (FriendsFragmentt)
 
         if (id == R.id.nav_profile) {
             getFragmentManager()
