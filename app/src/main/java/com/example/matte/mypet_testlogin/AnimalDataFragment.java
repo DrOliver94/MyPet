@@ -2,8 +2,6 @@ package com.example.matte.mypet_testlogin;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -115,12 +113,17 @@ public class AnimalDataFragment extends Fragment {
 
     private void insertAnimal(){
         //Recuperare dati, fare controlli se necessario
+        ArrayList<String> par = new ArrayList<String>();
 
-        //Inviare richiesta al server per l'inserimento
+        par.add("nome");
+        par.add("specie");
+        par.add("sesso");
+        par.add("datanascita");
+        par.add("profilepic");
 
-        //Se va a buon fine, inserire nel DB locale
-        //Altrimenti indicare l'errore all'utente
-
+        //Inviare richiesta al server per l'update
+        InsertAnimalTask insertAnim = new InsertAnimalTask("token", idAnim, "idUser");
+        insertAnim.execute((String[])par.toArray());
     }
 
     private void updateAnimal(){
