@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".UserDataFragment">
+    tools:context="com.example.matte.mypet_testlogin.AnimalDataFragment">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -35,19 +35,20 @@
                         android:padding="5dp"
                         android:layout_height="35dp"
                         android:textStyle="bold"
-                        android:id="@+id/textView10"
+                        android:id="@+id/textView20"
                         android:textSize="20dp"
                         android:layout_margin="8dp" />
 
                     <EditText
-                        android:text="Nome dell'utente"
+                        android:text="Nome dell'animale"
                         android:layout_width="match_parent"
                         android:layout_height="35dp"
-                        android:id="@+id/userNameEditText"
+                        android:id="@+id/animalNameEditText"
                         android:layout_weight="1"
                         android:gravity="left|fill_vertical"
                         android:padding="5dp"
-                        android:layout_margin="8dp" />
+                        android:layout_margin="8dp"
+                        android:textSize="20dp" />
 
                 </TableRow>
 
@@ -58,56 +59,27 @@
                     android:weightSum="2">
 
                     <TextView
-                        android:text="Cognome:"
+                        android:text="Specie:"
                         android:layout_width="match_parent"
                         android:gravity="right|fill_vertical"
                         android:layout_weight="1"
                         android:padding="5dp"
                         android:layout_height="35dp"
                         android:textStyle="bold"
-                        android:id="@+id/textView11"
+                        android:id="@+id/textView22"
                         android:textSize="20dp"
                         android:layout_margin="8dp" />
 
                     <EditText
-                        android:text="Cognome dell'utente"
+                        android:text="Specie dell'animale"
                         android:layout_width="match_parent"
                         android:layout_height="35dp"
-                        android:id="@+id/userSurnameEditText"
+                        android:id="@+id/animalSpeciesEditText"
                         android:layout_weight="1"
                         android:gravity="left|fill_vertical"
                         android:padding="5dp"
-                        android:layout_margin="8dp" />
-
-                </TableRow>
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal"
-                    android:weightSum="2">
-
-                    <TextView
-                        android:text="Nickname:"
-                        android:layout_width="match_parent"
-                        android:gravity="right|fill_vertical"
-                        android:layout_weight="1"
-                        android:padding="5dp"
-                        android:layout_height="35dp"
-                        android:textStyle="bold"
-                        android:id="@+id/textView12"
-                        android:textSize="20dp"
-                        android:layout_margin="8dp" />
-
-                    <EditText
-                        android:text="Username dell'utente"
-                        android:layout_width="match_parent"
-                        android:layout_height="35dp"
-                        android:id="@+id/userUsernameEditText"
-                        android:layout_weight="1"
-                        android:gravity="left|fill_vertical"
-                        android:padding="5dp"
-                        android:layout_margin="8dp" />
+                        android:layout_margin="8dp"
+                        android:textSize="20dp" />
                 </TableRow>
 
                 <TableRow
@@ -124,19 +96,20 @@
                         android:padding="5dp"
                         android:layout_height="35dp"
                         android:textStyle="bold"
-                        android:id="@+id/textView13"
+                        android:id="@+id/textView33"
                         android:textSize="20dp"
                         android:layout_margin="8dp" />
 
                     <EditText
-                        android:text="Data nascita dell'utente"
+                        android:text="Data nasc dell'anim"
                         android:layout_width="match_parent"
                         android:layout_height="35dp"
-                        android:id="@+id/userBirthDateEditText"
+                        android:id="@+id/animalBirthDateEditText"
                         android:layout_weight="1"
                         android:gravity="left|fill_vertical"
                         android:padding="5dp"
-                        android:layout_margin="8dp" />
+                        android:layout_margin="8dp"
+                        android:textSize="20dp" />
 
                 </TableRow>
 
@@ -154,48 +127,20 @@
                         android:padding="5dp"
                         android:layout_height="35dp"
                         android:textStyle="bold"
-                        android:id="@+id/textView14"
+                        android:id="@+id/textView24"
                         android:textSize="20dp"
                         android:layout_margin="8dp" />
 
                     <EditText
-                        android:text="Sesso dell'utente"
+                        android:text="Sesso dell'animale"
                         android:layout_width="match_parent"
                         android:layout_height="35dp"
-                        android:id="@+id/userGenderEditText"
+                        android:id="@+id/animalGenderEditText"
                         android:layout_weight="1"
                         android:gravity="left|fill_vertical"
                         android:padding="5dp"
-                        android:layout_margin="8dp" />
-                </TableRow>
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal"
-                    android:weightSum="2" >
-
-                    <TextView
-                        android:text="Mail:"
-                        android:layout_width="match_parent"
-                        android:gravity="right|fill_vertical"
-                        android:layout_weight="1"
-                        android:padding="5dp"
-                        android:layout_height="35dp"
-                        android:textStyle="bold"
-                        android:id="@+id/textView15"
-                        android:textSize="20dp"
-                        android:layout_margin="8dp" />
-
-                    <EditText
-                        android:text="Mail dell'utente"
-                        android:layout_width="match_parent"
-                        android:layout_height="35dp"
-                        android:id="@+id/userMailEditText"
-                        android:layout_weight="1"
-                        android:gravity="left|fill_vertical"
-                        android:padding="5dp"
-                        android:layout_margin="8dp" />
+                        android:layout_margin="8dp"
+                        android:textSize="20dp" />
                 </TableRow>
 
             </TableLayout>
@@ -210,7 +155,8 @@
                     android:layout_width="155dp"
                     android:layout_height="56dp"
                     android:id="@+id/button5"
-                    android:layout_gravity="center" />
+                    android:layout_gravity="center"
+                    android:textSize="20dp" />
 
             </FrameLayout>
 

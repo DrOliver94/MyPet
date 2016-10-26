@@ -1,9 +1,7 @@
 package com.example.matte.mypet_testlogin;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.util.Log;
@@ -74,7 +72,7 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_profile, container, false);
+        View view = inflater.inflate(R.layout.fragment_user_profile, container, false);
         header = getActivity().getLayoutInflater().inflate(R.layout.fragment_profile_header, null);
 
         User currUser = HomeActivity.dbManager.getUser(idUser);

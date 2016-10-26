@@ -73,7 +73,7 @@ public class AnimalDataFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_animal_user, container, false);
+        View view = inflater.inflate(R.layout.fragment_animal_data, container, false);
 
         if(isEdit){ //Se si modifica un animal => caricare negli edittext i dati dell'animal
 
