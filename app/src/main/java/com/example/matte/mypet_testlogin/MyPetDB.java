@@ -608,9 +608,10 @@ public class MyPetDB {
 
 
     /**
-     * Inserisce un animale nel DB
+     * Inserisce un animale nel DB. Inserisce il link tra user e animal.
      *
      * @param a animale da inserire
+     * @param userId Id utente da collegare
      * @return Numero della riga inserita. <br>
      *         -1 in caso di errore nell'inserimento
      */
@@ -642,6 +643,7 @@ public class MyPetDB {
             cv.put(ANIMALS_GENDER, a.gender);
             cv.put(ANIMALS_BIRTHDATE, a.birthdate);
             cv.put(ANIMALS_SPECIES, a.species);
+            cv.put(ANIMALS_PROFILEPIC, a.profilepic);
 
             this.openWriteableDB();
             rowIDAnim = db.insert(ANIMALS_TABLE, null, cv);
