@@ -7,5 +7,4 @@
         android:icon="@drawable/ic_menu_manage"
         app:showAsAction="ifRoom" />
 
-
 </menu>

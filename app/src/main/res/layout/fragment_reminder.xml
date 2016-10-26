@@ -7,8 +7,12 @@
 
     <ListView
         android:id="@+id/remindersListView"
-        android:padding="0dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_margin="0dp"
+        android:padding="0dp"
+        android:layout_height="match_parent"
+        android:dividerHeight="0dp"
+        android:divider="#00000000"
+        />
 
 </FrameLayout>

@@ -18,7 +18,8 @@ public class HomeActivity extends AppCompatActivity
                     ReminderFragment.OnFragmentInteractionListener,
                     ProfileFragment.OnFragmentInteractionListener,
                     AnimalsListFragment.OnFragmentInteractionListener,
-                    AnimalProfileFragment.OnFragmentInteractionListener{
+                    AnimalProfileFragment.OnFragmentInteractionListener,
+                    FriendsFragment.OnFragmentInteractionListener{
 
     public static MyPetDB dbManager;
     public static SharedPreferences shPref;
@@ -89,14 +90,19 @@ public class HomeActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
-        int id = item.getItemId();
-
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        } else if(id == R.id.menuEditUserProfile) {
-            return false;
+//        if (item.getItemId() == R.id.action_settings) {
+//            return true;
+//        } else if(id == R.id.menuEditUserProfile) {
+//            return false;
+//        }
+        switch(item.getItemId()){
+            case R.id.action_settings:
+                return true;
+            case R.id.menuEditUserProfile:
+                return false;
+            default:
+                break;
         }
 
         return super.onOptionsItemSelected(item);
@@ -134,6 +140,12 @@ public class HomeActivity extends AppCompatActivity
                     .replace(R.id.main_fragment, AnimalsListFragment.newInstance(shPref.getString("IdUser", "")))
                     .addToBackStack(null)
                     .commit();
+        } else if(id == R.id.nav_friends) {
+                getFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.main_fragment, FriendsFragment.newInstance(shPref.getString("IdUser", "")))
+                        .addToBackStack(null)
+                        .commit();
         } else if (id == R.id.nav_logout) {
             //Cancella token in shPref => e' come fare logout
             SharedPreferences.Editor editor = shPref.edit();
