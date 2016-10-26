@@ -33,7 +33,7 @@ public class ProfileFragment extends Fragment {
     private String idUser;
 
     private SharedPreferences shPref;
-    private MyPetDB dbHandler;
+//    private MyPetDB dbHandler;
 
     private ListView itemsListView;
     private View header;
@@ -67,7 +67,7 @@ public class ProfileFragment extends Fragment {
         }
         //Recupero delle SharedPreferences
         shPref = getActivity().getSharedPreferences("MyPetPrefs", Context.MODE_PRIVATE);
-        dbHandler = new MyPetDB(getActivity());
+//        dbHandler = new MyPetDB(getActivity());
     }
 
     @Override
@@ -77,7 +77,7 @@ public class ProfileFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
         header = getActivity().getLayoutInflater().inflate(R.layout.fragment_profile_header, null);
 
-        User currUser = dbHandler.getUser(idUser);
+        User currUser = HomeActivity.dbManager.getUser(idUser);
 
         TextView userUserNameProfileText = (TextView) header.findViewById(R.id.userUsernameTextView);
         TextView userNameText = (TextView) header.findViewById(R.id.userNameTextView);

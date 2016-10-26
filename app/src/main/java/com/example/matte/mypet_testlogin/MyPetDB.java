@@ -444,7 +444,7 @@ public class MyPetDB {
 
         //indichiamo le tabelle su cui lavorare
         qb.setTables(USERS_TABLE + " JOIN " + FRIENDSHIP_TABLE +
-                "ON (" + USERS_TABLE + "." + USERS_ID + "=" + FRIENDSHIP_TABLE + "." + FRIENDSHIP_USERSENDER +
+                " ON (" + USERS_TABLE + "." + USERS_ID + "=" + FRIENDSHIP_TABLE + "." + FRIENDSHIP_USERSENDER +
                 " OR " + USERS_TABLE + "." + USERS_ID + "=" + FRIENDSHIP_TABLE + "." + FRIENDSHIP_USERRECEIVER + ")");
 
         String where = FRIENDSHIP_USERSENDER + "=? OR " + FRIENDSHIP_USERRECEIVER + "=?";
