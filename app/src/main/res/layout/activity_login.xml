@@ -35,7 +35,9 @@
                 android:layout_height="wrap_content"
                 android:inputType="textNoSuggestions"
                 android:maxLines="1"
-                android:hint="@string/username_hint"/>
+                android:hint="@string/username_hint"
+                android:textAlignment="center"
+                android:layout_margin="5dp" />
 
             <EditText
                 android:id="@+id/password"
@@ -45,13 +47,17 @@
                 android:maxLines="1"
                 android:hint="@string/password_hint"
                 android:imeActionId="@+id/login"
-                android:imeActionLabel="Login"/>
+                android:imeActionLabel="Login"
+                android:textAlignment="center"
+                android:layout_margin="5dp" />
 
             <Button
                 android:id="@+id/login"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/login_button"/>
+                android:layout_width="269dp"
+                android:layout_height="64dp"
+                android:text="@string/login_button"
+                android:layout_gravity="center"
+                android:textSize="18dp" />
 
         </LinearLayout>
 
