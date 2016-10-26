@@ -39,10 +39,11 @@
         <TextView
             android:id="@+id/userUsernameTextView"
             android:layout_width="match_parent"
-            android:layout_height="50sp"
+            android:layout_height="wrap_content"
             android:gravity="center"
             android:text="User"
-            android:textSize="40sp" />
+            android:textSize="50dp"
+            android:layout_margin="5dp" />
 
         <TableLayout
             android:orientation="horizontal"
@@ -63,7 +64,9 @@
                     android:elevation="0dp"
                     android:layout_weight="1"
                     android:gravity="right|fill_vertical"
-                    android:paddingRight="10dp" />
+                    android:paddingRight="10dp"
+                    android:textSize="18dp"
+                    android:layout_margin="3dp" />
 
                 <TextView
                     android:text="Nome_utente"
@@ -73,7 +76,9 @@
                     android:layout_width="match_parent"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
-                    android:paddingLeft="10dp" />
+                    android:paddingLeft="10dp"
+                    android:textSize="18dp"
+                    android:layout_margin="3dp" />
             </TableRow>
 
             <TableRow
@@ -87,7 +92,9 @@
                     android:layout_weight="1"
                     android:textStyle="normal|bold"
                     android:gravity="right|fill_vertical"
-                    android:paddingRight="10dp" />
+                    android:paddingRight="10dp"
+                    android:textSize="18dp"
+                    android:layout_margin="3dp" />
 
                 <TextView
                     android:text="Cognome_utente"
@@ -96,7 +103,9 @@
                     android:id="@+id/userSurnameTextView"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
-                    android:paddingLeft="10dp" />
+                    android:paddingLeft="10dp"
+                    android:textSize="18dp"
+                    android:layout_margin="3dp" />
             </TableRow>
 
             <TableRow
@@ -110,7 +119,9 @@
                     android:layout_weight="1"
                     android:textStyle="normal|bold"
                     android:gravity="right|fill_vertical"
-                    android:paddingRight="10dp" />
+                    android:paddingRight="10dp"
+                    android:textSize="18dp"
+                    android:layout_margin="3dp" />
 
                 <TextView
                     android:text="Data_nascita_utente"
@@ -119,7 +130,9 @@
                     android:id="@+id/userBirthDateTextView"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
-                    android:paddingLeft="10dp" />
+                    android:paddingLeft="10dp"
+                    android:textSize="18dp"
+                    android:layout_margin="3dp" />
             </TableRow>
 
             <TableRow
@@ -133,7 +146,9 @@
                     android:layout_weight="1"
                     android:textStyle="normal|bold"
                     android:gravity="right|fill_vertical"
-                    android:paddingRight="10dp" />
+                    android:paddingRight="10dp"
+                    android:textSize="18dp"
+                    android:layout_margin="3dp" />
 
                 <TextView
                     android:text="Genere_utente"
@@ -142,7 +157,9 @@
                     android:id="@+id/userGenderTextView"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
-                    android:paddingLeft="10dp" />
+                    android:paddingLeft="10dp"
+                    android:textSize="18dp"
+                    android:layout_margin="3dp" />
             </TableRow>
 
         </TableLayout>
