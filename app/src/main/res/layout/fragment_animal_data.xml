@@ -19,36 +19,37 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:weightSum="2">
+                android:weightSum="1"
+                android:layout_margin="10dp">
 
                 <TableRow
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:weightSum="2"
+                    android:weightSum="1"
                     android:orientation="horizontal">
 
                     <TextView
                         android:text="Nome:"
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:gravity="right|fill_vertical"
-                        android:layout_weight="1"
-                        android:padding="5dp"
+                        android:layout_weight="0.4"
+                        android:padding="0dp"
                         android:layout_height="35dp"
                         android:textStyle="bold"
                         android:id="@+id/textView20"
-                        android:textSize="20dp"
-                        android:layout_margin="8dp" />
+                        android:layout_margin="10dp"
+                        android:textSize="25dp" />
 
                     <EditText
-                        android:text="Nome dell'animale"
-                        android:layout_width="match_parent"
+                        android:text=""
+                        android:layout_width="0dp"
                         android:layout_height="35dp"
                         android:id="@+id/animalNameEditText"
-                        android:layout_weight="1"
+                        android:layout_weight="0.6"
                         android:gravity="left|fill_vertical"
-                        android:padding="5dp"
-                        android:layout_margin="8dp"
-                        android:textSize="20dp" />
+                        android:padding="0dp"
+                        android:layout_margin="10dp"
+                        android:textSize="25dp" />
 
                 </TableRow>
 
@@ -56,91 +57,91 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal"
-                    android:weightSum="2">
+                    android:weightSum="1">
 
                     <TextView
                         android:text="Specie:"
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:gravity="right|fill_vertical"
-                        android:layout_weight="1"
-                        android:padding="5dp"
+                        android:layout_weight="0.4"
                         android:layout_height="35dp"
                         android:textStyle="bold"
                         android:id="@+id/textView22"
-                        android:textSize="20dp"
-                        android:layout_margin="8dp" />
+                        android:layout_margin="10dp"
+                        android:textSize="25dp"
+                        android:padding="0dp" />
 
                     <EditText
-                        android:text="Specie dell'animale"
-                        android:layout_width="match_parent"
+                        android:text=""
+                        android:layout_width="0dp"
                         android:layout_height="35dp"
                         android:id="@+id/animalSpeciesEditText"
-                        android:layout_weight="1"
+                        android:layout_weight="0.6"
                         android:gravity="left|fill_vertical"
-                        android:padding="5dp"
-                        android:layout_margin="8dp"
-                        android:textSize="20dp" />
+                        android:padding="0dp"
+                        android:layout_margin="10dp"
+                        android:textSize="25dp" />
                 </TableRow>
 
                 <TableRow
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal"
-                    android:weightSum="2">
+                    android:weightSum="1">
 
                     <TextView
                         android:text="Data di Nascita:"
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:gravity="right|fill_vertical"
-                        android:layout_weight="1"
-                        android:padding="5dp"
+                        android:layout_weight="0.4"
+                        android:padding="0dp"
                         android:layout_height="35dp"
                         android:textStyle="bold"
                         android:id="@+id/textView33"
-                        android:textSize="20dp"
-                        android:layout_margin="8dp" />
+                        android:layout_margin="10dp"
+                        android:textSize="25dp" />
 
                     <EditText
-                        android:text="Data nasc dell'anim"
-                        android:layout_width="match_parent"
+                        android:text=""
+                        android:layout_width="0dp"
                         android:layout_height="35dp"
                         android:id="@+id/animalBirthDateEditText"
-                        android:layout_weight="1"
+                        android:layout_weight="0.6"
                         android:gravity="left|fill_vertical"
-                        android:padding="5dp"
-                        android:layout_margin="8dp"
-                        android:textSize="20dp" />
+                        android:padding="0dp"
+                        android:layout_margin="10dp"
+                        android:textSize="25dp" />
 
                 </TableRow>
 
                 <TableRow
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:weightSum="2"
+                    android:weightSum="1"
                     android:orientation="horizontal" >
 
                     <TextView
                         android:text="Sesso:"
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:gravity="right|fill_vertical"
-                        android:layout_weight="1"
-                        android:padding="5dp"
+                        android:layout_weight="0.4"
+                        android:padding="0dp"
                         android:layout_height="35dp"
                         android:textStyle="bold"
                         android:id="@+id/textView24"
-                        android:textSize="20dp"
-                        android:layout_margin="8dp" />
+                        android:layout_margin="10dp"
+                        android:textSize="25dp" />
 
                     <EditText
-                        android:text="Sesso dell'animale"
-                        android:layout_width="match_parent"
+                        android:text=""
+                        android:layout_width="0dp"
                         android:layout_height="35dp"
                         android:id="@+id/animalGenderEditText"
-                        android:layout_weight="1"
+                        android:layout_weight="0.6"
                         android:gravity="left|fill_vertical"
-                        android:padding="5dp"
-                        android:layout_margin="8dp"
-                        android:textSize="20dp" />
+                        android:padding="0dp"
+                        android:layout_margin="10dp"
+                        android:textSize="25dp" />
                 </TableRow>
 
             </TableLayout>
@@ -152,8 +153,8 @@
 
                 <Button
                     android:text="Salva"
-                    android:layout_width="155dp"
-                    android:layout_height="56dp"
+                    android:layout_width="225dp"
+                    android:layout_height="87dp"
                     android:id="@+id/button5"
                     android:layout_gravity="center"
                     android:textSize="20dp" />

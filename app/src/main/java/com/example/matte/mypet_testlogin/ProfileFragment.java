@@ -6,6 +6,9 @@ import android.os.Bundle;
 import android.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListAdapter;
@@ -66,6 +69,7 @@ public class ProfileFragment extends Fragment {
         //Recupero delle SharedPreferences
         shPref = getActivity().getSharedPreferences("MyPetPrefs", Context.MODE_PRIVATE);
 //        dbHandler = new MyPetDB(getActivity());
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -73,7 +77,7 @@ public class ProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_user_profile, container, false);
-        header = getActivity().getLayoutInflater().inflate(R.layout.fragment_profile_header, null);
+        header = getActivity().getLayoutInflater().inflate(R.layout.fragment_user_profile_header, null);
 
         User currUser = HomeActivity.dbManager.getUser(idUser);
 
@@ -101,6 +105,29 @@ public class ProfileFragment extends Fragment {
         }
 
         return view;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.clear();
+        inflater.inflate(R.menu.menu_edit_user_profile, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.menuEditUserProfile:
+                getFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.main_fragment, new UserDataFragment())
+                        .addToBackStack(null)
+                        .commit();
+                return true;
+            default: break;
+        }
+        return false;
     }
 
     public static void justifyListViewHeightBasedOnChildren(ListView listView) {
