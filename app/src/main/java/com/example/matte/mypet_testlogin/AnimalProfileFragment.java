@@ -6,6 +6,9 @@ import android.os.Bundle;
 import android.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
@@ -64,6 +67,7 @@ public class AnimalProfileFragment extends Fragment {
             idAnim = getArguments().getString(ARG_PARAM1);
         }
         dbHandler2 = new MyPetDB(getActivity());
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -101,6 +105,29 @@ public class AnimalProfileFragment extends Fragment {
             mListener.onFragmentInteraction("Profilo Animale");
         }
     }*/
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.clear();
+        inflater.inflate(R.menu.menu_edit_profile, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menuEditProfile:
+                getFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.main_fragment, AnimalDataFragment.newInstance(idAnim, true))
+                        .addToBackStack(null)
+                        .commit();
+                return true;
+            default: break;
+        }
+        return false;
+    }
+
 
     @Override
     public void onAttach(Context context) {
