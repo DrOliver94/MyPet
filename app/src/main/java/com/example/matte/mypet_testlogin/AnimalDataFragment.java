@@ -79,6 +79,10 @@ public class AnimalDataFragment extends Fragment {
             idAnim = getArguments().getString(ARG_PARAM1);
             isEdit = getArguments().getBoolean(ARG_PARAM2);
         }
+
+        shPref = getActivity().getSharedPreferences("MyPetPrefs", Context.MODE_PRIVATE);
+
+        idUser = shPref.getString("IdUser", "");
     }
 
     @Override
@@ -221,7 +225,7 @@ public class AnimalDataFragment extends Fragment {
                         "&gender=" + anim.gender +
                         "&birthdate=" + anim.birthdate;
 
-//                Log.d("MyPet", postArgs);
+                Log.d("MyPet", postArgs);
 
                 return serverComm.makePostRequest(postArgs);
             } catch (IOException e) {
@@ -233,8 +237,14 @@ public class AnimalDataFragment extends Fragment {
         protected void onPostExecute(final JSONObject jObj) {
             try {
                 if(!jObj.isNull("success") && jObj.getBoolean("success")) {
-                    //Se va a buon fine, update nel DB locale
+                    //Se va a buon fine, recuperra l'ID e fa update nel DB locale
+                    anim.id = jObj.getString("idpet");
+
                     long idNewAnim = HomeActivity.dbManager.insertAnimal(anim, idUser);
+
+                    //Aggiorna token nelle SharedPref
+                    shPref.edit().putString("Token", jObj.getString("token")).apply();
+
                     //gira al fragment di profilo animale
                     getFragmentManager()
                             .beginTransaction()

@@ -189,13 +189,3 @@ public class AnimalProfileFragment extends Fragment {
 
 
 }
-
-
-
-/*
-
-
-
-
-
- */

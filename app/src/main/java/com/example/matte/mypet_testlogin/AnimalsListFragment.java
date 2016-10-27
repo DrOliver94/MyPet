@@ -124,10 +124,10 @@ public class AnimalsListFragment extends Fragment {
         switch (item.getItemId()) {
             case R.id.menuAddAnimal:
                 getFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.main_fragment, AnimalDataFragment.newInstance("0", false))
-                        .addToBackStack(null)
-                        .commit();
+                    .beginTransaction()
+                    .replace(R.id.main_fragment, AnimalDataFragment.newInstance("-1", false))
+                    .addToBackStack(null)
+                    .commit();
                 return true;
             default: break;
         }
