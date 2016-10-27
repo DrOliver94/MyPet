@@ -42,8 +42,8 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="User"
-            android:textSize="50dp"
-            android:layout_margin="5dp" />
+            android:layout_margin="5dp"
+            android:textSize="50sp" />
 
         <TableLayout
             android:orientation="horizontal"
@@ -58,27 +58,27 @@
                 <TextView
                     android:text="Nome"
                     android:layout_width="match_parent"
-                    android:layout_height="26dp"
+                    android:layout_height="35sp"
                     android:id="@+id/textView1"
                     android:textStyle="normal|bold"
                     android:elevation="0dp"
                     android:layout_weight="1"
                     android:gravity="right|fill_vertical"
                     android:paddingRight="10dp"
-                    android:textSize="18dp"
-                    android:layout_margin="3dp" />
+                    android:layout_margin="3dp"
+                    android:textSize="20sp" />
 
                 <TextView
                     android:text="Nome_utente"
-                    android:layout_height="31dp"
+                    android:layout_height="35sp"
                     android:id="@+id/userNameTextView"
                     android:elevation="0dp"
                     android:layout_width="match_parent"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
                     android:paddingLeft="10dp"
-                    android:textSize="18dp"
-                    android:layout_margin="3dp" />
+                    android:layout_margin="3dp"
+                    android:textSize="20sp" />
             </TableRow>
 
             <TableRow
@@ -86,26 +86,26 @@
                 android:layout_height="match_parent">
                 <TextView
                     android:text="Cognome"
-                    android:layout_width="295dp"
-                    android:layout_height="26dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="35sp"
                     android:id="@+id/textView2"
                     android:layout_weight="1"
                     android:textStyle="normal|bold"
                     android:gravity="right|fill_vertical"
                     android:paddingRight="10dp"
-                    android:textSize="18dp"
-                    android:layout_margin="3dp" />
+                    android:layout_margin="3dp"
+                    android:textSize="20sp" />
 
                 <TextView
                     android:text="Cognome_utente"
-                    android:layout_width="299dp"
-                    android:layout_height="31dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="35sp"
                     android:id="@+id/userSurnameTextView"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
                     android:paddingLeft="10dp"
-                    android:textSize="18dp"
-                    android:layout_margin="3dp" />
+                    android:layout_margin="3dp"
+                    android:textSize="20sp" />
             </TableRow>
 
             <TableRow
@@ -113,53 +113,54 @@
                 android:layout_height="match_parent">
                 <TextView
                     android:text="Data di Nascita"
-                    android:layout_width="295dp"
-                    android:layout_height="26dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="35sp"
                     android:id="@+id/textView3"
                     android:layout_weight="1"
                     android:textStyle="normal|bold"
                     android:gravity="right|fill_vertical"
                     android:paddingRight="10dp"
-                    android:textSize="18dp"
-                    android:layout_margin="3dp" />
+                    android:layout_margin="3dp"
+                    android:textSize="20sp" />
 
                 <TextView
                     android:text="Data_nascita_utente"
-                    android:layout_width="299dp"
-                    android:layout_height="31dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="35sp"
                     android:id="@+id/userBirthDateTextView"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
                     android:paddingLeft="10dp"
-                    android:textSize="18dp"
-                    android:layout_margin="3dp" />
+                    android:layout_margin="3dp"
+                    android:textSize="20sp" />
             </TableRow>
 
             <TableRow
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
+
                 <TextView
                     android:text="Sesso"
-                    android:layout_width="295dp"
-                    android:layout_height="26dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="35sp"
                     android:id="@+id/textView4"
                     android:layout_weight="1"
                     android:textStyle="normal|bold"
                     android:gravity="right|fill_vertical"
                     android:paddingRight="10dp"
-                    android:textSize="18dp"
-                    android:layout_margin="3dp" />
+                    android:layout_margin="3dp"
+                    android:textSize="20sp" />
 
                 <TextView
                     android:text="Genere_utente"
-                    android:layout_width="299dp"
-                    android:layout_height="31dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="35sp"
                     android:id="@+id/userGenderTextView"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
                     android:paddingLeft="10dp"
-                    android:textSize="18dp"
-                    android:layout_margin="3dp" />
+                    android:layout_margin="3dp"
+                    android:textSize="20sp" />
             </TableRow>
 
         </TableLayout>

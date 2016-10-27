@@ -69,7 +69,6 @@ public class ProfileFragment extends Fragment {
 
         //Recupero delle SharedPreferences
         shPref = getActivity().getSharedPreferences("MyPetPrefs", Context.MODE_PRIVATE);
-
         setHasOptionsMenu(true);
     }
 
@@ -111,14 +110,14 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         menu.clear();
-        inflater.inflate(R.menu.menu_edit_user_profile, menu);
+        inflater.inflate(R.menu.menu_edit_profile, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.menuEditUserProfile:
+            case R.id.menuEditProfile:
                 getFragmentManager()
                         .beginTransaction()
                         .replace(R.id.main_fragment, new UserDataFragment())

@@ -92,21 +92,14 @@ public class HomeActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        //noinspection SimplifiableIfStatement
-//        if (item.getItemId() == R.id.action_settings) {
-//            return true;
-//        } else if(id == R.id.menuEditUserProfile) {
-//            return false;
-//        }
         switch(item.getItemId()){
             case R.id.action_settings:
                 return true;
-            case R.id.menuEditUserProfile:
+            case R.id.menuEditProfile:
                 return false;
             default:
                 break;
         }
-
         return super.onOptionsItemSelected(item);
     }
 

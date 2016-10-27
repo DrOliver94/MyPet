@@ -38,7 +38,7 @@
                         android:textStyle="bold"
                         android:id="@+id/textView20"
                         android:layout_margin="10dp"
-                        android:textSize="25dp" />
+                        android:textSize="20sp" />
 
                     <EditText
                         android:text=""
@@ -49,7 +49,8 @@
                         android:gravity="left|fill_vertical"
                         android:padding="0dp"
                         android:layout_margin="10dp"
-                        android:textSize="25dp" />
+                        android:textSize="20sp"
+                        android:maxLines="1" />
 
                 </TableRow>
 
@@ -68,8 +69,8 @@
                         android:textStyle="bold"
                         android:id="@+id/textView22"
                         android:layout_margin="10dp"
-                        android:textSize="25dp"
-                        android:padding="0dp" />
+                        android:padding="0dp"
+                        android:textSize="20sp" />
 
                     <EditText
                         android:text=""
@@ -80,7 +81,8 @@
                         android:gravity="left|fill_vertical"
                         android:padding="0dp"
                         android:layout_margin="10dp"
-                        android:textSize="25dp" />
+                        android:textSize="20sp"
+                        android:maxLines="1" />
                 </TableRow>
 
                 <TableRow
@@ -99,7 +101,7 @@
                         android:textStyle="bold"
                         android:id="@+id/textView33"
                         android:layout_margin="10dp"
-                        android:textSize="25dp" />
+                        android:textSize="20sp" />
 
                     <EditText
                         android:text=""
@@ -110,7 +112,8 @@
                         android:gravity="left|fill_vertical"
                         android:padding="0dp"
                         android:layout_margin="10dp"
-                        android:textSize="25dp" />
+                        android:textSize="20sp"
+                        android:maxLines="1" />
 
                 </TableRow>
 
@@ -130,7 +133,7 @@
                         android:textStyle="bold"
                         android:id="@+id/textView24"
                         android:layout_margin="10dp"
-                        android:textSize="25dp" />
+                        android:textSize="20sp" />
 
                     <EditText
                         android:text=""
@@ -141,7 +144,8 @@
                         android:gravity="left|fill_vertical"
                         android:padding="0dp"
                         android:layout_margin="10dp"
-                        android:textSize="25dp" />
+                        android:textSize="20sp"
+                        android:maxLines="1" />
                 </TableRow>
 
             </TableLayout>
@@ -157,7 +161,7 @@
                     android:layout_height="87dp"
                     android:id="@+id/button5"
                     android:layout_gravity="center"
-                    android:textSize="20dp" />
+                    android:textSize="20sp" />
 
             </FrameLayout>
 
