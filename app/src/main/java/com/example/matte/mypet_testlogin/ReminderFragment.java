@@ -90,9 +90,7 @@ public class ReminderFragment extends Fragment {
         remindersListView = (ListView) view.findViewById(R.id.remindersListView);
         getReminders(shPref.getString("IdUser", ""));
 
-        if (mListener != null) {
-            mListener.onFragmentInteraction("Promemoria");
-        }
+        getActivity().setTitle("Promemoria");
 
         return view;
 

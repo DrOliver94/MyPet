@@ -91,9 +91,7 @@ public class FeedFragment extends Fragment {
         feedListView = (ListView) view.findViewById(R.id.feed_postsListView);
         getFeedPost(shPref.getString("IdUser", ""));
 
-        if (mListener != null) {
-            mListener.onFragmentInteraction("Feed");
-        }
+        getActivity().setTitle("Feed");
 
         //Test per controlli sessione
 //        srv = new ServerComm();

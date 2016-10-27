@@ -100,9 +100,7 @@ public class ProfileFragment extends Fragment {
 
         showPostsByAuthor(idUser);
 
-        if (mListener != null) {
-            mListener.onFragmentInteraction("Profilo");
-        }
+        getActivity().setTitle(currUser.username);
 
         return view;
     }
