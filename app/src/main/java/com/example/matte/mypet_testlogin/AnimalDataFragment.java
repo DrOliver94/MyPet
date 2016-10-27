@@ -2,6 +2,7 @@ package com.example.matte.mypet_testlogin;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -9,6 +10,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 
 import org.json.JSONObject;
 
@@ -33,6 +36,16 @@ public class AnimalDataFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String idAnim;
     private Boolean isEdit;
+    private String idUser;
+
+    private EditText aNameEditTxt;
+    private EditText aSpeciesEditTxt;
+    private EditText aBirthdateEditTxt;
+    private EditText aGenderEditTxt;
+
+    private Button sendData;
+
+    private SharedPreferences shPref;
 
     private OnFragmentInteractionListener mListener;
 
@@ -65,6 +78,8 @@ public class AnimalDataFragment extends Fragment {
             idAnim = getArguments().getString(ARG_PARAM1);
             isEdit = getArguments().getBoolean(ARG_PARAM2);
         }
+        shPref = getActivity().getSharedPreferences("MyPetPrefs", Context.MODE_PRIVATE);
+        idUser = shPref.getString("IdUser", "");
     }
 
     @Override
@@ -73,13 +88,23 @@ public class AnimalDataFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_animal_data, container, false);
 
-        if(isEdit){ //Se si modifica un animal => caricare negli edittext i dati dell'animal
+        aNameEditTxt = (EditText) view.findViewById(R.id.animalNameEditText);
+        aSpeciesEditTxt = (EditText) view.findViewById(R.id.animalSpeciesEditText);
+        aBirthdateEditTxt = (EditText) view.findViewById(R.id.animalBirthDateEditText);
+        aGenderEditTxt = (EditText) view.findViewById(R.id.animalGenderEditText);
 
+        if(isEdit){ //Se si modifica un animal => caricare negli edittext i dati dell'animal
             if (mListener != null) {
                 mListener.onFragmentInteraction("Modifica animale");
             }
         } else {    //Si crea un nuovo animale
-
+            sendData = (Button) view.findViewById(R.id.buttonSendAnimData);
+            sendData.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    insertAnimal();
+                }
+            });
             if (mListener != null) {
                 mListener.onFragmentInteraction("Nuovo animale");
             }
@@ -87,13 +112,6 @@ public class AnimalDataFragment extends Fragment {
 
         return view;
     }
-
-    // TODO: Rename method, update argument and hook method into UI event
-//    public void onButtonPressed(Uri uri) {
-//        if (mListener != null) {
-//            mListener.onFragmentInteraction(uri);
-//        }
-//    }
 
     @Override
     public void onAttach(Context context) {
@@ -121,30 +139,125 @@ public class AnimalDataFragment extends Fragment {
         //Recuperare dati, fare controlli se necessario
         ArrayList<String> par = new ArrayList<String>();
 
-        par.add("nome");
-        par.add("specie");
-        par.add("sesso");
-        par.add("datanascita");
+        par.add(aNameEditTxt.getText().toString());
+        par.add(aSpeciesEditTxt.getText().toString());
+        par.add(aGenderEditTxt.getText().toString());
+        par.add(aBirthdateEditTxt.getText().toString());
         par.add("profilepic");
 
         //Inviare richiesta al server per l'update
-        InsertAnimalTask insertAnim = new InsertAnimalTask("token", idAnim, "idUser");
-        insertAnim.execute((String[])par.toArray());
+        InsertAnimalTask insertAnim = new InsertAnimalTask(shPref.getString("Token", ""), "0", idUser);
+        insertAnim.execute(aNameEditTxt.getText().toString(), aSpeciesEditTxt.getText().toString(),
+                aGenderEditTxt.getText().toString(), aBirthdateEditTxt.getText().toString(), "profilepic");
     }
 
     private void updateAnimal(){
         //Recuperare dati, fare controlli se necessario
         ArrayList<String> par = new ArrayList<String>();
 
-        par.add("nome");
-        par.add("specie");
-        par.add("sesso");
-        par.add("datanascita");
+        par.add(aNameEditTxt.getText().toString());
+        par.add(aSpeciesEditTxt.getText().toString());
+        par.add(aGenderEditTxt.getText().toString());
+        par.add(aBirthdateEditTxt.getText().toString());
         par.add("profilepic");
 
         //Inviare richiesta al server per l'update
-        UpdateAnimalTask updateAnim = new UpdateAnimalTask("token", idAnim, "idUser");
+        UpdateAnimalTask updateAnim = new UpdateAnimalTask(shPref.getString("Token", ""), idAnim, idUser);
         updateAnim.execute((String[])par.toArray());
+    }
+
+    /**
+     * Inserisce l'animale inviato
+     */
+    public class InsertAnimalTask extends AsyncTask<String, Integer, JSONObject> {
+        private final String uToken;
+        private final String idUser;
+        private final Animal anim;
+
+        private ServerComm serverComm;
+
+        private ProgressDialog pDialog;
+
+        InsertAnimalTask(String token, String idAnim, String idUser) {
+            anim = new Animal();
+            anim.id = idAnim;
+
+            this.uToken = token;
+            this.idUser = idUser;
+
+            pDialog = new ProgressDialog(getContext());
+            serverComm = new ServerComm();
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            Log.d("MyPet", "checkLogin start");
+
+            pDialog.setTitle("Update animale");
+            pDialog.setMessage("Richiesta al server...");
+            pDialog.setIndeterminate(false);
+            pDialog.setCancelable(false);
+            pDialog.show();
+        }
+
+        @Override
+        protected JSONObject doInBackground(String... p) {
+            try {
+                anim.name = p[0];
+                anim.species = p[1];
+                anim.gender = p[2];
+                anim.birthdate = p[3];
+//                String profilepic = p[4];
+
+                String postArgs = "insertAnimal=" + anim.id +
+                                    "&iduser=" + idUser +
+                                    "&token=" + uToken +
+                                    "&name=" + anim.name +
+                                    "&species=" + anim.species +
+                                    "&gender=" + anim.gender +
+                                    "&birthdate=" + anim.birthdate;
+
+//                Log.d("MyPet", postArgs);
+
+                return serverComm.makePostRequest(postArgs);
+            } catch (IOException e) {
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(final JSONObject jObj) {
+            try {
+                if(jObj.isNull("error")) {
+                    //Se va a buon fine, update nel DB locale
+                    long idNewAnim = HomeActivity.dbManager.insertAnimal(anim, idUser);
+                    //gira al fragment di profilo animale
+                    getFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.main_fragment, AnimalProfileFragment.newInstance(Long.toString(idNewAnim)))
+                            .addToBackStack(null)
+                            .commit();
+                } else {
+
+                    //Altrimenti indicare l'errore all'utente
+                }
+            } catch(Exception e) {
+                e.fillInStackTrace();
+            }
+
+            if (pDialog.isShowing()) {
+                pDialog.dismiss();
+            }
+        }
+
+        @Override
+        protected void onCancelled() {
+            if (pDialog.isShowing()) {
+                pDialog.dismiss();
+            }
+        }
     }
 
     /**
@@ -193,6 +306,7 @@ public class AnimalDataFragment extends Fragment {
 //                String profilepic = p[4];
 
                 String postArgs = "updateAnimal=" + anim.id +
+                                    "token=" + uToken +
                                     "&name=" + anim.name +
                                     "&species=" + anim.species +
                                     "&gender=" + anim.gender;
@@ -208,10 +322,15 @@ public class AnimalDataFragment extends Fragment {
         @Override
         protected void onPostExecute(final JSONObject jObj) {
             try {
-                if(jObj.isNull("error")) {
+                if(!jObj.isNull("success") && jObj.getBoolean("success")) {
                     //Se va a buon fine, update nel DB locale
-                    HomeActivity.dbManager.insertAnimal(anim, idUser);
-                    //TODO girare al fragment di profilo animale
+                    long idNewAnim = HomeActivity.dbManager.updateAnimal(anim);
+                    //gira al fragment di profilo animale
+                    getFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.main_fragment, AnimalProfileFragment.newInstance(Long.toString(idNewAnim)))
+                            .addToBackStack(null)
+                            .commit();
                 } else {
 
                     //Altrimenti indicare l'errore all'utente
@@ -234,91 +353,6 @@ public class AnimalDataFragment extends Fragment {
     }
 
 
-    /**
-     * Inserisce l'animale inviato
-     */
-    public class InsertAnimalTask extends AsyncTask<String, Integer, JSONObject> {
-        private final String uToken;
-        private final String idUser;
-        private final Animal anim;
-
-        private ServerComm serverComm;
-
-        private ProgressDialog pDialog;
-
-        InsertAnimalTask(String token, String idAnim, String idUser) {
-            anim = new Animal();
-            anim.id = idAnim;
-
-            this.uToken = token;
-            this.idUser = idUser;
-
-            pDialog = new ProgressDialog(getContext());
-            serverComm = new ServerComm();
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-
-            Log.d("MyPet", "checkLogin start");
-
-            pDialog.setTitle("Update animale");
-            pDialog.setMessage("Richiesta al server...");
-            pDialog.setIndeterminate(false);
-            pDialog.setCancelable(false);
-            pDialog.show();
-        }
-
-        @Override
-        protected JSONObject doInBackground(String... p) {
-            try {
-                anim.name = p[0];
-                anim.species = p[1];
-                anim.gender = p[2];
-                anim.birthdate = p[3];
-//                String profilepic = p[4];
-
-                String postArgs = "updateAnimal=" + anim.id +
-                        "&name=" + anim.name +
-                        "&species=" + anim.species +
-                        "&gender=" + anim.gender;
-
-//                Log.d("MyPet", postArgs);
-
-                return serverComm.makePostRequest(postArgs);
-            } catch (IOException e) {
-                return null;
-            }
-        }
-
-        @Override
-        protected void onPostExecute(final JSONObject jObj) {
-            try {
-                if(jObj.isNull("error")) {
-                    //Se va a buon fine, update nel DB locale
-                    HomeActivity.dbManager.insertAnimal(anim, idUser);
-                    //TODO girare al fragment di profilo animale
-                } else {
-
-                    //Altrimenti indicare l'errore all'utente
-                }
-            } catch(Exception e) {
-                e.fillInStackTrace();
-            }
-
-            if (pDialog.isShowing()) {
-                pDialog.dismiss();
-            }
-        }
-
-        @Override
-        protected void onCancelled() {
-            if (pDialog.isShowing()) {
-                pDialog.dismiss();
-            }
-        }
-    }
 
 
 }

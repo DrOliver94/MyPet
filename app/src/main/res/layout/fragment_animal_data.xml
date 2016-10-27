@@ -155,7 +155,7 @@
                     android:text="Salva"
                     android:layout_width="225dp"
                     android:layout_height="87dp"
-                    android:id="@+id/button5"
+                    android:id="@+id/buttonSendAnimData"
                     android:layout_gravity="center"
                     android:textSize="20dp" />
 

@@ -49,10 +49,10 @@ public class AnimalProfileFragment extends Fragment {
      * @return A new instance of fragment AnimalProfileFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static AnimalProfileFragment newInstance(String param1) {
+    public static AnimalProfileFragment newInstance(String idAnim) {
         AnimalProfileFragment fragment = new AnimalProfileFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
+        args.putString(ARG_PARAM1, idAnim);
         fragment.setArguments(args);
         return fragment;
     }
