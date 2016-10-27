@@ -2,6 +2,7 @@ package com.example.matte.mypet_testlogin;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -9,6 +10,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 
 import org.json.JSONObject;
 
@@ -33,6 +36,17 @@ public class AnimalDataFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String idAnim;
     private Boolean isEdit;
+
+    private String idUser;
+
+    private EditText aNameEditTxt;
+    private EditText aSpeciesEditTxt;
+    private EditText aBirthdateEditTxt;
+    private EditText aGenderEditTxt;
+
+    private Button sendData;
+
+    private SharedPreferences shPref;
 
     private OnFragmentInteractionListener mListener;
 
@@ -132,8 +146,11 @@ public class AnimalDataFragment extends Fragment {
 
         //Inviare richiesta al server per l'update
         InsertAnimalTask insertAnim = new InsertAnimalTask(shPref.getString("Token", ""), "0", idUser);
-        insertAnim.execute(aNameEditTxt.getText().toString(), aSpeciesEditTxt.getText().toString(),
-                aGenderEditTxt.getText().toString(), aBirthdateEditTxt.getText().toString(), "profilepic");
+        insertAnim.execute(aNameEditTxt.getText().toString(),
+                            aSpeciesEditTxt.getText().toString(),
+                            aGenderEditTxt.getText().toString(),
+                            aBirthdateEditTxt.getText().toString(),
+                            "profilepic");
     }
 
     private void updateAnimal(){
@@ -149,6 +166,100 @@ public class AnimalDataFragment extends Fragment {
         //Inviare richiesta al server per l'update
         UpdateAnimalTask updateAnim = new UpdateAnimalTask(shPref.getString("Token", ""), idAnim, idUser);
         updateAnim.execute((String[])par.toArray());
+    }
+
+    /**
+     * Inserisce l'animale inviato
+     */
+    public class InsertAnimalTask extends AsyncTask<String, Integer, JSONObject> {
+        private final String uToken;
+        private final String idUser;
+        private final Animal anim;
+
+        private ServerComm serverComm;
+
+        private ProgressDialog pDialog;
+
+        InsertAnimalTask(String token, String idAnim, String idUser) {
+            anim = new Animal();
+            anim.id = idAnim;
+
+            this.uToken = token;
+            this.idUser = idUser;
+
+            pDialog = new ProgressDialog(getContext());
+            serverComm = new ServerComm();
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            Log.d("MyPet", "checkLogin start");
+
+            pDialog.setTitle("Update animale");
+            pDialog.setMessage("Richiesta al server...");
+            pDialog.setIndeterminate(false);
+            pDialog.setCancelable(false);
+            pDialog.show();
+        }
+
+        @Override
+        protected JSONObject doInBackground(String... p) {
+            try {
+                anim.name = p[0];
+                anim.species = p[1];
+                anim.gender = p[2];
+                anim.birthdate = p[3];
+//                String profilepic = p[4];
+
+                String postArgs = "insertAnimal=" + anim.id +
+                        "&iduser=" + idUser +
+                        "&token=" + uToken +
+                        "&name=" + anim.name +
+                        "&species=" + anim.species +
+                        "&gender=" + anim.gender +
+                        "&birthdate=" + anim.birthdate;
+
+//                Log.d("MyPet", postArgs);
+
+                return serverComm.makePostRequest(postArgs);
+            } catch (IOException e) {
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(final JSONObject jObj) {
+            try {
+                if(!jObj.isNull("success") && jObj.getBoolean("success")) {
+                    //Se va a buon fine, update nel DB locale
+                    long idNewAnim = HomeActivity.dbManager.insertAnimal(anim, idUser);
+                    //gira al fragment di profilo animale
+                    getFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.main_fragment, AnimalProfileFragment.newInstance(Long.toString(idNewAnim)))
+                            .addToBackStack(null)
+                            .commit();
+                } else {
+
+                    //Altrimenti indicare l'errore all'utente
+                }
+            } catch(Exception e) {
+                e.fillInStackTrace();
+            }
+
+            if (pDialog.isShowing()) {
+                pDialog.dismiss();
+            }
+        }
+
+        @Override
+        protected void onCancelled() {
+            if (pDialog.isShowing()) {
+                pDialog.dismiss();
+            }
+        }
     }
 
     /**
@@ -197,93 +308,7 @@ public class AnimalDataFragment extends Fragment {
 //                String profilepic = p[4];
 
                 String postArgs = "updateAnimal=" + anim.id +
-                                    "&name=" + anim.name +
-                                    "&species=" + anim.species +
-                                    "&gender=" + anim.gender;
-
-//                Log.d("MyPet", postArgs);
-
-                return serverComm.makePostRequest(postArgs);
-            } catch (IOException e) {
-                return null;
-            }
-        }
-
-        @Override
-        protected void onPostExecute(final JSONObject jObj) {
-            try {
-                if(jObj.isNull("error")) {
-                    //Se va a buon fine, update nel DB locale
-                    HomeActivity.dbManager.insertAnimal(anim, idUser);
-                    //TODO girare al fragment di profilo animale
-                } else {
-
-                    //Altrimenti indicare l'errore all'utente
-                }
-            } catch(Exception e) {
-                e.fillInStackTrace();
-            }
-
-            if (pDialog.isShowing()) {
-                pDialog.dismiss();
-            }
-        }
-
-        @Override
-        protected void onCancelled() {
-            if (pDialog.isShowing()) {
-                pDialog.dismiss();
-            }
-        }
-    }
-
-
-    /**
-     * Inserisce l'animale inviato
-     */
-    public class InsertAnimalTask extends AsyncTask<String, Integer, JSONObject> {
-        private final String uToken;
-        private final String idUser;
-        private final Animal anim;
-
-        private ServerComm serverComm;
-
-        private ProgressDialog pDialog;
-
-        InsertAnimalTask(String token, String idAnim, String idUser) {
-            anim = new Animal();
-            anim.id = idAnim;
-
-            this.uToken = token;
-            this.idUser = idUser;
-
-            pDialog = new ProgressDialog(getContext());
-            serverComm = new ServerComm();
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-
-            Log.d("MyPet", "checkLogin start");
-
-            pDialog.setTitle("Update animale");
-            pDialog.setMessage("Richiesta al server...");
-            pDialog.setIndeterminate(false);
-            pDialog.setCancelable(false);
-            pDialog.show();
-        }
-
-        @Override
-        protected JSONObject doInBackground(String... p) {
-            try {
-                anim.name = p[0];
-                anim.species = p[1];
-                anim.gender = p[2];
-                anim.birthdate = p[3];
-//                String profilepic = p[4];
-
-                String postArgs = "updateAnimal=" + anim.id +
+                        "token=" + uToken +
                         "&name=" + anim.name +
                         "&species=" + anim.species +
                         "&gender=" + anim.gender;
@@ -299,10 +324,15 @@ public class AnimalDataFragment extends Fragment {
         @Override
         protected void onPostExecute(final JSONObject jObj) {
             try {
-                if(jObj.isNull("error")) {
+                if(!jObj.isNull("success") && jObj.getBoolean("success")) {
                     //Se va a buon fine, update nel DB locale
-                    HomeActivity.dbManager.insertAnimal(anim, idUser);
-                    //TODO girare al fragment di profilo animale
+                    long idNewAnim = HomeActivity.dbManager.updateAnimal(anim);
+                    //gira al fragment di profilo animale
+                    getFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.main_fragment, AnimalProfileFragment.newInstance(Long.toString(idNewAnim)))
+                            .addToBackStack(null)
+                            .commit();
                 } else {
 
                     //Altrimenti indicare l'errore all'utente
@@ -323,8 +353,5 @@ public class AnimalDataFragment extends Fragment {
             }
         }
     }
-
-
-
 
 }
