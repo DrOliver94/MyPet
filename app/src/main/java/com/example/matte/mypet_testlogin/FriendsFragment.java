@@ -78,9 +78,7 @@ public class FriendsFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_friends, container, false);
 
-        if (mListener != null) {
-            mListener.onFragmentInteraction("Amici");
-        }
+        getActivity().setTitle("Amici");
 
         friendsListView = (ListView) view.findViewById(R.id.friendsListView);
         getFriends(idUser);

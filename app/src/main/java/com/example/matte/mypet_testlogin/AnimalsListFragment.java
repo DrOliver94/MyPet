@@ -105,9 +105,7 @@ public class AnimalsListFragment extends Fragment {
         showAnimalsByUser(idUser);
 //        debugUsersAnim();
 
-        if (mListener != null) {
-            mListener.onFragmentInteraction("Elenco animali");
-        }
+        getActivity().setTitle("Elenco Animali");
 
         return view;
     }

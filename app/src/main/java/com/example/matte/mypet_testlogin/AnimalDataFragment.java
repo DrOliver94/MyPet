@@ -92,10 +92,8 @@ public class AnimalDataFragment extends Fragment {
         aBirthdateEditTxt = (EditText) view.findViewById(R.id.animalBirthDateEditText);
         aGenderEditTxt = (EditText) view.findViewById(R.id.animalGenderEditText);
 
-        if(isEdit){ //Se si modifica un animal => caricare negli edittext i dati dell'animal
-            if (mListener != null) {
-                mListener.onFragmentInteraction("Modifica animale");
-            }
+        if(isEdit){ //Se si modifica un animale => caricare negli edittext i dati dell'animale
+            getActivity().setTitle("Modifica Animale");
         } else {    //Si crea un nuovo animale
             sendData = (Button) view.findViewById(R.id.buttonSendAnimData);
             sendData.setOnClickListener(new View.OnClickListener() {
@@ -104,9 +102,7 @@ public class AnimalDataFragment extends Fragment {
                     insertAnimal();
                 }
             });
-            if (mListener != null) {
-                mListener.onFragmentInteraction("Nuovo animale");
-            }
+            getActivity().setTitle("Nuovo Animale");
         }
 
         return view;

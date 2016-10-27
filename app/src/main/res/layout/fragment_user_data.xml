@@ -38,7 +38,8 @@
                         android:id="@+id/textView10"
                         android:layout_margin="10dp"
                         android:layout_weight="0.4"
-                        android:textSize="20sp" />
+                        android:textSize="20sp"
+                        android:textColor="?attr/colorControlNormal" />
 
                     <EditText
                         android:layout_width="0dp"
@@ -69,7 +70,8 @@
                         android:textStyle="bold"
                         android:id="@+id/textView11"
                         android:layout_margin="10dp"
-                        android:textSize="20sp" />
+                        android:textSize="20sp"
+                        android:textColor="?attr/colorControlNormal" />
 
                     <EditText
                         android:text=""
@@ -100,7 +102,8 @@
                         android:textStyle="bold"
                         android:id="@+id/textView12"
                         android:layout_margin="10dp"
-                        android:textSize="20sp" />
+                        android:textSize="20sp"
+                        android:textColor="?attr/colorControlNormal" />
 
                     <EditText
                         android:text=""
@@ -130,7 +133,8 @@
                         android:textStyle="bold"
                         android:id="@+id/textView13"
                         android:layout_margin="10dp"
-                        android:textSize="20sp" />
+                        android:textSize="20sp"
+                        android:textColor="?attr/colorControlNormal" />
 
                     <EditText
                         android:text=""
@@ -161,7 +165,8 @@
                         android:textStyle="bold"
                         android:id="@+id/textView14"
                         android:layout_margin="10dp"
-                        android:textSize="20sp" />
+                        android:textSize="20sp"
+                        android:textColor="?attr/colorControlNormal" />
 
                     <EditText
                         android:text=""
@@ -191,7 +196,8 @@
                         android:textStyle="bold"
                         android:id="@+id/textView15"
                         android:layout_margin="10dp"
-                        android:textSize="20sp" />
+                        android:textSize="20sp"
+                        android:textColor="?attr/colorControlNormal" />
 
                     <EditText
                         android:text=""

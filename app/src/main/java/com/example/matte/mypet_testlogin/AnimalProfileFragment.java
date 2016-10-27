@@ -92,9 +92,7 @@ public class AnimalProfileFragment extends Fragment {
 
 //        showPostsByAnimal(idAnim);
 
-        if (mListener != null) {
-            mListener.onFragmentInteraction("Profilo Animale");
-        }
+        getActivity().setTitle(currAnim.name);
 
         return view;
     }

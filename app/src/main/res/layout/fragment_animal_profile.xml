@@ -44,10 +44,12 @@
             <TextView
                 android:id="@+id/animalNameTextView"
                 android:layout_width="match_parent"
-                android:layout_height="73dp"
+                android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="Animal"
-                android:textSize="50sp" />
+                android:textSize="50sp"
+                android:textStyle="normal|bold"
+                android:textColor="@android:color/holo_green_light" />
 
             <TableLayout
                 android:orientation="horizontal"
@@ -70,7 +72,8 @@
                         android:textSize="20sp"
                         android:layout_height="35sp"
                         android:layout_margin="3dp"
-                        android:paddingLeft="10dp" />
+                        android:paddingLeft="10dp"
+                        android:textColor="@android:color/holo_green_dark" />
 
                     <TextView
                         android:text="Specie_animale"
@@ -81,7 +84,8 @@
                         android:paddingLeft="10dp"
                         android:textSize="20sp"
                         android:layout_height="35sp"
-                        android:layout_margin="3dp" />
+                        android:layout_margin="3dp"
+                        android:textColor="@android:color/holo_green_light" />
                 </TableRow>
 
                 <TableRow
@@ -98,7 +102,8 @@
                         android:textSize="20sp"
                         android:layout_height="35sp"
                         android:layout_margin="3dp"
-                        android:paddingLeft="10dp" />
+                        android:paddingLeft="10dp"
+                        android:textColor="@android:color/holo_green_dark" />
 
                     <TextView
                         android:text="Data_nascita_animale"
@@ -109,7 +114,8 @@
                         android:paddingLeft="10dp"
                         android:textSize="20sp"
                         android:layout_height="35sp"
-                        android:layout_margin="3dp" />
+                        android:layout_margin="3dp"
+                        android:textColor="@android:color/holo_green_light" />
                 </TableRow>
 
                 <TableRow
@@ -126,7 +132,8 @@
                         android:textSize="20sp"
                         android:layout_height="35sp"
                         android:layout_margin="3dp"
-                        android:paddingLeft="10dp" />
+                        android:paddingLeft="10dp"
+                        android:textColor="@android:color/holo_green_dark" />
 
                     <TextView
                         android:text="Sesso_animale"
@@ -137,7 +144,8 @@
                         android:paddingLeft="10dp"
                         android:textSize="20sp"
                         android:layout_height="35sp"
-                        android:layout_margin="3dp" />
+                        android:layout_margin="3dp"
+                        android:textColor="@android:color/holo_green_light" />
                 </TableRow>
 
             </TableLayout>
@@ -149,7 +157,9 @@
                 android:padding="20dp"
                 android:gravity="left|center"
                 android:text="Feed"
-                android:textSize="25sp" />
+                android:textSize="25sp"
+                android:textStyle="normal|bold"
+                android:textColor="@android:color/holo_green_dark" />
 
 
 
