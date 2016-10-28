@@ -489,6 +489,12 @@ public class MyPetDB {
 //        return list;
 //    }
 
+    /**
+     * Restituisce i dati di un animale dato il suo id
+     *
+     * @param idAnimal id dell'animale
+     * @return obj classe Animal dell'animale richiesto
+     */
     public Animal getAnimal(String idAnimal) {
         String where = ANIMALS_ID + "= ?";
         String[] whereArgs = { idAnimal };
@@ -504,6 +510,7 @@ public class MyPetDB {
         animal.species = cursor.getString(ANIMALS_SPECIES_COL);
         animal.birthdate = cursor.getString(ANIMALS_BIRTHDATE_COL);
         animal.gender = cursor.getString(ANIMALS_GENDER_COL);
+        animal.profilepic = cursor.getString(ANIMALS_PROFILEPIC_COL);
 
         if (cursor != null)
             cursor.close();
