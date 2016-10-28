@@ -23,8 +23,7 @@ import java.io.IOException;
 
 /**
  * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link FeedFragment.OnFragmentInteractionListener} interface
+ * Activities that contain this fragment must implement the/
  * to handle interaction events.
  * Use the {@link FeedFragment#newInstance} factory method to
  * create an instance of this fragment.
@@ -40,7 +39,7 @@ public class FeedFragment extends Fragment {
     private String mParam2;
 
     private ListView feedListView;
-    private OnFragmentInteractionListener mListener;
+//    private OnFragmentInteractionListener mListener;
 
     private SharedPreferences shPref;
     private MyPetDB dbHandler;
@@ -130,24 +129,24 @@ public class FeedFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
+//        if (context instanceof OnFragmentInteractionListener) {
+//            mListener = (OnFragmentInteractionListener) context;
+//        } else {
+//            throw new RuntimeException(context.toString()
+//                    + " must implement OnFragmentInteractionListener");
+//        }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
+//        mListener = null;
     }
 
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(String name);
-    }
+//    public interface OnFragmentInteractionListener {
+//        // TODO: Update argument type and name
+//        void onFragmentInteraction(String name);
+//    }
 
 
 

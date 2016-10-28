@@ -13,15 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 public class HomeActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener,
-                    FeedFragment.OnFragmentInteractionListener,
-                    ReminderFragment.OnFragmentInteractionListener,
-                    ProfileFragment.OnFragmentInteractionListener,
-                    AnimalsListFragment.OnFragmentInteractionListener,
-                    AnimalProfileFragment.OnFragmentInteractionListener,
-                    FriendsFragment.OnFragmentInteractionListener,
-                    UserDataFragment.OnFragmentInteractionListener,
-                    AnimalDataFragment.OnFragmentInteractionListener{
+        implements NavigationView.OnNavigationItemSelectedListener{
 
     public static MyPetDB dbManager;
     public static SharedPreferences shPref;
@@ -158,8 +150,8 @@ public class HomeActivity extends AppCompatActivity
         return true;
     }
 
-    @Override
-    public void onFragmentInteraction(String name) {
-        setTitle(name);
-    }
+//    @Override
+//    public void onFragmentInteraction(String name) {
+//        setTitle(name);
+//    }
 }

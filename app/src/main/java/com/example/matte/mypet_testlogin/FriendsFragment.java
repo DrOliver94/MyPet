@@ -18,7 +18,6 @@ import java.util.HashMap;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link FriendsFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
  * Use the {@link FriendsFragment#newInstance} factory method to
  * create an instance of this fragment.
@@ -31,7 +30,7 @@ public class FriendsFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String idUser;
 
-    private OnFragmentInteractionListener mListener;
+//    private OnFragmentInteractionListener mListener;
 
     ListView friendsListView;
 
@@ -96,23 +95,23 @@ public class FriendsFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
+//        if (context instanceof OnFragmentInteractionListener) {
+//            mListener = (OnFragmentInteractionListener) context;
+//        } else {
+//            throw new RuntimeException(context.toString()
+//                    + " must implement OnFragmentInteractionListener");
+//        }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
+//        mListener = null;
     }
 
-    public interface OnFragmentInteractionListener {
-        void onFragmentInteraction(String name);
-    }
+//    public interface OnFragmentInteractionListener {
+//        void onFragmentInteraction(String name);
+//    }
 
     public void getFriends(String idUser) {
         //recupero elenco dei post dal DB

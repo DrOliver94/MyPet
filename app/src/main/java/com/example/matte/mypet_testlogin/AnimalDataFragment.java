@@ -21,9 +21,7 @@ import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link AnimalDataFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
+ *
  * Use the {@link AnimalDataFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
@@ -48,7 +46,7 @@ public class AnimalDataFragment extends Fragment {
 
     private SharedPreferences shPref;
 
-    private OnFragmentInteractionListener mListener;
+//    private OnFragmentInteractionListener mListener;
 
     public AnimalDataFragment() {
         // Required empty public constructor
@@ -131,23 +129,23 @@ public class AnimalDataFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
+//        if (context instanceof OnFragmentInteractionListener) {
+//            mListener = (OnFragmentInteractionListener) context;
+//        } else {
+//            throw new RuntimeException(context.toString()
+//                    + " must implement OnFragmentInteractionListener");
+//        }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
+//        mListener = null;
     }
 
-    public interface OnFragmentInteractionListener {
-        void onFragmentInteraction(String name);
-    }
+//    public interface OnFragmentInteractionListener {
+//        void onFragmentInteraction(String name);
+//    }
 
     private void insertAnimal(){
         //Recuperare dati, fare controlli se necessario

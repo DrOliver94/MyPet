@@ -22,8 +22,7 @@ import java.util.HashMap;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link ProfileFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
+  * to handle interaction events.
  * Use the {@link ProfileFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
@@ -39,7 +38,7 @@ public class ProfileFragment extends Fragment {
     private ListView itemsListView;
     private View header;
 
-    private OnFragmentInteractionListener mListener;
+//    private OnFragmentInteractionListener mListener;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -163,23 +162,23 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
+//        if (context instanceof OnFragmentInteractionListener) {
+//            mListener = (OnFragmentInteractionListener) context;
+//        } else {
+//            throw new RuntimeException(context.toString()
+//                    + " must implement OnFragmentInteractionListener");
+//        }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
+//        mListener = null;
     }
 
-   public interface OnFragmentInteractionListener {
-        void onFragmentInteraction(String name);
-    }
+//   public interface OnFragmentInteractionListener {
+//        void onFragmentInteraction(String name);
+//    }
 
     /**
      * Mostra i post dell'utente richiesto
