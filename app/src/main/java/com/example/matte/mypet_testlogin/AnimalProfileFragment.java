@@ -40,9 +40,7 @@ public class AnimalProfileFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    public AnimalProfileFragment() {
-        // Required empty public constructor
-    }
+    public AnimalProfileFragment() {}
 
     /**
      * Use this factory method to create a new instance of
@@ -96,13 +94,6 @@ public class AnimalProfileFragment extends Fragment {
 
         return view;
     }
-
-    // TODO: Rename method, update argument and hook method into UI event
-/*    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction("Profilo Animale");
-        }
-    }*/
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {

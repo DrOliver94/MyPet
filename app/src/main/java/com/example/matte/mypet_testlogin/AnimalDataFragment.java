@@ -67,7 +67,7 @@ public class AnimalDataFragment extends Fragment {
         AnimalDataFragment fragment = new AnimalDataFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, idAnimal);
-        args.putBoolean(ARG_PARAM1, isEdit);
+        args.putBoolean(ARG_PARAM2, isEdit);
         fragment.setArguments(args);
         return fragment;
     }
@@ -97,6 +97,13 @@ public class AnimalDataFragment extends Fragment {
         aGenderEditTxt = (EditText) view.findViewById(R.id.animalGenderEditText);
 
         if(isEdit){ //Se si modifica un animale => caricare negli edittext i dati dell'animale
+            sendData = (Button) view.findViewById(R.id.buttonSendAnimData);
+            sendData.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    updateAnimal();
+                }
+            });
             getActivity().setTitle("Modifica Animale");
         } else {    //Si crea un nuovo animale
             sendData = (Button) view.findViewById(R.id.buttonSendAnimData);
@@ -136,13 +143,13 @@ public class AnimalDataFragment extends Fragment {
 
     private void insertAnimal(){
         //Recuperare dati, fare controlli se necessario
-        ArrayList<String> par = new ArrayList<String>();
-
-        par.add(aNameEditTxt.getText().toString());
-        par.add(aSpeciesEditTxt.getText().toString());
-        par.add(aGenderEditTxt.getText().toString());
-        par.add(aBirthdateEditTxt.getText().toString());
-        par.add("profilepic");
+//        ArrayList<String> par = new ArrayList<String>();
+//
+//        par.add(aNameEditTxt.getText().toString());
+//        par.add(aSpeciesEditTxt.getText().toString());
+//        par.add(aGenderEditTxt.getText().toString());
+//        par.add(aBirthdateEditTxt.getText().toString());
+//        par.add("profilepic");
 
         //Inviare richiesta al server per l'update
         InsertAnimalTask insertAnim = new InsertAnimalTask(shPref.getString("Token", ""), "0", idUser);
@@ -197,7 +204,7 @@ public class AnimalDataFragment extends Fragment {
 
             Log.d("MyPet", "checkLogin start");
 
-            pDialog.setTitle("Update animale");
+            pDialog.setTitle("Insert animale");
             pDialog.setMessage("Richiesta al server...");
             pDialog.setIndeterminate(false);
             pDialog.setCancelable(false);
@@ -314,10 +321,12 @@ public class AnimalDataFragment extends Fragment {
 //                String profilepic = p[4];
 
                 String postArgs = "updateAnimal=" + anim.id +
-                        "token=" + uToken +
+                        "&iduser=" + idUser +
+                        "&token=" + uToken +
                         "&name=" + anim.name +
                         "&species=" + anim.species +
-                        "&gender=" + anim.gender;
+                        "&gender=" + anim.gender +
+                        "&birthdate=" + anim.birthdate;
 
 //                Log.d("MyPet", postArgs);
 
@@ -333,6 +342,10 @@ public class AnimalDataFragment extends Fragment {
                 if(!jObj.isNull("success") && jObj.getBoolean("success")) {
                     //Se va a buon fine, update nel DB locale
                     long idNewAnim = HomeActivity.dbManager.updateAnimal(anim);
+
+                    //Aggiorna token nelle SharedPref
+                    shPref.edit().putString("Token", jObj.getString("token")).apply();
+
                     //gira al fragment di profilo animale
                     getFragmentManager()
                             .beginTransaction()
