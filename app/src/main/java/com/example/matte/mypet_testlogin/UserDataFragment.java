@@ -63,7 +63,11 @@ public class UserDataFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_user_data, container, false);
+        View view = inflater.inflate(R.layout.fragment_user_data, container, false);
+
+        getActivity().setTitle("Modifica utente");
+
+        return view;
     }
 
     @Override

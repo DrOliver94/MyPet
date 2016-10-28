@@ -123,6 +123,8 @@ public class AnimalDataFragment extends Fragment {
             getActivity().setTitle("Nuovo Animale");
         }
 
+
+
         return view;
     }
 
@@ -349,10 +351,15 @@ public class AnimalDataFragment extends Fragment {
                     shPref.edit().putString("Token", jObj.getString("token")).apply();
 
                     //gira al fragment di profilo animale
-                    getFragmentManager()
-                            .beginTransaction()
-                            .replace(R.id.main_fragment, AnimalProfileFragment.newInstance(anim.id))
-                            .commit();
+//                    getFragmentManager()
+//                            .beginTransaction()
+//                            .replace(R.id.main_fragment, AnimalProfileFragment.newInstance(anim.id))
+//                            .addToBackStack("")
+//                            .commit();
+
+                    //Torna al fragment precedente
+                    getFragmentManager().popBackStack();
+
                 } else {
 
                     //Altrimenti indicare l'errore all'utente

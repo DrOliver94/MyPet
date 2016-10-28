@@ -26,6 +26,9 @@ public class HomeActivity extends AppCompatActivity
     public static MyPetDB dbManager;
     public static SharedPreferences shPref;
 
+    private DrawerLayout drawer;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,7 +37,7 @@ public class HomeActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         //Drawer
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         toggle.syncState();
@@ -75,11 +78,14 @@ public class HomeActivity extends AppCompatActivity
     @Override
     public void onBackPressed() {
         //Se il drawer e' aperto, lo chiude
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            //Va indietro solo se sono presenti fragment nel BackStack
+            if(getFragmentManager().getBackStackEntryCount()!=0)
+                super.onBackPressed();
+            else
+                drawer.openDrawer(GravityCompat.START);
         }
     }
 
@@ -94,9 +100,9 @@ public class HomeActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()){
             case R.id.action_settings:
-                return true;
+                return true;    //gestito qui
             case R.id.menuEditProfile:
-                return false;
+                return false;   //gestito nel fragment
             default:
                 break;
         }
@@ -108,8 +114,6 @@ public class HomeActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-
-        //TODO aggiungere link all'elenco amici (FriendsFragmentt)
 
         if (id == R.id.nav_profile) {
             getFragmentManager()
@@ -150,7 +154,6 @@ public class HomeActivity extends AppCompatActivity
             startActivity(new Intent(HomeActivity.this, LoginActivity.class));
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }

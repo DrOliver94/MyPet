@@ -109,6 +109,7 @@ public class AnimalProfileFragment extends Fragment {
                 getFragmentManager()
                         .beginTransaction()
                         .replace(R.id.main_fragment, AnimalDataFragment.newInstance(idAnim, true))
+                        .addToBackStack("")
                         .commit();
                 return true;
             default: break;

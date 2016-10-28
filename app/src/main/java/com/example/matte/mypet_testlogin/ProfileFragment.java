@@ -77,8 +77,14 @@ public class ProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_user_profile, container, false);
-        header = getActivity().getLayoutInflater().inflate(R.layout.fragment_user_profile_header, null);
 
+        itemsListView = (ListView) view.findViewById(R.id.profile_postsListView);
+
+        //Inflate header in listView
+        header = getActivity().getLayoutInflater().inflate(R.layout.fragment_user_profile_header, null);
+        itemsListView.addHeaderView(header);
+
+        //Read user data from DB
         User currUser = HomeActivity.dbManager.getUser(idUser);
 
         TextView userUserNameProfileText = (TextView) header.findViewById(R.id.userUsernameTextView);
@@ -87,14 +93,12 @@ public class ProfileFragment extends Fragment {
         TextView userGenderText = (TextView) header.findViewById(R.id.userGenderTextView);
         TextView userBirthDateText = (TextView) header.findViewById(R.id.userBirthDateTextView);
 
-        userUserNameProfileText.setText(shPref.getString("Username", "No Username"));//TODO leggi da db
+        userUserNameProfileText.setText(currUser.username);//TODO leggi da db
         userNameText.setText(currUser.name);
         userSurnameText.setText(currUser.surname);
         userGenderText.setText(currUser.gender);
         userBirthDateText.setText(currUser.birthdate);
 
-        itemsListView = (ListView) view.findViewById(R.id.profile_postsListView);
-        itemsListView.addHeaderView(header);
 
         //itemsListView.setScrollContainer(false);
 
@@ -127,27 +131,27 @@ public class ProfileFragment extends Fragment {
         return false;
     }
 
-    public static void justifyListViewHeightBasedOnChildren(ListView listView) {
-        ListAdapter adapter = listView.getAdapter();
-
-        if (adapter == null) {
-            return;
-        }
-        ViewGroup vg = listView;
-        int totalHeight = 0;
-        int measure =0;
-        for (int i = 0; i < adapter.getCount(); i++) {
-            View listItem = adapter.getView(i, null, vg);
-            listItem.measure(0, 0);
-            measure = listItem.getMeasuredHeight();
-            totalHeight += measure;
-        }
-        //totalHeight+=measure/2;
-        ViewGroup.LayoutParams par = listView.getLayoutParams();
-        par.height = totalHeight + (listView.getDividerHeight() * (adapter.getCount() - 1));
-        listView.setLayoutParams(par);
-        listView.requestLayout();
-    }
+//    public static void justifyListViewHeightBasedOnChildren(ListView listView) {
+//        ListAdapter adapter = listView.getAdapter();
+//
+//        if (adapter == null) {
+//            return;
+//        }
+//        ViewGroup vg = listView;
+//        int totalHeight = 0;
+//        int measure =0;
+//        for (int i = 0; i < adapter.getCount(); i++) {
+//            View listItem = adapter.getView(i, null, vg);
+//            listItem.measure(0, 0);
+//            measure = listItem.getMeasuredHeight();
+//            totalHeight += measure;
+//        }
+//        //totalHeight+=measure/2;
+//        ViewGroup.LayoutParams par = listView.getLayoutParams();
+//        par.height = totalHeight + (listView.getDividerHeight() * (adapter.getCount() - 1));
+//        listView.setLayoutParams(par);
+//        listView.requestLayout();
+//    }
 
     // TODO: Rename method, update argument and hook method into UI event
 //    public void onButtonPressed(Uri uri) {
@@ -173,17 +177,7 @@ public class ProfileFragment extends Fragment {
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
+   public interface OnFragmentInteractionListener {
         void onFragmentInteraction(String name);
     }
 
