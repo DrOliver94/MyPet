@@ -121,7 +121,7 @@ public class ProfileFragment extends Fragment {
             case R.id.menuEditProfile:
                 getFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.main_fragment, new UserDataFragment())
+                        .replace(R.id.main_fragment, UserDataFragment.newInstance(idUser, true))
                         .addToBackStack(null)
                         .commit();
                 return true;

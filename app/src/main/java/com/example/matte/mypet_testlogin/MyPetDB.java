@@ -458,9 +458,13 @@ public class MyPetDB {
             if(!idCurrUser.equals(idUser)) {  //se l'utente della riga selezionata è un amico
                 User user = new User();
 
-                //TODO fare il resto
                 user.id = idCurrUser;
+                user.username = cursor.getString(USERS_USERNAME_COL);
                 user.name = cursor.getString(USERS_NAME_COL);
+                user.surname = cursor.getString(USERS_SURNAME_COL);
+                user.gender = cursor.getString(USERS_GENDER_COL);
+                user.birthdate = cursor.getString(USERS_BIRTHDATE_COL);
+                user.profilepic = cursor.getString(USERS_PROFILEPIC_COL);
 
                 friends.add(user);
             }

@@ -94,6 +94,8 @@ public class AnimalDataFragment extends Fragment {
         aBirthdateEditTxt = (EditText) view.findViewById(R.id.animalBirthDateEditText);
         aGenderEditTxt = (EditText) view.findViewById(R.id.animalGenderEditText);
 
+        sendData = (Button) view.findViewById(R.id.buttonSendAnimData);
+
         if(isEdit){ //Se si modifica un animale => caricare negli edittext i dati dell'animale
             Animal a = HomeActivity.dbManager.getAnimal(idAnim);
 
@@ -102,7 +104,6 @@ public class AnimalDataFragment extends Fragment {
             aBirthdateEditTxt.setText(a.birthdate);
             aGenderEditTxt.setText(a.gender);
 
-            sendData = (Button) view.findViewById(R.id.buttonSendAnimData);
             sendData.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -111,7 +112,6 @@ public class AnimalDataFragment extends Fragment {
             });
             getActivity().setTitle("Modifica Animale");
         } else {    //Si crea un nuovo animale
-            sendData = (Button) view.findViewById(R.id.buttonSendAnimData);
             sendData.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -120,8 +120,6 @@ public class AnimalDataFragment extends Fragment {
             });
             getActivity().setTitle("Nuovo Animale");
         }
-
-
 
         return view;
     }
@@ -204,7 +202,7 @@ public class AnimalDataFragment extends Fragment {
         protected void onPreExecute() {
             super.onPreExecute();
 
-            Log.d("MyPet", "checkLogin start");
+            Log.d("MyPet", "insertAnimal start");
 
             pDialog.setTitle("Insert animale");
             pDialog.setMessage("Richiesta al server...");
@@ -258,7 +256,7 @@ public class AnimalDataFragment extends Fragment {
                             .commit();
                 } else {
 
-                    //Altrimenti indicare l'errore all'utente
+                    //TODO Altrimenti indicare l'errore all'utente
                 }
             } catch(Exception e) {
                 e.fillInStackTrace();
@@ -304,7 +302,7 @@ public class AnimalDataFragment extends Fragment {
         protected void onPreExecute() {
             super.onPreExecute();
 
-            Log.d("MyPet", "checkLogin start");
+            Log.d("MyPet", "updateAnimal start");
 
             pDialog.setTitle("Update animale");
             pDialog.setMessage("Richiesta al server...");

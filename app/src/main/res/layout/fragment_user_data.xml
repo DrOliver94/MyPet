@@ -13,7 +13,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- Inseriamo un frame layout per la modifica dell'immagine del profilo??? -->
+            <!-- TODO Inseriamo un frame layout per la modifica dell'immagine del profilo??? -->
 
             <TableLayout
                 android:layout_width="match_parent"
@@ -24,7 +24,7 @@
 
                 <TableRow
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:weightSum="1"
                     android:orientation="horizontal">
 
@@ -43,11 +43,12 @@
 
                     <EditText
                         android:layout_width="0dp"
-                        android:layout_height="35dp"
+                        android:layout_height="45dp"
                         android:id="@+id/userNameEditText"
                         android:layout_weight="0.6"
                         android:gravity="left|fill_vertical"
                         android:padding="0dp"
+                        android:paddingStart="10dp"
                         android:layout_margin="10dp"
                         android:textSize="20sp"
                         android:maxLines="1" />
@@ -76,7 +77,8 @@
                     <EditText
                         android:text=""
                         android:layout_width="0dp"
-                        android:layout_height="35dp"
+                        android:layout_height="45dp"
+                        android:paddingStart="10dp"
                         android:id="@+id/userSurnameEditText"
                         android:layout_weight="0.6"
                         android:gravity="left|fill_vertical"
@@ -108,7 +110,8 @@
                     <EditText
                         android:text=""
                         android:layout_width="0dp"
-                        android:layout_height="35dp"
+                        android:layout_height="45dp"
+                        android:paddingStart="10dp"
                         android:id="@+id/userUsernameEditText"
                         android:layout_weight="0.6"
                         android:gravity="left|fill_vertical"
@@ -139,7 +142,8 @@
                     <EditText
                         android:text=""
                         android:layout_width="0dp"
-                        android:layout_height="35dp"
+                        android:layout_height="45dp"
+                        android:paddingStart="10dp"
                         android:id="@+id/userBirthDateEditText"
                         android:layout_weight="0.6"
                         android:gravity="left|fill_vertical"
@@ -171,7 +175,8 @@
                     <EditText
                         android:text=""
                         android:layout_width="0dp"
-                        android:layout_height="35dp"
+                        android:layout_height="45dp"
+                        android:paddingStart="10dp"
                         android:id="@+id/userGenderEditText"
                         android:layout_weight="0.6"
                         android:gravity="left|fill_vertical"
@@ -202,7 +207,8 @@
                     <EditText
                         android:text=""
                         android:layout_width="0dp"
-                        android:layout_height="35dp"
+                        android:layout_height="45dp"
+                        android:paddingStart="10dp"
                         android:id="@+id/userMailEditText"
                         android:layout_weight="0.6"
                         android:gravity="left|fill_vertical"
@@ -220,9 +226,9 @@
 
                 <Button
                     android:text="Salva"
-                    android:layout_width="201dp"
+                    android:layout_width="200dp"
                     android:layout_height="90dp"
-                    android:id="@+id/button5"
+                    android:id="@+id/buttonSendUserData"
                     android:layout_gravity="center"
                     android:textSize="20sp" />
 
