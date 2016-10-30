@@ -11,13 +11,18 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -98,6 +103,12 @@ public class ProfileFragment extends Fragment {
         userGenderText.setText(currUser.gender);
         userBirthDateText.setText(currUser.birthdate);
 
+        Picasso.with(view.getContext()).setIndicatorsEnabled(true);
+        //Immagine
+        Picasso.with(view.getContext())
+                .load(HomeActivity.IMG_BASEURL + currUser.profilepic)
+                .transform(new CropCircleTransformation())
+                .into((ImageView) view.findViewById(R.id.imageViewUserProfile));
 
         //itemsListView.setScrollContainer(false);
 

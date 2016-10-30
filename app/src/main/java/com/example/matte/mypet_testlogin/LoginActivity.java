@@ -18,15 +18,19 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import org.json.JSONException;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class LoginActivity extends AppCompatActivity {
 
     private UserLoginTask mAuthTask = null;
+    private DownloadImgTask downImgTask = null;
 
     // UI references.
     private EditText mUserView;
@@ -398,6 +402,8 @@ public class LoginActivity extends AppCompatActivity {
         private final String mToken;
         private final String mIdUser;
 
+        ArrayList<String> imgsList = new ArrayList<>();     //Array per raccogliere tutti i link delle immagini
+
         private ProgressDialog pDialog;
 
         private ServerComm serverComm;
@@ -444,6 +450,7 @@ public class LoginActivity extends AppCompatActivity {
                 JSONObject jObjUser = jObj.getJSONObject("_user");
                 User u = new User(jObj.getString("iduser"), jObjUser);
                 dbHand.insertUser(u);
+                imgsList.add(u.profilepic);
 
                 //##### Loading animali nel DB
                 if(!jObj.isNull("_pets")) {
@@ -454,13 +461,14 @@ public class LoginActivity extends AppCompatActivity {
                         JSONObject jPet = jPets.getJSONObject(idPet);   //recupera animale
                         Animal p = new Animal(idPet, jPet);             //Crea obj
                         dbHand.insertAnimal(p, u.id);                         //Inserisce nel DB
+                        imgsList.add(p.profilepic);
                     }
                 }
 
                 //##### Loading amici nel DB
-                if(!jObj.isNull("_pets")) {
+                if(!jObj.isNull("_friends")) {
                     JSONObject jFriends = jObj.getJSONObject("_friends");
-                    JSONArray idFriends = jFriends.names();                        //recupera elenco ID degli amici
+                    JSONArray idFriends = jFriends.names();                     //recupera elenco ID degli amici
                     for (int i = 0; i < idFriends.length(); i++) {              //per ogni utente nell'obj
                         String idFriend = (String) idFriends.get(i);            //recupera ID
                         JSONObject jFriend = jFriends.getJSONObject(idFriend);  //recupera utente
@@ -468,12 +476,13 @@ public class LoginActivity extends AppCompatActivity {
                         dbHand.insertUser(f);                                   //Inserisce nel DB
                         String status = jFriend.getString("status");
                         dbHand.insertFriendship(jFriend.getString("idfriendship"), idUser, f.id, status);
+                        imgsList.add(f.profilepic);
                     }
                 }
 
                 //##### Loading post nel DB
                 //Dopo gli amici (o nel DB potrebbero venir caricati dati parziali...)
-                if(!jObj.isNull("_pets")) {
+                if(!jObj.isNull("_posts")) {
                     JSONObject jPosts = jObj.getJSONObject("_posts");
                     //TODO qualquadra non cosa qui
                     JSONArray idPosts = jPosts.names();                  //recupera elenco ID dei post
@@ -482,6 +491,7 @@ public class LoginActivity extends AppCompatActivity {
                         JSONObject jPost = jPosts.getJSONObject(idPost);//recupera post
                         Post p = new Post(idPost, jPost);               //Crea obj
                         dbHand.insertPost(p);                           //Inserisce nel DB
+                        imgsList.add(p.picture);
                     }
                 }
 
@@ -495,11 +505,16 @@ public class LoginActivity extends AppCompatActivity {
                         dbHand.insertReminder(r);                               //Inserisce nel DB
                     }
                 }
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
             //TODO controllare per errori
+
+            //Caricamento dell'asyncTask per il download delle imgs
+            //Verrà eseguito al termine di questo AsyncTask
+
 
             return jObj;
         }
@@ -518,13 +533,72 @@ public class LoginActivity extends AppCompatActivity {
                 pDialog.dismiss();
             }
 
+            downImgTask = new DownloadImgTask(imgsList);
+            downImgTask.execute();
+        }
+
+        @Override
+        protected void onCancelled() {
+            mAuthTask = null;
+            if (pDialog.isShowing()) {
+                pDialog.dismiss();
+            }
+        }
+    }
+
+    /**
+     * Verifica se l'utente è già riconosciuto dal server
+     * In tal caso salta la schermata di login
+     */
+    public class DownloadImgTask extends AsyncTask<Void, Integer, JSONObject> {
+        private final ArrayList<String> imgList;
+
+        private ProgressDialog pDialog;
+
+        DownloadImgTask(ArrayList<String> imgL) {
+            imgList = imgL;
+            pDialog = new ProgressDialog(LoginActivity.this);
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            Log.d("MyPet", "downloadImg start");
+
+            pDialog.setTitle("Richiesta ai Server");
+            pDialog.setMessage("Download immagini...");
+            pDialog.setIndeterminate(false);
+            pDialog.setCancelable(false);
+            pDialog.show();
+        }
+
+        @Override
+        protected JSONObject doInBackground(Void... p) {
+
+            for(String imgUrl : imgList){
+                try {
+                    Picasso.with(getBaseContext()).load("https://webdev.dibris.unige.it/~S3951060/" + imgUrl).get();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(final JSONObject jObj) {
+            if (pDialog.isShowing()) {
+                pDialog.dismiss();
+            }
+
             //si passa alla home
             startActivity(new Intent(LoginActivity.this, HomeActivity.class));
         }
 
         @Override
         protected void onCancelled() {
-            mAuthTask = null;
             if (pDialog.isShowing()) {
                 pDialog.dismiss();
             }

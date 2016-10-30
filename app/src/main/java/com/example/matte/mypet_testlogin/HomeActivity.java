@@ -18,8 +18,9 @@ public class HomeActivity extends AppCompatActivity
     public static MyPetDB dbManager;
     public static SharedPreferences shPref;
 
-    private DrawerLayout drawer;
+    public static final String IMG_BASEURL = "https://webdev.dibris.unige.it/~S3951060/";
 
+    private DrawerLayout drawer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

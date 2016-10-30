@@ -11,12 +11,17 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -86,6 +91,12 @@ public class AnimalProfileFragment extends Fragment {
         animalBirthDateText.setText(currAnim.birthdate);
 
         itemsListView = (ListView) view.findViewById(R.id.profile_postsListView);
+
+        Picasso.with(view.getContext()).setIndicatorsEnabled(true);
+        Picasso.with(view.getContext())
+                .load(HomeActivity.IMG_BASEURL + currAnim.profilepic)
+                .transform(new CropCircleTransformation())
+                .into((ImageView) view.findViewById(R.id.imageViewAnimalProfile));
 
 //        showPostsByAnimal(idAnim);
 
