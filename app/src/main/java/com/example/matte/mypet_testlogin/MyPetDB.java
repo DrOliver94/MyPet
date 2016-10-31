@@ -819,6 +819,10 @@ public class MyPetDB {
             //TODO fare il resto
             post.id = cursor.getString(cursor.getColumnIndex(POSTS_ID));
             post.text = cursor.getString(cursor.getColumnIndex(POSTS_TEXT));
+            post.place = cursor.getString(cursor.getColumnIndex(POSTS_PLACE));
+            post.date = cursor.getString(cursor.getColumnIndex(POSTS_DATE));
+            post.idauthor = cursor.getString(cursor.getColumnIndex(POSTS_IDAUTHOR));
+            post.picture = cursor.getString(cursor.getColumnIndex(POSTS_PICTURE));
 
             posts.add(post);
         }
@@ -861,6 +865,10 @@ public class MyPetDB {
             post.id = cursor.getString(cursor.getColumnIndex(POSTS_ID));
             post.text = cursor.getString(cursor.getColumnIndex(POSTS_TEXT));
             post.date = cursor.getString(cursor.getColumnIndex(POSTS_DATE));
+            post.place = cursor.getString(cursor.getColumnIndex(POSTS_PLACE));
+            post.date = cursor.getString(cursor.getColumnIndex(POSTS_DATE));
+            post.idauthor = cursor.getString(cursor.getColumnIndex(POSTS_IDAUTHOR));
+            post.picture = cursor.getString(cursor.getColumnIndex(POSTS_PICTURE));
 
             posts.add(post);
         }
@@ -901,7 +909,8 @@ public class MyPetDB {
             cv.put(POSTS_TEXT, p.text);
             cv.put(POSTS_DATE, p.date);
             cv.put(POSTS_PLACE, p.place);
-            //Agginta di animali e utenti taggati
+            cv.put(POSTS_PICTURE, p.picture);
+            //Aggiunta di animali e utenti taggati
             for(User u : p.users){
                 insertUser(u);
                 linkUserPost(u.id, p.id);

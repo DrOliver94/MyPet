@@ -156,24 +156,27 @@ public class FeedFragment extends Fragment {
 
 //        Log.d("MyPet", feedListView.toString());
 
-        //caricamento dei post in un array di HashMap
-        ArrayList<HashMap<String, String>> data = new ArrayList<>();
-        for(Post p : posts) {
-            HashMap<String, String> map = new HashMap<>();
-            map.put("id", p.id);
-            map.put("text", p.text);
-            data.add(map);
-            Log.d("MyPet", p.text);
-        }
+//        //caricamento dei post in un array di HashMap
+//        ArrayList<HashMap<String, String>> data = new ArrayList<>();
+//        for(Post p : posts) {
+//            HashMap<String, String> map = new HashMap<>();
+//            map.put("id", p.id);
+//            map.put("text", p.text);
+//            data.add(map);
+//            Log.d("MyPet", p.text);
+//        }
+//
+//        //risorse
+//        int res = R.layout.listview_post;
+//        String [] from = {"id", "text"};
+//        int[] to = {R.id.post_id, R.id.post_text};
 
-        //risorse
-        int res = R.layout.listview_post;
-        String [] from = {"id", "text"};
-        int[] to = {R.id.post_id, R.id.post_text};
+//        //caricamento dei dati nell'adapter
+//        SimpleAdapter adapter = new SimpleAdapter(getActivity(), data, res, from, to);
+//        //adapter.getCount();
+//        feedListView.setAdapter(adapter);
 
-        //caricamento dei dati nell'adapter
-        SimpleAdapter adapter = new SimpleAdapter(getActivity(), data, res, from, to);
-        //adapter.getCount();
+        PostListAdapter adapter = new PostListAdapter(getActivity(), posts);
         feedListView.setAdapter(adapter);
     }
 

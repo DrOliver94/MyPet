@@ -40,7 +40,8 @@ public class Post {
             idauthor = jObjPost.getString("author");
             nameauthor = jObjPost.getString("nameauthor");
             //TODO picAuthor
-            //TODO pic
+            if(!jObjPost.isNull("pic"))
+                picture = jObjPost.getString("pic");
             if(!jObjPost.isNull("text"))
                 text = jObjPost.getString("text");
             if(!jObjPost.isNull("date"))

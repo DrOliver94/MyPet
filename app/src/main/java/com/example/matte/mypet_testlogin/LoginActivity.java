@@ -578,7 +578,7 @@ public class LoginActivity extends AppCompatActivity {
 
             for(String imgUrl : imgList){
                 try {
-                    Picasso.with(getBaseContext()).load("https://webdev.dibris.unige.it/~S3951060/" + imgUrl).get();
+                    Picasso.with(getBaseContext()).load(HomeActivity.IMG_BASEURL + imgUrl).get();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
