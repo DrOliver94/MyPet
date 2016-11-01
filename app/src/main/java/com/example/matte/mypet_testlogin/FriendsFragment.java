@@ -13,8 +13,12 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
+import com.squareup.picasso.OkHttpDownloader;
+
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import okhttp3.OkHttpClient;
 
 /**
  * A simple {@link Fragment} subclass.

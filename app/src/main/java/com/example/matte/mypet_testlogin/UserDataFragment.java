@@ -217,13 +217,6 @@ public class UserDataFragment extends Fragment {
                     //Aggiorna token nelle SharedPref
                     shPref.edit().putString("Token", jObj.getString("token")).apply();
 
-                    //gira al fragment di profilo animale
-//                    getFragmentManager()
-//                            .beginTransaction()
-//                            .replace(R.id.main_fragment, AnimalProfileFragment.newInstance(anim.id))
-//                            .addToBackStack("")
-//                            .commit();
-
                     //Torna al fragment precedente
                     getFragmentManager().popBackStack();
 

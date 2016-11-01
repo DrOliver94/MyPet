@@ -97,7 +97,7 @@ public class ProfileFragment extends Fragment {
         TextView userGenderText = (TextView) header.findViewById(R.id.userGenderTextView);
         TextView userBirthDateText = (TextView) header.findViewById(R.id.userBirthDateTextView);
 
-        userUserNameProfileText.setText(currUser.username);//TODO leggi da db
+        userUserNameProfileText.setText(currUser.username);
         userNameText.setText(currUser.name);
         userSurnameText.setText(currUser.surname);
         userGenderText.setText(currUser.gender);
@@ -163,7 +163,6 @@ public class ProfileFragment extends Fragment {
 //        listView.requestLayout();
 //    }
 
-    // TODO: Rename method, update argument and hook method into UI event
 //    public void onButtonPressed(Uri uri) {
 //        if (mListener != null) {
 //            mListener.onFragmentInteraction("Profilo");
@@ -173,23 +172,12 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-//        if (context instanceof OnFragmentInteractionListener) {
-//            mListener = (OnFragmentInteractionListener) context;
-//        } else {
-//            throw new RuntimeException(context.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-//        mListener = null;
     }
-
-//   public interface OnFragmentInteractionListener {
-//        void onFragmentInteraction(String name);
-//    }
 
     /**
      * Mostra i post dell'utente richiesto
@@ -202,26 +190,29 @@ public class ProfileFragment extends Fragment {
 
         Log.d("MyPet", itemsListView.toString());
 
-        //caricamento dei post in un array di HashMap
-        ArrayList<HashMap<String, String>> data = new ArrayList<>();
-        for(Post p : posts) {
-            HashMap<String, String> map = new HashMap<>();
-            map.put("id", p.id);
-            map.put("text", p.text);
-            data.add(map);
-            Log.d("MyPet", p.text);
-        }
+//        //caricamento dei post in un array di HashMap
+//        ArrayList<HashMap<String, String>> data = new ArrayList<>();
+//        for(Post p : posts) {
+//            HashMap<String, String> map = new HashMap<>();
+//            map.put("id", p.id);
+//            map.put("text", p.text);
+//            data.add(map);
+//            Log.d("MyPet", p.text);
+//        }
+//
+//        //risorse
+//        int res = R.layout.listview_post;
+//        String [] from = {"id", "text"};
+//        int[] to = {R.id.post_id, R.id.post_text};
+//
+//        //caricamento dei dati nell'adapter
+//        SimpleAdapter adapter = new SimpleAdapter(getActivity(), data, res, from, to);
+//        adapter.getCount();
+//        itemsListView.setAdapter(adapter);
+//        //justifyListViewHeightBasedOnChildren(itemsListView);
 
-        //risorse
-        int res = R.layout.listview_post;
-        String [] from = {"id", "text"};
-        int[] to = {R.id.post_id, R.id.post_text};
-
-        //caricamento dei dati nell'adapter
-        SimpleAdapter adapter = new SimpleAdapter(getActivity(), data, res, from, to);
-        adapter.getCount();
+        PostListAdapter adapter = new PostListAdapter(getActivity(), posts);
         itemsListView.setAdapter(adapter);
-        //justifyListViewHeightBasedOnChildren(itemsListView);
     }
 
 }
