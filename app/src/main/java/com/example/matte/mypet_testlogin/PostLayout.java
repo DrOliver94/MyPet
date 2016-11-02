@@ -8,8 +8,6 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import jp.wasabeef.picasso.transformations.CropCircleTransformation;
-
 /**
  * Gestisce il layout del post
  */

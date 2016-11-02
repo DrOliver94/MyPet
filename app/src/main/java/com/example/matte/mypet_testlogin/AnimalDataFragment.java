@@ -1,23 +1,43 @@
 package com.example.matte.mypet_testlogin;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.provider.MediaStore;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.squareup.picasso.Picasso;
+
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.Hashtable;
+import java.util.Map;
 
+import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -26,12 +46,13 @@ import java.util.ArrayList;
  * create an instance of this fragment.
  */
 public class AnimalDataFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "idAnimal";
     private static final String ARG_PARAM2 = "isEdit";
 
-    // TODO: Rename and change types of parameters
+    private final int PICK_IMAGE_REQUEST = 1;
+    private Uri chosenImgUri;
+    private String oldImgPath;
+
     private String idAnim;
     private Boolean isEdit;
 
@@ -41,8 +62,13 @@ public class AnimalDataFragment extends Fragment {
     private EditText aSpeciesEditTxt;
     private EditText aBirthdateEditTxt;
     private EditText aGenderEditTxt;
-
     private Button sendData;
+    private Button uploadImg;
+    private ImageView imgAnimalData;
+
+    private Bitmap bitmap;
+
+    private ProgressDialog pDialog;
 
     private SharedPreferences shPref;
 
@@ -60,7 +86,6 @@ public class AnimalDataFragment extends Fragment {
      *               false se si vuole creare un nuovo animale
      * @return A new instance of fragment AnimalDataFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static AnimalDataFragment newInstance(String idAnimal, Boolean isEdit) {
         AnimalDataFragment fragment = new AnimalDataFragment();
         Bundle args = new Bundle();
@@ -93,8 +118,10 @@ public class AnimalDataFragment extends Fragment {
         aSpeciesEditTxt = (EditText) view.findViewById(R.id.animalSpeciesEditText);
         aBirthdateEditTxt = (EditText) view.findViewById(R.id.animalBirthDateEditText);
         aGenderEditTxt = (EditText) view.findViewById(R.id.animalGenderEditText);
+        imgAnimalData = (ImageView) view.findViewById(R.id.imageViewAnimalData);
 
         sendData = (Button) view.findViewById(R.id.buttonSendAnimData);
+        uploadImg = (Button) view .findViewById(R.id.buttonUploadAnimalImg);
 
         if(isEdit){ //Se si modifica un animale => caricare negli edittext i dati dell'animale
             Animal a = HomeActivity.dbManager.getAnimal(idAnim);
@@ -104,12 +131,28 @@ public class AnimalDataFragment extends Fragment {
             aBirthdateEditTxt.setText(a.birthdate);
             aGenderEditTxt.setText(a.gender);
 
+            //Memorizzo percorso ultima img usata
+            oldImgPath = a.profilepic;
+
+            //All'avvio, si carica l'img che si ha nel profilo
+            Picasso.with(view.getContext())
+                    .load(oldImgPath)
+                    .placeholder(R.drawable.img)
+                    .transform(new CropCircleTransformation())
+                    .into(imgAnimalData);
+
             sendData.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    updateAnimal();
+                    if(chosenImgUri != null)
+                        uploadImage();
+                    else {
+                        //Se non si è scelta una nuova img, passare subito all'edit utente
+                        updateAnimal(null);
+                    }
                 }
             });
+
             getActivity().setTitle("Modifica Animale");
         } else {    //Si crea un nuovo animale
             sendData.setOnClickListener(new View.OnClickListener() {
@@ -121,29 +164,133 @@ public class AnimalDataFragment extends Fragment {
             getActivity().setTitle("Nuovo Animale");
         }
 
+        //Button di upload img. Chiede all'user da dove scegliere l'img
+        uploadImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent();
+                // Show only images, no videos or anything else
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);  //Always show the chooser (if there are multiple options available)
+                startActivityForResult(Intent.createChooser(intent, "Seleziona immagine profilo"), PICK_IMAGE_REQUEST);
+            }
+        });
+
         return view;
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-//        if (context instanceof OnFragmentInteractionListener) {
-//            mListener = (OnFragmentInteractionListener) context;
-//        } else {
-//            throw new RuntimeException(context.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-//        mListener = null;
     }
 
-//    public interface OnFragmentInteractionListener {
-//        void onFragmentInteraction(String name);
-//    }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null && data.getData() != null) {
+            //Memorizzo l'Uri dell'img scelta
+            chosenImgUri = data.getData();
+
+            //La mostro nell'ImageView
+            Picasso.with(getActivity().getBaseContext())
+                    .load(chosenImgUri)
+                    .placeholder(R.drawable.img)
+                    .transform(new CropCircleTransformation())
+                    .into((ImageView) getActivity().findViewById(R.id.imageViewAnimalData));
+        }
+    }
+
+
+    private void uploadImage(){
+        try {
+            bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), chosenImgUri);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        //Showing the progress dialog
+        pDialog = new ProgressDialog(getActivity());
+        pDialog.setTitle("Connessione ai Server");
+        pDialog.setMessage("Upload immagine...");
+        pDialog.setIndeterminate(false);
+        pDialog.setCancelable(false);
+        pDialog.show();
+        StringRequest stringRequest = new StringRequest(Request.Method.POST,
+                "http://webdev.dibris.unige.it/~S3951060/mobile_login.php",
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String s) {
+                        String imgPath = "";
+                        boolean success = false;
+                        try {
+                            JSONObject jObj = new JSONObject(s);
+                            imgPath = jObj.getString("imgpath");
+                            success = jObj.getBoolean("success");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                        if(success) {
+                            if(isEdit)
+                                updateAnimal(imgPath);
+                            else
+                                insertAnimal();
+                        }
+
+                        //TODO controllare per insuccesso
+
+                        //Disimissing the progress dialog
+                        if (pDialog.isShowing()) {
+                            pDialog.dismiss();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+                        Log.d("MyPet", "Erro volley" + volleyError.getMessage());
+
+                        //Dismissing the progress dialog
+                        if (pDialog.isShowing()) {
+                            pDialog.dismiss();
+                        }
+                    }
+                }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                //Converting Bitmap to String
+                String image = getStringImage(bitmap);
+
+                //Creating parameters
+                Map<String,String> params = new Hashtable<String, String>();
+
+                //Adding parameters
+                params.put("uploadImg", image);
+
+                //returning parameters
+                return params;
+            }
+        };
+
+        //Creating a Request Queue
+        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
+
+        //Adding request to the queue
+        requestQueue.add(stringRequest);
+    }
+
+    public String getStringImage(Bitmap bmp){
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bmp.compress(Bitmap.CompressFormat.JPEG, 80, baos);
+        byte[] imageBytes = baos.toByteArray();
+        String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+        return encodedImage;
+    }
 
     private void insertAnimal(){
         //Recuperare dati, fare controlli se necessario
@@ -160,7 +307,7 @@ public class AnimalDataFragment extends Fragment {
         insertAnim.execute(nameTxt, speciesTxt, genderTxt, birthdateTxt, profilepicTxt);
     }
 
-    private void updateAnimal(){
+    private void updateAnimal(String serverPicPath){
         //Recuperare dati, fare controlli se necessario
 //        ArrayList<String> par = new ArrayList<String>();
 //
@@ -168,11 +315,17 @@ public class AnimalDataFragment extends Fragment {
         String speciesTxt = aSpeciesEditTxt.getText().toString();
         String genderTxt = aGenderEditTxt.getText().toString();
         String birthdateTxt = aBirthdateEditTxt.getText().toString();   //TODO gestire data
-        String profilepicTxt = "profilepic";
+
+        String clientImgPath = "";
+        if(chosenImgUri != null)
+            clientImgPath = chosenImgUri.toString();
+        else
+            clientImgPath = oldImgPath;
 
         //Inviare richiesta al server per l'update
         UpdateAnimalTask updateAnim = new UpdateAnimalTask(shPref.getString("Token", ""), idAnim, idUser);
-        updateAnim.execute(nameTxt, speciesTxt, genderTxt, birthdateTxt, profilepicTxt);
+        updateAnim.execute(nameTxt, speciesTxt, genderTxt, birthdateTxt,
+                clientImgPath, serverPicPath);
     }
 
     /**
@@ -218,7 +371,8 @@ public class AnimalDataFragment extends Fragment {
                 anim.species = p[1];
                 anim.gender = p[2];
                 anim.birthdate = p[3];
-//                String profilepic = p[4];
+                anim.profilepic = p[4];
+                String serverPic = p[5];
 
                 String postArgs = "insertAnimal=" + anim.id +
                         "&iduser=" + idUser +
@@ -254,6 +408,8 @@ public class AnimalDataFragment extends Fragment {
                             .replace(R.id.main_fragment, AnimalProfileFragment.newInstance(Long.toString(idNewAnim)))
                             .addToBackStack(null)
                             .commit();
+                    return;
+
                 } else {
 
                     //TODO Altrimenti indicare l'errore all'utente
@@ -318,7 +474,8 @@ public class AnimalDataFragment extends Fragment {
                 anim.species = p[1];
                 anim.gender = p[2];
                 anim.birthdate = p[3];
-//                String profilepic = p[4];
+                anim.profilepic = p[4];
+                String serverPic = p[5];
 
                 String postArgs = "updateAnimal=" + anim.id +
                         "&iduser=" + idUser +
@@ -326,7 +483,8 @@ public class AnimalDataFragment extends Fragment {
                         "&name=" + anim.name +
                         "&species=" + anim.species +
                         "&gender=" + anim.gender +
-                        "&birthdate=" + anim.birthdate;
+                        "&birthdate=" + anim.birthdate +
+                        "&profilepic=" + serverPic;
 
                 Log.d("MyPet", postArgs);
 
@@ -367,6 +525,7 @@ public class AnimalDataFragment extends Fragment {
             if (pDialog.isShowing()) {
                 pDialog.dismiss();
             }
+            return;
         }
 
         @Override

@@ -110,9 +110,6 @@ public class UserDataFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_user_data, container, false);
 
-        //Raccolta dati dell'utente
-        User u = HomeActivity.dbManager.getUser(idUser);
-
         //Riferimenti UI
         uUsernameEditTxt = (EditText) view.findViewById(R.id.userUsernameEditText);
         uNameEditTxt = (EditText) view.findViewById(R.id.userNameEditText);
@@ -126,6 +123,7 @@ public class UserDataFragment extends Fragment {
         uploadImg = (Button) view.findViewById(R.id.buttonUploadUserImg);
 
         if (isEdit) {     //Se si vuole modificare i dati di un user
+            User u = HomeActivity.dbManager.getUser(idUser);    //Raccolta dati dell'utente
             uUsernameEditTxt.setText(u.username);
             uNameEditTxt.setText(u.name);
             uSurnameEditTxt.setText(u.surname);
@@ -306,8 +304,6 @@ public class UserDataFragment extends Fragment {
                 //Converting Bitmap to String
                 String image = getStringImage(bitmap);
 
-//                //Getting Image Name
-//                String name = editTextName.getText().toString().trim();
                 //Creating parameters
                 Map<String,String> params = new Hashtable<String, String>();
 
