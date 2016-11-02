@@ -94,7 +94,7 @@ public class AnimalProfileFragment extends Fragment {
 
         Picasso.with(view.getContext()).setIndicatorsEnabled(true);
         Picasso.with(view.getContext())
-                .load(HomeActivity.IMG_BASEURL + currAnim.profilepic)
+                .load(currAnim.profilepic)
                 .transform(new CropCircleTransformation())
                 .into((ImageView) view.findViewById(R.id.imageViewAnimalProfile));
 

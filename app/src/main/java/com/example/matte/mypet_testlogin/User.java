@@ -30,7 +30,7 @@ public class User {
             if(!jObjUser.isNull("birthDate"))
                 birthdate = jObjUser.getString("birthDate");
             if(!jObjUser.isNull("profilePic"))
-                profilepic = jObjUser.getString("profilePic");
+                profilepic = HomeActivity.IMG_BASEURL + jObjUser.getString("profilePic");
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -26,7 +26,7 @@ public class Animal {
             if(!jObjPet.isNull("birthdate"))
                 birthdate = jObjPet.getString("birthdate");
             if(!jObjPet.isNull("profilePic"))
-                profilepic = jObjPet.getString("profilePic");
+                profilepic = HomeActivity.IMG_BASEURL + jObjPet.getString("profilePic");
         } catch (Exception e) {
             e.printStackTrace();
         }

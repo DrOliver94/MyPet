@@ -106,7 +106,7 @@ public class ProfileFragment extends Fragment {
         Picasso.with(view.getContext()).setIndicatorsEnabled(true);
         //Immagine
         Picasso.with(view.getContext())
-                .load(HomeActivity.IMG_BASEURL + currUser.profilepic)
+                .load(currUser.profilepic)
                 .transform(new CropCircleTransformation())
                 .into((ImageView) view.findViewById(R.id.imageViewUserProfile));
 

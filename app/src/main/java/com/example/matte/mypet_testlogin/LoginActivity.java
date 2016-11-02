@@ -515,7 +515,6 @@ public class LoginActivity extends AppCompatActivity {
             //Caricamento dell'asyncTask per il download delle imgs
             //Verrà eseguito al termine di questo AsyncTask
 
-
             return jObj;
         }
 
@@ -575,10 +574,10 @@ public class LoginActivity extends AppCompatActivity {
 
         @Override
         protected JSONObject doInBackground(Void... p) {
-
+            //Download di ogni img caricata in lista
             for(String imgUrl : imgList){
                 try {
-                    Picasso.with(getBaseContext()).load(HomeActivity.IMG_BASEURL + imgUrl).get();
+                    Picasso.with(getBaseContext()).load(imgUrl).get();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

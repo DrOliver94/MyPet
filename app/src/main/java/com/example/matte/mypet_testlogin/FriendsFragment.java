@@ -1,24 +1,16 @@
 package com.example.matte.mypet_testlogin;
 
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
-
-import com.squareup.picasso.OkHttpDownloader;
-
 import java.util.ArrayList;
 import java.util.HashMap;
-
-import okhttp3.OkHttpClient;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -41,7 +33,6 @@ public class FriendsFragment extends Fragment {
      * @param idUser id of the user
      * @return A new instance of fragment FriendsFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static FriendsFragment newInstance(String idUser) {
         FriendsFragment fragment = new FriendsFragment();
         Bundle args = new Bundle();
@@ -73,15 +64,15 @@ public class FriendsFragment extends Fragment {
         friendsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                HashMap<String, String> data = (HashMap<String, String>) adapterView.getItemAtPosition(i); //TODO si casta a Animal e funziona? Testare
+            HashMap<String, String> data = (HashMap<String, String>) adapterView.getItemAtPosition(i); //TODO si casta a Animal e funziona? Testare
 
 //                Animal a = animals.get(i);
 
-                getFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.main_fragment, ProfileFragment.newInstance(data.get("id")))
-                        .addToBackStack(null)
-                        .commit();
+            getFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.main_fragment, ProfileFragment.newInstance(data.get("id")))
+                    .addToBackStack(null)
+                    .commit();
             }
         });
 

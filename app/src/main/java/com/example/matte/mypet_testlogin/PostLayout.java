@@ -48,7 +48,7 @@ public class PostLayout extends LinearLayout {
         pText.setText(post.text);
         Picasso.with(getContext()).setIndicatorsEnabled(true);
         Picasso.with(getContext())
-                .load(HomeActivity.IMG_BASEURL + post.picture)
+                .load(post.picture)
                 .into(pImageView);
     }
 }

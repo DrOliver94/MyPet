@@ -41,7 +41,7 @@ public class Post {
             nameauthor = jObjPost.getString("nameauthor");
             //TODO picAuthor
             if(!jObjPost.isNull("pic"))
-                picture = jObjPost.getString("pic");
+                picture = HomeActivity.IMG_BASEURL + jObjPost.getString("pic");
             if(!jObjPost.isNull("text"))
                 text = jObjPost.getString("text");
             if(!jObjPost.isNull("date"))

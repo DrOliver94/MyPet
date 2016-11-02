@@ -409,6 +409,7 @@ public class MyPetDB {
         cv.put(USERS_SURNAME, user.surname);
         cv.put(USERS_GENDER, user.gender);
         cv.put(USERS_BIRTHDATE, user.birthdate);
+        cv.put(USERS_PROFILEPIC, user.profilepic);
 
         String where = USERS_ID + "= ?";
         String[] whereArgs = { String.valueOf(user.id) };
