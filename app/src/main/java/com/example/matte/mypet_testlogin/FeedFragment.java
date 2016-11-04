@@ -7,19 +7,8 @@ import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.util.Log;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
 import java.util.ArrayList;
-import java.util.HashMap;
-
-import android.os.StrictMode;
-import android.net.Uri;
-import android.widget.Button;
-import android.widget.TextView;
-import org.json.JSONException;
-import org.json.JSONObject;
-import java.io.IOException;
 
 /**
  * A simple {@link Fragment} subclass.

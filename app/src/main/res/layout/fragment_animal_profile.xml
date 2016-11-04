@@ -161,8 +161,6 @@
                 android:textStyle="normal|bold"
                 android:textColor="@android:color/holo_green_dark" />
 
-
-
             <ListView
                 android:id="@+id/profile_postsListView"
                 android:padding="20dp"

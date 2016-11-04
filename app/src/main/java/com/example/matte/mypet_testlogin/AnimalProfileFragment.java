@@ -98,7 +98,7 @@ public class AnimalProfileFragment extends Fragment {
                 .transform(new CropCircleTransformation())
                 .into((ImageView) view.findViewById(R.id.imageViewAnimalProfile));
 
-//        showPostsByAnimal(idAnim);
+        showPostsByAnimal(idAnim);
 
         getActivity().setTitle(currAnim.name);
 

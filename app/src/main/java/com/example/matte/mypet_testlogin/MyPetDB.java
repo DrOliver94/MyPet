@@ -831,7 +831,7 @@ public class MyPetDB {
                 " JOIN " + ANIMALS_TABLE +
                 " ON (" + POSTANIMALS_TABLE+"."+POSTANIMALS_IDANIMAL + "=" + ANIMALS_TABLE+"."+ANIMALS_ID + ")");
 
-        String where = ANIMALS_ID + "=?";
+        String where = ANIMALS_TABLE+"."+ANIMALS_ID + "=?";
         String[] whereArgs = { idAnimal };
 
         Cursor cursor = qb.query(db, null, where, whereArgs, null, null, null);
