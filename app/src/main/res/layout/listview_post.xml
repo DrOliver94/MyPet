@@ -8,17 +8,23 @@
     android:weightSum="1"
     android:padding="15dp">
 
-    <TextView
-        android:id="@+id/post_id"
-        android:layout_width="wrap_content"
+    <ListView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Id"/>
+        android:layout_gravity="right"
+        android:id="@+id/picListView"/>
 
     <TextView
         android:id="@+id/post_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Testo post"/>
+
+    <TextView
+        android:id="@+id/post_place"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Place"/>
 
     <ImageView
         android:layout_width="match_parent"
@@ -27,6 +33,5 @@
         android:id="@+id/post_imageView"
         android:adjustViewBounds="true"
         />
-
 
 </LinearLayout>

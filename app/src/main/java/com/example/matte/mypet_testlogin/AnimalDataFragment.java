@@ -318,9 +318,9 @@ public class AnimalDataFragment extends Fragment {
 
         String clientImgPath = "";
         if(chosenImgUri != null)
-            clientImgPath = chosenImgUri.toString();
+            clientImgPath = chosenImgUri.toString();    //img scelta
         else
-            clientImgPath = oldImgPath;
+            clientImgPath = oldImgPath; //img non modificata, si lascia quella già presente
 
         //Inviare richiesta al server per l'update
         UpdateAnimalTask updateAnim = new UpdateAnimalTask(shPref.getString("Token", ""), idAnim, idUser);

@@ -353,6 +353,8 @@ public class MyPetDB {
         cursor.close();
         this.closeDB();
 
+        //TODO forse meglio non ritornare presence
+
         if(presence > 0){        //Se l'utente è nel DB
 //            return updateUser(u);
             return presence;    //Si rischia di cancellare info. Usare updateUser per aggiornare un utente.
@@ -422,18 +424,31 @@ public class MyPetDB {
     }
 
     public long insertFriendship(String idFriendship, String idUser1, String idUser2, String status) {
-        //TODO controllare se l'amicizia è già presente (IDfriend funzionerà)
-        ContentValues cv = new ContentValues();
-        cv.put(FRIENDSHIP_ID, idFriendship);
-        cv.put(FRIENDSHIP_USERSENDER, idUser1);
-        cv.put(FRIENDSHIP_USERRECEIVER, idUser2);
-        cv.put(FRIENDSHIP_STATUS, status);
+        //Verifica se l'amicizia è già nel DB
+        String where = FRIENDSHIP_ID + "= ?";
+        String[] whereArgs = { idFriendship };
+        openReadableDB();
+        Cursor cursor = db.query(FRIENDSHIP_TABLE, null,
+                where, whereArgs, null, null, null);
 
-        this.openWriteableDB();
-        long rowID = db.insert(FRIENDSHIP_TABLE, null, cv);
+        int presence = cursor.getCount();
+        cursor.close();
         this.closeDB();
 
-        return rowID;
+        if(presence > 0){
+            return presence;
+        } else {
+            ContentValues cv = new ContentValues();
+            cv.put(FRIENDSHIP_ID, idFriendship);
+            cv.put(FRIENDSHIP_USERSENDER, idUser1);
+            cv.put(FRIENDSHIP_USERRECEIVER, idUser2);
+            cv.put(FRIENDSHIP_STATUS, status);
+
+            this.openWriteableDB();
+            long rowID = db.insert(FRIENDSHIP_TABLE, null, cv);
+            this.closeDB();
+            return rowID;
+        }
     }
 
     public ArrayList<User> getFriendsByUser(String idUser) {
@@ -902,7 +917,7 @@ public class MyPetDB {
         cursor.close();
         this.closeDB();
 
-        long rowID = -1;
+        long rowID = presence;
         if(presence == 0) {        //Se il post non è nel DB
             ContentValues cv = new ContentValues();
             cv.put(POSTS_ID, p.id);

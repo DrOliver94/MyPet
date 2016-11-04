@@ -14,6 +14,7 @@ public class Post {
     public String id;
     public String idauthor;
     public String nameauthor;
+    public String picauthor;
     public String picture;
     public String text;
     public String date;
@@ -39,7 +40,7 @@ public class Post {
             id = idPost;
             idauthor = jObjPost.getString("author");
             nameauthor = jObjPost.getString("nameauthor");
-            //TODO picAuthor
+            picauthor = HomeActivity.IMG_BASEURL + jObjPost.getString("picauthor");
             if(!jObjPost.isNull("pic"))
                 picture = HomeActivity.IMG_BASEURL + jObjPost.getString("pic");
             if(!jObjPost.isNull("text"))
