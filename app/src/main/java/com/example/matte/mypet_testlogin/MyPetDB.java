@@ -799,6 +799,11 @@ public class MyPetDB {
             post.place = cursor.getString(POSTS_PLACE_COL);
             post.date = cursor.getString(POSTS_DATE_COL);
             post.idauthor = cursor.getString(POSTS_IDAUTHOR_COL);
+
+            User author = getUser(post.idauthor);
+            post.nameauthor = author.username;
+            post.picauthor = author.profilepic;
+
             post.picture = cursor.getString(POSTS_PICTURE_COL);
 
             post.users = getTaggedUsersByPost(post.id);
@@ -840,7 +845,15 @@ public class MyPetDB {
             post.place = cursor.getString(cursor.getColumnIndex(POSTS_PLACE));
             post.date = cursor.getString(cursor.getColumnIndex(POSTS_DATE));
             post.idauthor = cursor.getString(cursor.getColumnIndex(POSTS_IDAUTHOR));
+
+            User author = getUser(post.idauthor);
+            post.nameauthor = author.username;
+            post.picauthor = author.profilepic;
+
             post.picture = cursor.getString(cursor.getColumnIndex(POSTS_PICTURE));
+
+            post.users = getTaggedUsersByPost(post.id);
+            post.animals = getTaggedAnimalsByPost(post.id);
 
             posts.add(post);
         }
@@ -886,6 +899,8 @@ public class MyPetDB {
             post.place = cursor.getString(cursor.getColumnIndex(POSTS_PLACE));
             post.date = cursor.getString(cursor.getColumnIndex(POSTS_DATE));
             post.idauthor = cursor.getString(cursor.getColumnIndex(POSTS_IDAUTHOR));
+            post.picauthor = cursor.getString(cursor.getColumnIndex(USERS_PROFILEPIC));
+            post.nameauthor = cursor.getString(cursor.getColumnIndex(USERS_USERNAME));
             post.picture = cursor.getString(cursor.getColumnIndex(POSTS_PICTURE));
 
             post.users = getTaggedUsersByPost(post.id);

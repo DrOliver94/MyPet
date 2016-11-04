@@ -8,11 +8,11 @@
     android:weightSum="1"
     android:padding="15dp">
 
-    <ListView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:id="@+id/picListView"/>
+        android:layout_height="60dp"
+        android:orientation="horizontal"
+        android:id="@+id/picListView" />
 
     <TextView
         android:id="@+id/post_text"

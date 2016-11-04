@@ -6,6 +6,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.squareup.picasso.Picasso;
+import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 
 /**
  * Created by matte with <3 on 161104.
@@ -34,6 +35,7 @@ public class InterprExCircleLayout extends LinearLayout {
         Picasso.with(getContext()).setIndicatorsEnabled(true);
         Picasso.with(getContext())
                 .load(img)
+                .transform(new CropCircleTransformation())
                 .into(picture);
     }
 }

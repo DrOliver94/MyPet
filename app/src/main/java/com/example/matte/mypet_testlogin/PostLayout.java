@@ -3,6 +3,7 @@ package com.example.matte.mypet_testlogin;
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -25,6 +26,7 @@ public class PostLayout extends LinearLayout {
     private ImageView pImageView;
     private TextView pPlace;
     private ListView pPicListView;
+    private LinearLayout pPicLayout;
 
     public PostLayout(Context context){
         super(context);
@@ -42,7 +44,8 @@ public class PostLayout extends LinearLayout {
         pText = (TextView) findViewById(R.id.post_text);
         pPlace = (TextView) findViewById(R.id.post_place);
         pImageView = (ImageView) findViewById(R.id.post_imageView);
-        pPicListView = (ListView) findViewById(R.id.picListView);
+//        pPicListView = (ListView) findViewById(R.id.picListView);
+        pPicLayout = (LinearLayout) findViewById(R.id.picListView);
 
         //TODO sistemare click Listener
 
@@ -75,8 +78,14 @@ public class PostLayout extends LinearLayout {
                 imgs.add(a.profilepic);
             }
         }
-        InterprExCircleAdapter adapter = new InterprExCircleAdapter(c, imgs);
-        pPicListView.setAdapter(adapter);
+//        InterprExCircleAdapter adapter = new InterprExCircleAdapter(c, imgs);
+//        pPicListView.setAdapter(adapter);
+
+        for(String img : imgs){
+            View v = new InterprExCircleLayout(c, img);
+            pPicLayout.addView(v);
+        }
+
     }
 }
 
