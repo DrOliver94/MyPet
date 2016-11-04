@@ -794,13 +794,15 @@ public class MyPetDB {
         while (cursor.moveToNext()) {
             Post post = new Post();
 
-            //TODO fare il resto
             post.id = cursor.getString(POSTS_ID_COL);
             post.text = cursor.getString(POSTS_TEXT_COL);
             post.place = cursor.getString(POSTS_PLACE_COL);
             post.date = cursor.getString(POSTS_DATE_COL);
             post.idauthor = cursor.getString(POSTS_IDAUTHOR_COL);
             post.picture = cursor.getString(POSTS_PICTURE_COL);
+
+            post.users = getTaggedUsersByPost(post.id);
+            post.animals = getTaggedAnimalsByPost(post.id);
 
             posts.add(post);
         }
@@ -886,6 +888,9 @@ public class MyPetDB {
             post.idauthor = cursor.getString(cursor.getColumnIndex(POSTS_IDAUTHOR));
             post.picture = cursor.getString(cursor.getColumnIndex(POSTS_PICTURE));
 
+            post.users = getTaggedUsersByPost(post.id);
+            post.animals = getTaggedAnimalsByPost(post.id);
+
             posts.add(post);
         }
 
@@ -956,6 +961,34 @@ public class MyPetDB {
         return rowID;
     }
 
+    public ArrayList<User> getTaggedUsersByPost(String idPost){
+        ArrayList<User> users = new ArrayList<User>();
+        openReadableDB();
+
+        SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
+
+        //indichiamo le tabelle su cui lavorare
+        qb.setTables(POSTUSERS_TABLE + " JOIN " + USERS_TABLE +
+                " ON (" + POSTUSERS_TABLE+"."+POSTUSERS_IDUSER + "=" + USERS_TABLE+"."+USERS_ID + ")");
+
+        String where = POSTUSERS_TABLE+"."+POSTUSERS_IDPOST + "=?";
+        String[] whereArgs = { idPost };
+
+        Cursor cursor = qb.query(db, null, where, whereArgs, null, null, null);
+
+        while (cursor.moveToNext()) {
+            User u = new User();
+
+            u.id = cursor.getString(cursor.getColumnIndex(USERS_ID));
+            u.username = cursor.getString(cursor.getColumnIndex(USERS_USERNAME));
+            u.profilepic = cursor.getString(cursor.getColumnIndex(USERS_PROFILEPIC));
+
+            users.add(u);
+        }
+
+        return users;
+    }
+
     public long linkAnimalPost(String idAnimal, String idPost) {
         ContentValues cv = new ContentValues();
         cv.put(POSTANIMALS_IDANIMAL, idAnimal);
@@ -966,6 +999,34 @@ public class MyPetDB {
         this.closeDB();
 
         return rowID;
+    }
+
+    public ArrayList<Animal> getTaggedAnimalsByPost(String idPost){
+        ArrayList<Animal> animals = new ArrayList<>();
+        openReadableDB();
+
+        SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
+
+        //indichiamo le tabelle su cui lavorare
+        qb.setTables(POSTANIMALS_TABLE + " JOIN " + ANIMALS_TABLE +
+                " ON (" + POSTANIMALS_TABLE+"."+POSTANIMALS_IDANIMAL + "=" + ANIMALS_TABLE+"."+ANIMALS_ID + ")");
+
+        String where = POSTANIMALS_TABLE+"."+POSTANIMALS_IDPOST + "=?";
+        String[] whereArgs = { idPost };
+
+        Cursor cursor = qb.query(db, null, where, whereArgs, null, null, null);
+
+        while (cursor.moveToNext()) {
+            Animal a = new Animal();
+
+            a.id = cursor.getString(cursor.getColumnIndex(ANIMALS_ID));
+            a.name = cursor.getString(cursor.getColumnIndex(ANIMALS_NAME));
+            a.profilepic = cursor.getString(cursor.getColumnIndex(ANIMALS_PROFILEPIC));
+
+            animals.add(a);
+        }
+
+        return animals;
     }
 
     public long insertReminder(Reminder r) {
