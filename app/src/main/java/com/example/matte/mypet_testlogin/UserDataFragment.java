@@ -332,7 +332,7 @@ public class UserDataFragment extends Fragment {
 
     private void updateUser(String serverPicPath) {
         //Recuperare dati
-        //TODO fare controlli se necessario
+        //TODO fare controlli. usare TextView.setError()
         String usernameTxt = uUsernameEditTxt.getText().toString();
         String nameTxt = uNameEditTxt.getText().toString();
         String surnameTxt = uSurnameEditTxt.getText().toString();

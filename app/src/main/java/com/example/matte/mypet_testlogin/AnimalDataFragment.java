@@ -294,8 +294,8 @@ public class AnimalDataFragment extends Fragment {
 
     private void insertAnimal(){
         //Recuperare dati, fare controlli se necessario
-//        ArrayList<String> par = new ArrayList<String>();
-//
+
+        //TODO fare controlli. usare TextView.setError()
         String nameTxt = aNameEditTxt.getText().toString();
         String speciesTxt = aSpeciesEditTxt.getText().toString();
         String genderTxt = aGenderEditTxt.getText().toString();

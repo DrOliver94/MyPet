@@ -74,6 +74,23 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        //Bottone REGISTRATI
+        Button mSignupButton = (Button) findViewById(R.id.signup_button);
+        mSignupButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                getFragmentManager()
+//                        .beginTransaction()
+//                        .replace(R.id.main_fragment, UserDataFragment.newInstance("", false))
+//                        .addToBackStack(null)
+//                        .commit();
+
+                Intent i = new Intent(LoginActivity.this, HomeActivity.class);
+                i.putExtra("com.example.matte.mypet_testlogin.NewUser", true);
+                startActivity(i);
+            }
+        });
+
         mLoginFormView = findViewById(R.id.login_form);
     }
 
@@ -95,27 +112,6 @@ public class LoginActivity extends AppCompatActivity {
         //In tal caso salta il login
         checkLoginTask checkTask = new checkLoginTask(shPref.getString("Token", ""), shPref.getString("IdUser", ""));
         checkTask.execute();
-
-
-//        //TODO se si può buttare in un AsyncTask, better...
-//        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-//        StrictMode.setThreadPolicy(policy);
-//
-//        ServerComm serverComm = new ServerComm();
-//        JSONObject jObj = null; //JSON di risposta
-//        try {
-//            String postArgs = "checkToken=" + shPref.getString("Token", "") + "&iduser=" + shPref.getString("IdUser", "");
-//
-//            Log.d("MyPet", postArgs);
-//
-//            jObj = serverComm.makePostRequest(postArgs);
-//            if(jObj.getBoolean("logged")) {
-//                //si passa alla home
-//                startActivity(new Intent(LoginActivity.this, HomeActivity.class));
-//            }
-//        } catch (IOException | JSONException e) {
-//            e.printStackTrace();
-//        }
     }
 
     /**
@@ -174,7 +170,6 @@ public class LoginActivity extends AppCompatActivity {
         //Istanza dell'editor di SharedPreferences
         SharedPreferences.Editor editor = shPref.edit();
 
-        //TODO caricare altre info
         //Si caricano nelle ShPref le info ricevute dal server
         String token = null;
         String idUser = null;
@@ -189,11 +184,11 @@ public class LoginActivity extends AppCompatActivity {
                     .putString("Surname", jObj.getString("surname"))
                     .apply(); //inserisce in background (al contrario di commit)
 
-            //Si ricopia sul DB offline ogni dato di quello online
-            //TODO AsyncTask s'impianta, sistemare
         } catch(NullPointerException | JSONException e) {
             e.fillInStackTrace();
         }
+
+        //Si ricopia sul DB offline ogni dato di quello online
         dbPairingTask mPair = new dbPairingTask(token, idUser);
         mPair.execute(idUser);
     }
@@ -377,7 +372,9 @@ public class LoginActivity extends AppCompatActivity {
             try {
                 if(jObj.getBoolean("logged")) {
                     //si passa alla home
-                    startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+                    Intent i = new Intent(LoginActivity.this, HomeActivity.class);
+                    i.putExtra("com.example.matte.mypet_testlogin.NewUser", false);
+                    startActivity(i);
                 }
             } catch(Exception e) {
                 e.fillInStackTrace();
@@ -484,7 +481,7 @@ public class LoginActivity extends AppCompatActivity {
                 //Dopo gli amici (o nel DB potrebbero venir caricati dati parziali...)
                 if(!jObj.isNull("_posts")) {
                     JSONObject jPosts = jObj.getJSONObject("_posts");
-                    //TODO qualquadra non cosa qui
+                    //TODO qualquadra non cosa qui (forse non più)
                     JSONArray idPosts = jPosts.names();                  //recupera elenco ID dei post
                     for (int i = 0; i < idPosts.length(); i++) {        //per ogni post nell'obj
                         String idPost = (String) idPosts.get(i);        //recupera ID
@@ -512,8 +509,8 @@ public class LoginActivity extends AppCompatActivity {
 
             //TODO controllare per errori
 
-            //Caricamento dell'asyncTask per il download delle imgs
-            //Verrà eseguito al termine di questo AsyncTask
+            //L'asyncTask per il download delle imgs
+            //verrà eseguito al termine di questo AsyncTask
 
             return jObj;
         }
@@ -532,6 +529,7 @@ public class LoginActivity extends AppCompatActivity {
                 pDialog.dismiss();
             }
 
+            //AsyncTask per il download delle imgs
             downImgTask = new DownloadImgTask(imgsList);
             downImgTask.execute();
         }
@@ -593,7 +591,9 @@ public class LoginActivity extends AppCompatActivity {
             }
 
             //si passa alla home
-            startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+            Intent i = new Intent(LoginActivity.this, HomeActivity.class);
+            i.putExtra("com.example.matte.mypet_testlogin.NewUser", false);
+            startActivity(i);
         }
 
         @Override

@@ -88,8 +88,7 @@ public class ProfileFragment extends Fragment {
         header = getActivity().getLayoutInflater().inflate(R.layout.fragment_user_profile_header, null);
         itemsListView.addHeaderView(header);
 
-        //Read user data from DB
-        User currUser = HomeActivity.dbManager.getUser(idUser);
+        User currUser = HomeActivity.dbManager.getUser(idUser);     //Read user data from DB
 
         TextView userUserNameProfileText = (TextView) header.findViewById(R.id.userUsernameTextView);
         TextView userNameText = (TextView) header.findViewById(R.id.userNameTextView);
@@ -103,14 +102,12 @@ public class ProfileFragment extends Fragment {
         userGenderText.setText(currUser.gender);
         userBirthDateText.setText(currUser.birthdate);
 
-        Picasso.with(view.getContext()).setIndicatorsEnabled(true);
         //Immagine
+        Picasso.with(view.getContext()).setIndicatorsEnabled(true);
         Picasso.with(view.getContext())
                 .load(currUser.profilepic)
                 .transform(new CropCircleTransformation())
                 .into((ImageView) view.findViewById(R.id.imageViewUserProfile));
-
-        //itemsListView.setScrollContainer(false);
 
         showPostsByAuthor(idUser);
 
