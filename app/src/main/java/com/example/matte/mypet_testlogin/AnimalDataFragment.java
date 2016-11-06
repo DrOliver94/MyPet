@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -158,9 +159,15 @@ public class AnimalDataFragment extends Fragment {
             sendData.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    insertAnimal();
+                    if(chosenImgUri != null)
+                        uploadImage();
+                    else {
+                        //Se non si è scelta una nuova img, passare subito all'edit utente
+                        insertAnimal(null);
+                    }
                 }
             });
+
             getActivity().setTitle("Nuovo Animale");
         }
 
@@ -239,7 +246,7 @@ public class AnimalDataFragment extends Fragment {
                             if(isEdit)
                                 updateAnimal(imgPath);
                             else
-                                insertAnimal();
+                                insertAnimal(imgPath);
                         }
 
                         //TODO controllare per insuccesso
@@ -253,7 +260,10 @@ public class AnimalDataFragment extends Fragment {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
-                        Log.d("MyPet", "Erro volley" + volleyError.getMessage());
+                        Log.d("MyPet", "Error volley ");
+                        volleyError.printStackTrace();
+
+                        Toast.makeText(getActivity(), "Errore di rete. Riprovare.", Toast.LENGTH_SHORT).show();
 
                         //Dismissing the progress dialog
                         if (pDialog.isShowing()) {
@@ -292,7 +302,7 @@ public class AnimalDataFragment extends Fragment {
         return encodedImage;
     }
 
-    private void insertAnimal(){
+    private void insertAnimal(String serverPicPath){
         //Recuperare dati, fare controlli se necessario
 
         //TODO fare controlli. usare TextView.setError()
@@ -300,17 +310,22 @@ public class AnimalDataFragment extends Fragment {
         String speciesTxt = aSpeciesEditTxt.getText().toString();
         String genderTxt = aGenderEditTxt.getText().toString();
         String birthdateTxt = aBirthdateEditTxt.getText().toString();   //TODO gestire data
-        String profilepicTxt = "profilepic";
+
+        String clientImgPath = "";
+        if(chosenImgUri != null) {
+            clientImgPath = chosenImgUri.toString();
+        } else {
+            //TODO set img di default
+        }
 
         //Inviare richiesta al server per l'update
-        InsertAnimalTask insertAnim = new InsertAnimalTask(shPref.getString("Token", ""), "0", idUser);
-        insertAnim.execute(nameTxt, speciesTxt, genderTxt, birthdateTxt, profilepicTxt);
+        InsertAnimalTask insertAnim = new InsertAnimalTask(shPref.getString("Token", ""), idUser);
+        insertAnim.execute(nameTxt, speciesTxt, genderTxt, birthdateTxt, clientImgPath, serverPicPath);
     }
 
     private void updateAnimal(String serverPicPath){
-        //Recuperare dati, fare controlli se necessario
-//        ArrayList<String> par = new ArrayList<String>();
-//
+        //Recuperare dati
+        //TODO fai controlli
         String nameTxt = aNameEditTxt.getText().toString();
         String speciesTxt = aSpeciesEditTxt.getText().toString();
         String genderTxt = aGenderEditTxt.getText().toString();
@@ -340,14 +355,13 @@ public class AnimalDataFragment extends Fragment {
 
         private ProgressDialog pDialog;
 
-        InsertAnimalTask(String token, String idAnim, String idUser) {
+        InsertAnimalTask(String token, String idUser) {
             anim = new Animal();
-            anim.id = idAnim;
 
             this.uToken = token;
             this.idUser = idUser;
 
-            pDialog = new ProgressDialog(getContext());
+            pDialog = new ProgressDialog(getActivity());
             serverComm = new ServerComm();
         }
 
@@ -380,7 +394,8 @@ public class AnimalDataFragment extends Fragment {
                         "&name=" + anim.name +
                         "&species=" + anim.species +
                         "&gender=" + anim.gender +
-                        "&birthdate=" + anim.birthdate;
+                        "&birthdate=" + anim.birthdate +
+                        "&profilepic=" + serverPic;
 
                 Log.d("MyPet", postArgs);
 
@@ -397,7 +412,7 @@ public class AnimalDataFragment extends Fragment {
                     //Se va a buon fine, recuperra l'ID e fa update nel DB locale
                     anim.id = jObj.getString("idpet");
 
-                    long idNewAnim = HomeActivity.dbManager.insertAnimal(anim, idUser);
+                    long idNewAnim = HomeActivity.dbManager.insertAnimal(anim, idUser); //FIXME Non dovrebbe essere il nuovo id quello...
 
                     //Aggiorna token nelle SharedPref
                     shPref.edit().putString("Token", jObj.getString("token")).apply();
@@ -405,14 +420,14 @@ public class AnimalDataFragment extends Fragment {
                     //gira al fragment di profilo animale
                     getFragmentManager()
                             .beginTransaction()
-                            .replace(R.id.main_fragment, AnimalProfileFragment.newInstance(Long.toString(idNewAnim)))
+                            .replace(R.id.main_fragment, AnimalProfileFragment.newInstance(anim.id))
                             .addToBackStack(null)
                             .commit();
                     return;
 
                 } else {
 
-                    //TODO Altrimenti indicare l'errore all'utente
+                    //TODO Altrimenti indicare l'errore all'utente. Aggiorna token.
                 }
             } catch(Exception e) {
                 e.fillInStackTrace();
@@ -504,6 +519,10 @@ public class AnimalDataFragment extends Fragment {
                     //Aggiorna token nelle SharedPref
                     shPref.edit().putString("Token", jObj.getString("token")).apply();
 
+                    if (pDialog.isShowing()) {
+                        pDialog.dismiss();
+                    }
+
                     //gira al fragment di profilo animale
 //                    getFragmentManager()
 //                            .beginTransaction()
@@ -522,9 +541,7 @@ public class AnimalDataFragment extends Fragment {
                 e.fillInStackTrace();
             }
 
-            if (pDialog.isShowing()) {
-                pDialog.dismiss();
-            }
+
             return;
         }
 

@@ -463,6 +463,9 @@ public class UserDataFragment extends Fragment {
                     //Aggiorna token nelle SharedPref
                     shPref.edit().putString("Token", jObj.getString("token")).apply();
 
+                    if (pDialog.isShowing()) {
+                        pDialog.dismiss();
+                    }
                     //Torna al fragment precedente
                     getFragmentManager().popBackStack();
 
@@ -474,14 +477,13 @@ public class UserDataFragment extends Fragment {
                 e.fillInStackTrace();
             }
 
-            if (pDialog.isShowing()) {
-                pDialog.dismiss();
-            }
         }
-
 
         @Override
         protected void onCancelled() {
+
+            //TODO Indicare l'errore all'utente
+
             if (pDialog.isShowing()) {
                 pDialog.dismiss();
             }
@@ -607,7 +609,7 @@ public class UserDataFragment extends Fragment {
 
             Log.d("MyPet", "updateUser start");
 
-            pDialog.setTitle("Update utente");
+            pDialog.setTitle("Insert utente");
             pDialog.setMessage("Richiesta al server...");
             pDialog.setIndeterminate(false);
             pDialog.setCancelable(false);
