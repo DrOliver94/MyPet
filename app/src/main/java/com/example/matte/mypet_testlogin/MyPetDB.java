@@ -10,6 +10,7 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class MyPetDB {
 
@@ -892,16 +893,17 @@ public class MyPetDB {
         while (cursor.moveToNext()) {
             Post post = new Post();
 
-            //TODO fare il resto
             post.id = cursor.getString(cursor.getColumnIndex(POSTS_ID));
             post.text = cursor.getString(cursor.getColumnIndex(POSTS_TEXT));
             post.date = cursor.getString(cursor.getColumnIndex(POSTS_DATE));
             post.place = cursor.getString(cursor.getColumnIndex(POSTS_PLACE));
             post.date = cursor.getString(cursor.getColumnIndex(POSTS_DATE));
             post.idauthor = cursor.getString(cursor.getColumnIndex(POSTS_IDAUTHOR));
-            post.picauthor = cursor.getString(cursor.getColumnIndex(USERS_PROFILEPIC));
-            post.nameauthor = cursor.getString(cursor.getColumnIndex(USERS_USERNAME));
             post.picture = cursor.getString(cursor.getColumnIndex(POSTS_PICTURE));
+
+            User author = getUser(post.idauthor);
+            post.picauthor = author.profilepic;
+            post.nameauthor = author.username;
 
             post.users = getTaggedUsersByPost(post.id);
             post.animals = getTaggedAnimalsByPost(post.id);
@@ -919,6 +921,7 @@ public class MyPetDB {
         posts.addAll(authPost);
 
         //TODO ordinare per data
+        //Collections.sort(posts);
 
         return posts;
     }

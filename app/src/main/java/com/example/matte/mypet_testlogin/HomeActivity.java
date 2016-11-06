@@ -1,5 +1,6 @@
 package com.example.matte.mypet_testlogin;
 
+import android.app.Fragment;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -54,12 +55,15 @@ public class HomeActivity extends AppCompatActivity
                 return;
             }
 
-            // Create a new Fragment to be placed in the activity layout
-            FeedFragment firstFragment = new FeedFragment();
-
-            // In case this activity was started with special instructions from an
-            // Intent, pass the Intent's extras to the fragment as arguments
-            firstFragment.setArguments(getIntent().getExtras());
+            Fragment firstFragment;
+            //Check if we need to create a new user
+            if((boolean)getIntent().getExtras().get("com.example.matte.mypet_testlogin.NewUser")){
+                //Call UserDataFragm
+                firstFragment = UserDataFragment.newInstance("", false);
+            } else {
+                //No need to create a user => call FeedFragment
+                firstFragment = new FeedFragment();
+            }
 
             // Add the fragment to the 'fragment_container' FrameLayout
             getFragmentManager().beginTransaction()

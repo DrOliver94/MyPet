@@ -59,6 +59,14 @@
                 android:layout_gravity="center"
                 android:textSize="18dp" />
 
+            <Button
+                android:id="@+id/signup_button"
+                android:layout_width="269dp"
+                android:layout_height="64dp"
+                android:text="Registrati"
+                android:layout_gravity="center"
+                android:textSize="18dp" />
+
         </LinearLayout>
 
     </ScrollView>
