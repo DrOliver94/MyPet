@@ -5,6 +5,9 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
@@ -68,6 +71,8 @@ public class FeedFragment extends Fragment {
 
         //Creazione handler database
         dbHandler = new MyPetDB(getActivity());
+
+        setHasOptionsMenu(true);    //Per mostrare il menu specifico
     }
 
     @Override
@@ -108,12 +113,27 @@ public class FeedFragment extends Fragment {
         return view;
     }
 
-//    // TODO: Rename method, update argument and hook method into UI event
-//    public void onButtonPressed(Uri uri) {
-//        if (mListener != null) {
-//            mListener.onFragmentInteraction("");
-//        }
-//    }
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.clear();
+        inflater.inflate(R.menu.menu_feed_fragment, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menuAddPost:
+                getFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.main_fragment, new PostDataFragment())
+                        .addToBackStack(null)
+                        .commit();
+                return true;
+            default: break;
+        }
+        return false;
+    }
 
     @Override
     public void onAttach(Context context) {
