@@ -19,6 +19,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -69,6 +71,10 @@ public class UserDataFragment extends Fragment {
     private Button sendData;
     private Button uploadImg;
     private ImageView imgUserData;
+    private EditText uPasswordEditTxt;
+    private TextView uPasswordLbl;
+    private EditText uPasswordConfirmEditTxt;
+    private TextView uPasswordCOnfirmLbl;
 
     private Bitmap bitmap;
 
@@ -118,6 +124,12 @@ public class UserDataFragment extends Fragment {
         uBirthdateEditTxt = (EditText) view.findViewById(R.id.userBirthDateEditText);
         imgUserData = (ImageView) view.findViewById(R.id.imageViewUserData);
 
+        //PW
+        uPasswordEditTxt = (EditText) view.findViewById(R.id.userPasswordEditText);
+        uPasswordLbl = (TextView) view.findViewById(R.id.textViewPassword);
+        uPasswordConfirmEditTxt = (EditText) view.findViewById(R.id.userPasswordConfirmEditText);
+        uPasswordCOnfirmLbl = (TextView) view.findViewById(R.id.textViewPasswordConfirm);
+
         //Due button
         sendData = (Button) view.findViewById(R.id.buttonSendUserData);
         uploadImg = (Button) view.findViewById(R.id.buttonUploadUserImg);
@@ -129,6 +141,12 @@ public class UserDataFragment extends Fragment {
             uSurnameEditTxt.setText(u.surname);
             uGenderEditTxt.setText(u.gender);
             uBirthdateEditTxt.setText(u.birthdate);
+
+            //Si nascondono i campi delle pw
+            uPasswordEditTxt.setVisibility(View.GONE);
+            uPasswordLbl.setVisibility(View.GONE);
+            uPasswordConfirmEditTxt.setVisibility(View.GONE);
+            uPasswordCOnfirmLbl.setVisibility(View.GONE);
 
             oldImgPath = u.profilepic;
 
@@ -143,9 +161,9 @@ public class UserDataFragment extends Fragment {
             sendData.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if(chosenImgUri != null)
+                    if(chosenImgUri != null) {
                         uploadImage();
-                    else {
+                    } else {
                         //Se non si è scelta una nuova img, passare subito all'edit utente
                         updateUser(null);
                     }
@@ -154,6 +172,22 @@ public class UserDataFragment extends Fragment {
 
             getActivity().setTitle("Modifica utente");
         } else {
+
+            //TODO cancella token, blocca drawer
+
+            //Richiama la sequenza di azioni per aggiungere l'user
+            sendData.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                if (chosenImgUri != null){
+                   uploadImage();
+                } else {
+                    //Se non si è scelta una nuova img, passare subito all'edit utente
+                   insertUser(null);
+                }
+                }
+            });
+
             getActivity().setTitle("Nuovo utente");
         }
 
@@ -277,7 +311,10 @@ public class UserDataFragment extends Fragment {
                         }
 
                         if(success) {
-                            updateUser(imgPath);
+                            if(isEdit)
+                                updateUser(imgPath);
+                            else
+                                insertUser(imgPath);
                         }
 
                         //TODO controllare per insuccesso
@@ -291,7 +328,9 @@ public class UserDataFragment extends Fragment {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
-                        Log.d("MyPet", "Erro volley" + volleyError.getMessage());
+                        Log.d("MyPet", "Error volley" + volleyError.getMessage());
+
+                        Toast.makeText(getActivity(), "Errore di rete. Riprovare.", Toast.LENGTH_SHORT).show();
 
                         //Dismissing the progress dialog
                         if (pDialog.isShowing()) {
@@ -519,5 +558,135 @@ public class UserDataFragment extends Fragment {
 //        return result;
 //    }
 
+
+    private void insertUser(String serverPicPath) {
+        //Recuperare dati
+        //TODO fare controlli. usare TextView.setError()
+        String usernameTxt = uUsernameEditTxt.getText().toString();
+        String nameTxt = uNameEditTxt.getText().toString();
+        String surnameTxt = uSurnameEditTxt.getText().toString();
+        String genderTxt = uGenderEditTxt.getText().toString();
+        String birthdateTxt = uBirthdateEditTxt.getText().toString();   //TODO gestire data
+        String passwordTxt = uPasswordEditTxt.getText().toString();
+
+        String clientImgPath = "";
+        if(chosenImgUri != null) {
+            clientImgPath = chosenImgUri.toString();
+        } else {
+            //TODO set img di default
+        }
+
+        //Inviare richiesta al server per l'update
+        InsertUserTask insertUser = new InsertUserTask();
+        insertUser.execute(usernameTxt, nameTxt, surnameTxt, genderTxt,
+                birthdateTxt, passwordTxt, clientImgPath, serverPicPath);
+    }
+
+
+    /**
+     * AsyncTask che aggiorna l'utente inviato
+     */
+    public class InsertUserTask extends AsyncTask<String, Integer, JSONObject> {
+        private final String uToken = "";
+        private final User user;
+
+        private ServerComm serverComm;
+
+        private ProgressDialog pDialog;
+
+        InsertUserTask() {
+            user = new User();
+
+            pDialog = new ProgressDialog(getContext());
+            serverComm = new ServerComm();
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            Log.d("MyPet", "updateUser start");
+
+            pDialog.setTitle("Update utente");
+            pDialog.setMessage("Richiesta al server...");
+            pDialog.setIndeterminate(false);
+            pDialog.setCancelable(false);
+            pDialog.show();
+        }
+
+        @Override
+        protected JSONObject doInBackground(String... p) {
+            try {
+                user.username = p[0];
+                user.name = p[1];
+                user.surname = p[2];
+                user.gender = p[3];
+                user.birthdate = p[4];
+                String password = p[5];
+                user.profilepic = p[6];
+                String serverPic = p[7];
+
+                String postArgs = "insertUser=" +
+                        "&username=" + user.username +
+                        "&name=" + user.name +
+                        "&surname=" + user.surname +
+                        "&gender=" + user.gender +
+                        "&password=" + password +
+                        "&birthdate=" + user.birthdate +
+                        "&profilepic=" + serverPic;
+
+                Log.d("MyPet", postArgs);
+
+                return serverComm.makePostRequest(postArgs);
+            } catch (IOException e) {
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(final JSONObject jObj) {
+            try {
+                if(!jObj.isNull("success") && jObj.getBoolean("success")) {
+                    //recupera id
+                    user.id = jObj.getString("iduser");
+
+                    //Se va a buon fine, update nel DB locale
+                    //TODO controlla buon fine
+                    long numRows = HomeActivity.dbManager.insertUser(user);
+
+                    //Aggiorna token nelle SharedPref
+                    shPref.edit().putString("Token", jObj.getString("token")).apply();
+                    //TODO ripulisci shPref, copia login
+
+                    //Vai al profilo
+                    //TODO sblocca drawer
+                    getFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.main_fragment, ProfileFragment.newInstance(user.id))
+                            .addToBackStack("")
+                            .commit();
+
+                } else {
+
+                    //TODO indicare l'errore all'utente. es: uUsernameEditTxt.setError();
+
+                }
+            } catch(Exception e) {
+                e.fillInStackTrace();
+            }
+
+            if (pDialog.isShowing()) {
+                pDialog.dismiss();
+            }
+        }
+
+
+        @Override
+        protected void onCancelled() {
+            if (pDialog.isShowing()) {
+                pDialog.dismiss();
+            }
+        }
+    }
 
 }
