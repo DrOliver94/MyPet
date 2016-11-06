@@ -73,11 +73,7 @@ public class AnimalDataFragment extends Fragment {
 
     private SharedPreferences shPref;
 
-//    private OnFragmentInteractionListener mListener;
-
-    public AnimalDataFragment() {
-        // Required empty public constructor
-    }
+    public AnimalDataFragment() {}
 
     /**
      * Factory method per il fragment per editare/inserire i dati di un animale

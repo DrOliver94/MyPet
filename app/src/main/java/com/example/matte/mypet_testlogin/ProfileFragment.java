@@ -38,28 +38,23 @@ public class ProfileFragment extends Fragment {
     private String idUser;
 
     private SharedPreferences shPref;
-//    private MyPetDB dbHandler;
 
     private ListView itemsListView;
     private View header;
 
-//    private OnFragmentInteractionListener mListener;
-
-    public ProfileFragment() {
-        // Required empty public constructor
-    }
+    public ProfileFragment() {}
 
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Id dell'utente da visualizzare.
+     * @param idUser Id dell'utente da visualizzare.
      * @return A new instance of fragment ProfileFragment.
      */
-    public static ProfileFragment newInstance(String param1) {
+    public static ProfileFragment newInstance(String idUser) {
         ProfileFragment fragment = new ProfileFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
+        args.putString(ARG_PARAM1, idUser);
         fragment.setArguments(args);
         return fragment;
     }
