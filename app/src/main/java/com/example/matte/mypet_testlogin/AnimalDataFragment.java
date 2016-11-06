@@ -417,6 +417,10 @@ public class AnimalDataFragment extends Fragment {
                     //Aggiorna token nelle SharedPref
                     shPref.edit().putString("Token", jObj.getString("token")).apply();
 
+                    if (pDialog.isShowing()) {
+                        pDialog.dismiss();
+                    }
+
                     //gira al fragment di profilo animale
                     getFragmentManager()
                             .beginTransaction()
@@ -431,10 +435,6 @@ public class AnimalDataFragment extends Fragment {
                 }
             } catch(Exception e) {
                 e.fillInStackTrace();
-            }
-
-            if (pDialog.isShowing()) {
-                pDialog.dismiss();
             }
         }
 
