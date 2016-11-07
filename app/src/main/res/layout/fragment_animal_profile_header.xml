@@ -1,22 +1,24 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
-    <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
-    <!--android:orientation="vertical"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent">-->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="layout.AnimalProfileHeaderFragment">
 
-    <GridLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
-        <FrameLayout
+        <GridLayout
             android:layout_width="match_parent"
-            android:padding="25dp"
-            android:layout_height="wrap_content">
-            <!--<android.support.v7.widget.CardView-->
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="25dp">
+                <!--<android.support.v7.widget.CardView-->
                 <!--android:layout_width="250dp"-->
                 <!--android:layout_height="250dp"-->
                 <!--android:paddingTop="25dp"-->
@@ -26,28 +28,27 @@
                 <!--android:innerRadius="0dp"-->
                 <!--android:shape="ring"-->
                 <!--android:thicknessRatio="1.9">-->
-            <!--</android.support.v7.widget.CardView>-->
+                <!--</android.support.v7.widget.CardView>-->
                 <ImageView
                     android:layout_height="250dp"
                     android:layout_width="match_parent"
-                    android:id="@+id/imageViewUserProfile"
+                    android:id="@+id/imageViewAnimalProfile"
                     android:src="@drawable/img"
                     android:layout_alignParentTop="true"
                     android:layout_centerHorizontal="true">
                 </ImageView>
-        </FrameLayout>
+            </FrameLayout>
 
         <TextView
-            android:id="@+id/userUsernameTextView"
+            android:id="@+id/animalNameTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="User"
-            android:layout_margin="5sp"
+            android:text="Animal"
             android:textSize="50sp"
-            android:textColor="@android:color/holo_green_light"
             android:textStyle="normal|bold"
-            android:textAllCaps="false" />
+            android:textColor="@android:color/holo_green_light"
+            android:layout_margin="5sp" />
 
         <TableLayout
             android:orientation="horizontal"
@@ -60,59 +61,28 @@
                 android:layout_height="match_parent">
 
                 <TextView
-                    android:text="Nome"
+                    android:text="Specie"
                     android:layout_width="match_parent"
-                    android:layout_height="35sp"
-                    android:id="@+id/textView1"
-                    android:textStyle="normal|bold"
-                    android:elevation="0dp"
-                    android:layout_weight="1"
-                    android:gravity="right|fill_vertical"
-                    android:paddingRight="8sp"
-                    android:layout_margin="3sp"
-                    android:textSize="20sp"
-                    android:textColor="@android:color/holo_green_dark" />
-
-                <TextView
-                    android:text="Nome_utente"
-                    android:layout_height="35sp"
-                    android:id="@+id/userNameTextView"
-                    android:elevation="0dp"
-                    android:layout_width="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="8sp"
-                    android:layout_margin="3sp"
-                    android:textSize="20sp"
-                    android:textColor="@android:color/holo_green_light" />
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-                <TextView
-                    android:text="Cognome"
-                    android:layout_width="match_parent"
-                    android:layout_height="35sp"
-                    android:id="@+id/textView2"
+                    android:id="@+id/textView5"
                     android:layout_weight="1"
                     android:textStyle="normal|bold"
                     android:gravity="right|fill_vertical"
                     android:paddingRight="8sp"
-                    android:layout_margin="3sp"
                     android:textSize="20sp"
+                    android:layout_height="35sp"
+                    android:layout_margin="3sp"
                     android:textColor="@android:color/holo_green_dark" />
 
                 <TextView
-                    android:text="Cognome_utente"
+                    android:text="Specie_animale"
                     android:layout_width="match_parent"
-                    android:layout_height="35sp"
-                    android:id="@+id/userSurnameTextView"
+                    android:id="@+id/animalSpeciesTextView"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
                     android:paddingLeft="8sp"
-                    android:layout_margin="3sp"
                     android:textSize="20sp"
+                    android:layout_height="35sp"
+                    android:layout_margin="3sp"
                     android:textColor="@android:color/holo_green_light" />
             </TableRow>
 
@@ -122,74 +92,73 @@
                 <TextView
                     android:text="Data di Nascita"
                     android:layout_width="match_parent"
-                    android:layout_height="35sp"
-                    android:id="@+id/textView3"
+                    android:id="@+id/textView6"
                     android:layout_weight="1"
                     android:textStyle="normal|bold"
                     android:gravity="right|fill_vertical"
                     android:paddingRight="8sp"
-                    android:layout_margin="3sp"
                     android:textSize="20sp"
+                    android:layout_height="35sp"
+                    android:layout_margin="3sp"
                     android:textColor="@android:color/holo_green_dark" />
 
                 <TextView
-                    android:text="Data_nascita_utente"
+                    android:text="Data_nascita_animale"
                     android:layout_width="match_parent"
-                    android:layout_height="35sp"
-                    android:id="@+id/userBirthDateTextView"
+                    android:id="@+id/animalBirthDateTextView"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
                     android:paddingLeft="8sp"
-                    android:layout_margin="3sp"
                     android:textSize="20sp"
+                    android:layout_height="35sp"
+                    android:layout_margin="3sp"
                     android:textColor="@android:color/holo_green_light" />
             </TableRow>
 
             <TableRow
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
-
                 <TextView
                     android:text="Sesso"
                     android:layout_width="match_parent"
-                    android:layout_height="35sp"
-                    android:id="@+id/textView4"
+                    android:id="@+id/textView7"
                     android:layout_weight="1"
                     android:textStyle="normal|bold"
                     android:gravity="right|fill_vertical"
                     android:paddingRight="8sp"
-                    android:layout_margin="3sp"
                     android:textSize="20sp"
+                    android:layout_height="35sp"
+                    android:layout_margin="3sp"
                     android:textColor="@android:color/holo_green_dark" />
 
                 <TextView
-                    android:text="Genere_utente"
+                    android:text="Sesso_animale"
                     android:layout_width="match_parent"
-                    android:layout_height="35sp"
-                    android:id="@+id/userGenderTextView"
+                    android:id="@+id/animalGenderTextView"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
                     android:paddingLeft="8sp"
-                    android:layout_margin="3sp"
                     android:textSize="20sp"
+                    android:layout_height="35sp"
+                    android:layout_margin="3sp"
                     android:textColor="@android:color/holo_green_light" />
             </TableRow>
 
         </TableLayout>
 
-    <TextView
-        android:id="@+id/feed_headingTextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="20dp"
-        android:gravity="left|center"
-        android:text="Feed"
-        android:textSize="25sp"
-        android:textColor="@android:color/holo_green_dark"
-        android:textStyle="normal|bold" />
+        <TextView
+            android:id="@+id/feed_headingTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="20dp"
+            android:gravity="left|center"
+            android:text="Feed"
+            android:textSize="25sp"
+            android:textStyle="normal|bold"
+            android:textColor="@android:color/holo_green_dark" />
 
+        </GridLayout>
 
-</GridLayout>
+    </ScrollView>
 
-
-<!--</LinearLayout>-->
+</FrameLayout>
