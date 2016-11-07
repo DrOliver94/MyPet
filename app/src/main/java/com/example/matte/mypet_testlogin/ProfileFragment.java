@@ -12,15 +12,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 
@@ -32,7 +29,6 @@ import jp.wasabeef.picasso.transformations.CropCircleTransformation;
  * create an instance of this fragment.
  */
 public class ProfileFragment extends Fragment {
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "idUser";
 
     private String idUser;
@@ -68,6 +64,8 @@ public class ProfileFragment extends Fragment {
 
         //Recupero delle SharedPreferences
         shPref = getActivity().getSharedPreferences("MyPetPrefs", Context.MODE_PRIVATE);
+
+        //Mostra il menu
         setHasOptionsMenu(true);
     }
 

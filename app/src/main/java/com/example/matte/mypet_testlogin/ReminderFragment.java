@@ -7,6 +7,9 @@ import android.os.Bundle;
 import android.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
@@ -34,14 +37,11 @@ public class ReminderFragment extends Fragment {
     private String mParam2;
 
     private ListView remindersListView;
-//    private OnFragmentInteractionListener mListener;
 
     private SharedPreferences shPref;
     private MyPetDB dbHandler;
 
-    public ReminderFragment() {
-        // Required empty public constructor
-    }
+    public ReminderFragment() { }
 
     /**
      * Use this factory method to create a new instance of
@@ -73,6 +73,9 @@ public class ReminderFragment extends Fragment {
         shPref = getActivity().getSharedPreferences("MyPetPrefs", Context.MODE_PRIVATE);
 
         dbHandler = new MyPetDB(getActivity());
+
+        //Mostra il menu
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -124,34 +127,37 @@ public class ReminderFragment extends Fragment {
     }
 
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.clear();
+        inflater.inflate(R.menu.menu_reminder_fragment, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menuAddPost:
+                getFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.main_fragment, new ReminderDataFragment())
+                        .addToBackStack(null)
+                        .commit();
+                return true;
+            default: break;
+        }
+        return false;
+    }
+
+    @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-//        if (context instanceof OnFragmentInteractionListener) {
-//            mListener = (OnFragmentInteractionListener) context;
-//        } else {
-//            throw new RuntimeException(context.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-//        mListener = null;
     }
 
-//    /**
-//     * This interface must be implemented by activities that contain this
-//     * fragment to allow an interaction in this fragment to be communicated
-//     * to the activity and potentially other fragments contained in that
-//     * activity.
-//     * <p/>
-//     * See the Android Training lesson <a href=
-//     * "http://developer.android.com/training/basics/fragments/communicating.html"
-//     * >Communicating with Other Fragments</a> for more information.
-//     */
-//    public interface OnFragmentInteractionListener {
-//        // TODO: Update argument type and name
-//        void onFragmentInteraction(String name);
-//    }
+
+
 }

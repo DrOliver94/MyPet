@@ -520,6 +520,8 @@ public class MyPetDB {
         String where = ANIMALS_ID + "= ?";
         String[] whereArgs = { idAnimal };
 
+        //FIXME controlla idAnim null
+
         openReadableDB();
         Cursor cursor = db.query(ANIMALS_TABLE, null,
                 where, whereArgs, null, null, null);

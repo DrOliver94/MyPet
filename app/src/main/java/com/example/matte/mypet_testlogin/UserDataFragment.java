@@ -589,7 +589,6 @@ public class UserDataFragment extends Fragment {
      * AsyncTask che aggiorna l'utente inviato
      */
     public class InsertUserTask extends AsyncTask<String, Integer, JSONObject> {
-        private final String uToken = "";
         private final User user;
 
         private ServerComm serverComm;
