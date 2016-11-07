@@ -136,6 +136,8 @@ public class AnimalDataFragment extends Fragment {
                     .load(oldImgPath)
                     .placeholder(R.drawable.img)
                     .transform(new CropCircleTransformation())
+                    .resize(512, 512)
+                    .centerCrop()
                     .into(imgAnimalData);
 
             sendData.setOnClickListener(new View.OnClickListener() {
@@ -163,6 +165,13 @@ public class AnimalDataFragment extends Fragment {
                     }
                 }
             });
+
+            Picasso.with(view.getContext())
+                    .load(R.drawable.img)
+                    .transform(new CropCircleTransformation())
+                    .resize(512, 512)
+                    .centerCrop()
+                    .into(imgAnimalData);
 
             getActivity().setTitle("Nuovo Animale");
         }
@@ -204,6 +213,8 @@ public class AnimalDataFragment extends Fragment {
                     .load(chosenImgUri)
                     .placeholder(R.drawable.img)
                     .transform(new CropCircleTransformation())
+                    .resize(512, 512)
+                    .centerCrop()
                     .into((ImageView) getActivity().findViewById(R.id.imageViewAnimalData));
         }
     }

@@ -177,7 +177,6 @@
             <ImageView
                 android:layout_width="250dp"
                 android:layout_height="250dp"
-                app:srcCompat="@drawable/img"
                 android:id="@+id/imageViewAnimalData"
                 android:layout_weight="1" />
 

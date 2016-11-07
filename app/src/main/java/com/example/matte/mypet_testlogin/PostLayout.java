@@ -63,6 +63,8 @@ public class PostLayout extends LinearLayout {
         Picasso.with(getContext()).setIndicatorsEnabled(true);
         Picasso.with(getContext())
                 .load(post.picture)
+                .resize(750, 750)   //Aggiusta le dimensioni per non pesare troppo
+                .centerInside()
                 .into(pImageView);
 
         //Immagini

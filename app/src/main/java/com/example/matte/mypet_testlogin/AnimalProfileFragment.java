@@ -100,6 +100,8 @@ public class AnimalProfileFragment extends Fragment {
         Picasso.with(view.getContext())
                 .load(currAnim.profilepic)
                 .transform(new CropCircleTransformation())
+                .resize(512, 512)
+                .centerCrop()
                 .into((ImageView) view.findViewById(R.id.imageViewAnimalProfile));
 
         showPostsByAnimal(idAnim);

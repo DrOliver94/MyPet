@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="#ccc"
     android:weightSum="1"
-    android:padding="10dp">
+    android:padding="5dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -20,13 +19,13 @@
         android:layout_height="wrap_content"
         card_view:cardCornerRadius="2dp"
         card_view:cardElevation="4dp"
-        android:layout_margin="15dp">
+        android:layout_margin="10dp">
 
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="10dp">
+            android:layout_margin="5dp">
 
             <TextView
                 android:id="@+id/post_text"
@@ -44,8 +43,7 @@
 
             <ImageView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:srcCompat="@drawable/img"
+                android:layout_height="wrap_content"
                 android:id="@+id/post_imageView"
                 android:adjustViewBounds="true"
                 />

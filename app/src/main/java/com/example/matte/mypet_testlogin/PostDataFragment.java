@@ -139,6 +139,11 @@ public class PostDataFragment extends Fragment {
             }
         });
 
+        Picasso.with(view.getContext())
+                .load(R.drawable.img)
+                .resize(750, 750)
+                .centerInside()
+                .into((ImageView) view.findViewById(R.id.imageViewPostData));
 
         //Test multispinner
         MultiCustomSpinner multiSpinner = (MultiCustomSpinner) view.findViewById(R.id.multispinner);
@@ -180,6 +185,8 @@ public class PostDataFragment extends Fragment {
             Picasso.with(getActivity().getBaseContext())
                     .load(chosenImgUri)
                     .placeholder(R.drawable.img)
+                    .resize(750, 750)
+                    .centerInside()
                     .into((ImageView) getActivity().findViewById(R.id.imageViewPostData));
         }
     }

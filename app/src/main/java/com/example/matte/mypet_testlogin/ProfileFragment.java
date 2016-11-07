@@ -100,6 +100,8 @@ public class ProfileFragment extends Fragment {
         Picasso.with(view.getContext())
                 .load(currUser.profilepic)
                 .transform(new CropCircleTransformation())
+                .resize(512, 512)
+                .centerCrop()
                 .into((ImageView) view.findViewById(R.id.imageViewUserProfile));
 
         showPostsByAuthor(idUser);
