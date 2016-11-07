@@ -524,20 +524,26 @@ public class MyPetDB {
         Cursor cursor = db.query(ANIMALS_TABLE, null,
                 where, whereArgs, null, null, null);
 
-        cursor.moveToFirst();
-        Animal animal = new Animal();
-        animal.id = cursor.getString(ANIMALS_ID_COL);
-        animal.name = cursor.getString(ANIMALS_NAME_COL);
-        animal.species = cursor.getString(ANIMALS_SPECIES_COL);
-        animal.birthdate = cursor.getString(ANIMALS_BIRTHDATE_COL);
-        animal.gender = cursor.getString(ANIMALS_GENDER_COL);
-        animal.profilepic = cursor.getString(ANIMALS_PROFILEPIC_COL);
+        if((cursor != null) && (cursor.getCount() > 0)) {
+            cursor.moveToFirst();
+            Animal animal = new Animal();
+            animal.id = cursor.getString(ANIMALS_ID_COL);
+            animal.name = cursor.getString(ANIMALS_NAME_COL);
+            animal.species = cursor.getString(ANIMALS_SPECIES_COL);
+            animal.birthdate = cursor.getString(ANIMALS_BIRTHDATE_COL);
+            animal.gender = cursor.getString(ANIMALS_GENDER_COL);
+            animal.profilepic = cursor.getString(ANIMALS_PROFILEPIC_COL);
 
-        if (cursor != null)
             cursor.close();
-        this.closeDB();
 
-        return animal;
+            this.closeDB();
+
+            return animal;
+        } else {
+            this.closeDB();
+            return null;
+        }
+
     }
 
 //    public ArrayList<Animal> getAnimalsByOwner(String idOwner) {
@@ -1034,17 +1040,25 @@ public class MyPetDB {
 
         Cursor cursor = qb.query(db, null, where, whereArgs, null, null, null);
 
-        while (cursor.moveToNext()) {
-            Animal a = new Animal();
+        if((cursor != null) && (cursor.getCount() > 0)){
+            while (cursor.moveToNext()) {
+                Animal a = new Animal();
 
-            a.id = cursor.getString(cursor.getColumnIndex(ANIMALS_ID));
-            a.name = cursor.getString(cursor.getColumnIndex(ANIMALS_NAME));
-            a.profilepic = cursor.getString(cursor.getColumnIndex(ANIMALS_PROFILEPIC));
+                a.id = cursor.getString(cursor.getColumnIndex(ANIMALS_ID));
+                a.name = cursor.getString(cursor.getColumnIndex(ANIMALS_NAME));
+                a.profilepic = cursor.getString(cursor.getColumnIndex(ANIMALS_PROFILEPIC));
 
-            animals.add(a);
+                animals.add(a);
+            }
+
+            this.closeDB();
+            return animals;
+        } else {
+            this.closeDB();
+            return null;
         }
 
-        return animals;
+
     }
 
     public long insertReminder(Reminder r) {
@@ -1066,7 +1080,6 @@ public class MyPetDB {
         if (presence > 0) {   //animale già presente nel DB
 //            rowIDAnim = updateAnimal(a);
             return presence;    //Altrimenti si rischia di cancellare dati inseriti.
-            // Usare updateAnimal per aggiornare i dati dell'animale
         } else {
             ContentValues cv = new ContentValues();
             cv.put(REMINDERS_IDREMINDER, r.id);
@@ -1100,24 +1113,30 @@ public class MyPetDB {
 
         Cursor cursor = qb.query(db, null, where, whereArgs, null, null, null);
 
-        while (cursor.moveToNext()) {
-            Reminder r = new Reminder();
+        if((cursor != null) && (cursor.getCount() > 0)){
+            while (cursor.moveToNext()) {
+                Reminder r = new Reminder();
 
-            r.id = cursor.getString(cursor.getColumnIndex(REMINDERS_IDREMINDER));
-            r.idanim = cursor.getString(cursor.getColumnIndex(REMINDERS_IDANIM));
-            r.eventname = cursor.getString(cursor.getColumnIndex(REMINDERS_EVENTNAME));
-            r.eventplace = cursor.getString(cursor.getColumnIndex(REMINDERS_EVENTPLACE));
-            r.eventtime = cursor.getString(cursor.getColumnIndex(REMINDERS_EVENTTIME));
-            r.animname = cursor.getString(cursor.getColumnIndex(ANIMALS_NAME));
-            r.animpic = cursor.getString(cursor.getColumnIndex(ANIMALS_PROFILEPIC));
+                r.id = cursor.getString(cursor.getColumnIndex(REMINDERS_IDREMINDER));
+                r.idanim = cursor.getString(cursor.getColumnIndex(REMINDERS_IDANIM));
+                r.eventname = cursor.getString(cursor.getColumnIndex(REMINDERS_EVENTNAME));
+                r.eventplace = cursor.getString(cursor.getColumnIndex(REMINDERS_EVENTPLACE));
+                r.eventtime = cursor.getString(cursor.getColumnIndex(REMINDERS_EVENTTIME));
+                r.animname = cursor.getString(cursor.getColumnIndex(ANIMALS_NAME));
+                r.animpic = cursor.getString(cursor.getColumnIndex(ANIMALS_PROFILEPIC));
 
-            reminders.add(r);
-        }
-        if (cursor != null)
+                reminders.add(r);
+            }
+
             cursor.close();
-        closeDB();
+            closeDB();
 
-        return reminders;
+            return reminders;
+        } else {    //Se non ci sono risultati
+            closeDB();
+            return null;
+        }
+
     }
 
 //    public int updateTask(Task task) {
