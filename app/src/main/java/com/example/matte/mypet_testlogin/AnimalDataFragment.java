@@ -55,9 +55,9 @@ public class AnimalDataFragment extends Fragment {
     private String oldImgPath;
 
     private String idAnim;
-    private Boolean isEdit;
-
     private String idUser;
+
+    private Boolean isEdit;
 
     private EditText aNameEditTxt;
     private EditText aSpeciesEditTxt;

@@ -115,6 +115,12 @@ public class ProfileFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         menu.clear();
         inflater.inflate(R.menu.menu_edit_profile, menu);
+
+        //Check se si può modificare il profilo
+        String idLoggedUser = shPref.getString("IdUser", "");
+        if(!idUser.equals(idLoggedUser)){ //Se l'user non visualizza il proprio profilo
+            menu.findItem(R.id.menuEditProfile).setVisible(false).setEnabled(false);
+        }
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -181,27 +187,6 @@ public class ProfileFragment extends Fragment {
         ArrayList<Post> posts = HomeActivity.dbManager.getPostsByAuthor(idAuthor);
 
         Log.d("MyPet", itemsListView.toString());
-
-//        //caricamento dei post in un array di HashMap
-//        ArrayList<HashMap<String, String>> data = new ArrayList<>();
-//        for(Post p : posts) {
-//            HashMap<String, String> map = new HashMap<>();
-//            map.put("id", p.id);
-//            map.put("text", p.text);
-//            data.add(map);
-//            Log.d("MyPet", p.text);
-//        }
-//
-//        //risorse
-//        int res = R.layout.listview_post;
-//        String [] from = {"id", "text"};
-//        int[] to = {R.id.post_id, R.id.post_text};
-//
-//        //caricamento dei dati nell'adapter
-//        SimpleAdapter adapter = new SimpleAdapter(getActivity(), data, res, from, to);
-//        adapter.getCount();
-//        itemsListView.setAdapter(adapter);
-//        //justifyListViewHeightBasedOnChildren(itemsListView);
 
         PostListAdapter adapter = new PostListAdapter(getActivity(), posts);
         itemsListView.setAdapter(adapter);
