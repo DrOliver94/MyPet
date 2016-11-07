@@ -115,6 +115,12 @@ public class ProfileFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         menu.clear();
         inflater.inflate(R.menu.menu_edit_profile, menu);
+
+        //Check se si può modificare il profilo
+        String idLoggedUser = shPref.getString("IdUser", "");
+        if(!idUser.equals(idLoggedUser)){ //Se l'user non visualizza il proprio profilo
+            menu.findItem(R.id.menuEditProfile).setVisible(false).setEnabled(false);
+        }
         super.onCreateOptionsMenu(menu, inflater);
     }
 
