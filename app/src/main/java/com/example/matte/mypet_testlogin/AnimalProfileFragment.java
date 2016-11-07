@@ -41,7 +41,7 @@ public class AnimalProfileFragment extends Fragment {
     private MyPetDB dbHandler2;
 
     private ListView itemsListView;
-
+    private View headerAnimal;
 //    private OnFragmentInteractionListener mListener;
 
     public AnimalProfileFragment() {}
@@ -78,19 +78,23 @@ public class AnimalProfileFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_animal_profile, container, false);
 
+        itemsListView = (ListView) view.findViewById(R.id.animal_profile_listView);
+
+        //Inflate header in listView
+        headerAnimal = getActivity().getLayoutInflater().inflate(R.layout.fragment_animal_profile_header, null);
+        itemsListView.addHeaderView(headerAnimal);
+
         Animal currAnim = dbHandler2.getAnimal(idAnim);
 
-        TextView animalNameText = (TextView) view.findViewById(R.id.animalNameTextView);
-        TextView animalSpeciesText = (TextView) view.findViewById(R.id.animalSpeciesTextView);
-        TextView animalGenderText = (TextView) view.findViewById(R.id.animalGenderTextView);
-        TextView animalBirthDateText = (TextView) view.findViewById(R.id.animalBirthDateTextView);
+        TextView animalNameText = (TextView) headerAnimal.findViewById(R.id.animalNameTextView);
+        TextView animalSpeciesText = (TextView) headerAnimal.findViewById(R.id.animalSpeciesTextView);
+        TextView animalGenderText = (TextView) headerAnimal.findViewById(R.id.animalGenderTextView);
+        TextView animalBirthDateText = (TextView) headerAnimal.findViewById(R.id.animalBirthDateTextView);
 
         animalNameText.setText(currAnim.name);
         animalSpeciesText.setText(currAnim.species);
         animalGenderText.setText(currAnim.gender);
         animalBirthDateText.setText(currAnim.birthdate);
-
-        itemsListView = (ListView) view.findViewById(R.id.profile_postsListView);
 
         Picasso.with(view.getContext()).setIndicatorsEnabled(true);
         Picasso.with(view.getContext())
