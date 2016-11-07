@@ -35,6 +35,8 @@ public class InterprExCircleLayout extends LinearLayout {
         Picasso.with(getContext()).setIndicatorsEnabled(true);
         Picasso.with(getContext())
                 .load(img)
+                .resize(150, 150)   //Limita dimensione
+                .centerInside()     //Non distorce img non quadrate
                 .transform(new CropCircleTransformation())
                 .into(picture);
     }
