@@ -81,10 +81,20 @@ public class PostLayout extends LinearLayout {
 //        InterprExCircleAdapter adapter = new InterprExCircleAdapter(c, imgs);
 //        pPicListView.setAdapter(adapter);
 
-        for(String img : imgs){
+        pPicLayout.removeAllViews();
+        for(int i = 0; i<imgs.size(); i++){
+            String img = imgs.get(i);
             View v = new InterprExCircleLayout(c, img);
-            pPicLayout.addView(v);
+            pPicLayout.addView(v, i);
         }
+
+        //Tentativo di non far comparire mille circle
+//        if(pPicLayout.findViewById(i) == null){
+//            View v = new InterprExCircleLayout(c, img);
+//            int id = Integer.parseInt(p.id + i + "");
+//            v.setId(id);
+//            pPicLayout.addView(v, i);
+//        }
 
     }
 }

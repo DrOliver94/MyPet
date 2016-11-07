@@ -92,6 +92,11 @@
                         android:layout_height="wrap_content" />
                 </TableRow>
 
+                <TableRow>
+                    <com.example.matte.mypet_testlogin.MultiCustomSpinner
+                        android:id="@+id/multispinner"/>
+                </TableRow>
+
             </TableLayout>
 
             <LinearLayout

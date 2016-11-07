@@ -35,7 +35,7 @@
         card_view:cardElevation="4dp"
         android:layout_margin="15dp">
 
-        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
