@@ -94,7 +94,14 @@ public class AnimalProfileFragment extends Fragment {
 
         animalNameText.setText(currAnim.name);
         animalSpeciesText.setText(currAnim.species);
-        animalGenderText.setText(currAnim.gender);
+
+        String gender = "";
+        if(currAnim.gender.equals("male")){
+            gender = "Maschio";
+        } else if(currAnim.gender.equals("female")) {
+            gender = "Femmina";
+        }
+        animalGenderText.setText(gender);
 
         SimpleDateFormat format = new SimpleDateFormat("dd LLLL y");
         animalBirthDateText.setText(format.format(currAnim.birthdate));

@@ -93,7 +93,14 @@ public class ProfileFragment extends Fragment {
         userUserNameProfileText.setText(currUser.username);
         userNameText.setText(currUser.name);
         userSurnameText.setText(currUser.surname);
-        userGenderText.setText(currUser.gender);
+
+        String gender = "";
+        if(currUser.gender.equals("male")){
+            gender = "Maschio";
+        } else if(currUser.gender.equals("female")) {
+            gender = "Femmina";
+        }
+        userGenderText.setText(gender);
 
         SimpleDateFormat format = new SimpleDateFormat("dd LLLL y");
         userBirthDateText.setText(format.format(currUser.birthdate));

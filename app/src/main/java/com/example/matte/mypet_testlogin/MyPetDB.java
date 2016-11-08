@@ -511,6 +511,81 @@ public class MyPetDB {
         return friends;
     }
 
+    public boolean areFriends(String idUser1, String idUser2) {
+        String where = "(" + FRIENDSHIP_USERRECEIVER + "= ? AND " + FRIENDSHIP_USERSENDER + "=?) OR ("
+                        + FRIENDSHIP_USERSENDER + "=? AND " + FRIENDSHIP_USERRECEIVER + "=?)";
+        String[] whereArgs = { idUser1, idUser2, idUser1, idUser2 };
+
+        openReadableDB();
+        Cursor cursor = db.query(FRIENDSHIP_TABLE, null,
+                where, whereArgs, null, null, null);
+
+        boolean result;
+        if(cursor.getCount() == 0){
+            result = false;
+        } else {
+            result = true;
+        }
+
+        if (cursor != null)
+            cursor.close();
+        this.closeDB();
+
+        return result;
+    }
+
+
+    /**
+     * Ricerca utenti il cui nome, cognome o username contiene la stringa indicata
+     *
+     * @param searchText
+     * @return
+     */
+    public ArrayList<User> searchUsers(String searchText) {
+        ArrayList<User> friends = new ArrayList<>();
+        openReadableDB();
+
+        SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
+
+        //indichiamo le tabelle su cui lavorare
+        qb.setTables(USERS_TABLE);
+        String where = USERS_NAME + " LIKE '%?%' OR "
+                        + USERS_SURNAME + " LIKE '%?%' OR "
+                        + USERS_USERNAME + " LIKE '%?%'";
+        String[] whereArgs = { searchText, searchText, searchText };
+
+        //richiesta al DB
+        Cursor cursor = qb.query(db, null, where, whereArgs, null, null, null);
+
+        while (cursor.moveToNext()) {
+            String idCurrUser = cursor.getString(cursor.getColumnIndex(USERS_ID)); //TODO Probabile funzioni
+//            if(!idCurrUser.equals(idUser)) {  //se l'utente della riga selezionata è un amico
+                User user = new User();
+
+                user.id = idCurrUser;
+                user.username = cursor.getString(USERS_USERNAME_COL);
+                user.name = cursor.getString(USERS_NAME_COL);
+                user.surname = cursor.getString(USERS_SURNAME_COL);
+                user.gender = cursor.getString(USERS_GENDER_COL);
+                user.profilepic = cursor.getString(USERS_PROFILEPIC_COL);
+
+                SimpleDateFormat format = new SimpleDateFormat("y-LL-F");
+                try {
+                    user.birthdate = format.parse(cursor.getString(USERS_BIRTHDATE_COL));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                friends.add(user);
+//            }
+        }
+        if (cursor != null)
+            cursor.close();
+        closeDB();
+
+        return friends;
+    }
+
 //    public List getList(String name) {
 //        String where = LIST_NAME + "= ?";
 //        String[] whereArgs = { name };
