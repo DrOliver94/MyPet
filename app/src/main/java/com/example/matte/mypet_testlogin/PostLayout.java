@@ -18,6 +18,7 @@ import java.util.ArrayList;
 /**
  * Gestisce il layout del singolo post
  */
+
 public class PostLayout extends LinearLayout {
 
     private Post post;
@@ -56,8 +57,7 @@ public class PostLayout extends LinearLayout {
         setPost(p);
     }
 
-    public void setPost(Post p){
-        post = p;
+    public void setPost(Post post){
 
         //Caricamento dati
         pText.setText(post.text);
