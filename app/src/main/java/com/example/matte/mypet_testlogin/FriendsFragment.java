@@ -64,13 +64,13 @@ public class FriendsFragment extends Fragment {
         friendsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-            HashMap<String, String> data = (HashMap<String, String>) adapterView.getItemAtPosition(i); //TODO si casta a Animal e funziona? Testare
+            User data = (User) adapterView.getItemAtPosition(i); //TODO si casta a Animal e funziona? Testare
 
-//                Animal a = animals.get(i);
+//          Animal a = animals.get(i);
 
             getFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.main_fragment, ProfileFragment.newInstance(data.get("id")))
+                    .replace(R.id.main_fragment, ProfileFragment.newInstance(data.id))
                     .addToBackStack(null)
                     .commit();
             }
