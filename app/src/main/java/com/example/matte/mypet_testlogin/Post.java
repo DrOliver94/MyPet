@@ -2,9 +2,9 @@ package com.example.matte.mypet_testlogin;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-
-import java.lang.reflect.Array;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Contiene le informazioni di un singolo post
@@ -17,14 +17,14 @@ public class Post {
     public String picauthor;
     public String picture;
     public String text;
-    public String date;
+    public Date date;
     public String place;
     public ArrayList<User> users;
     public ArrayList<Animal> animals;
 
     public Post() {}
 
-    public Post(String idPost, String text, String date, String place, String pic) {
+    public Post(String idPost, String text, Date date, String place, String pic) {
         this.id = idPost;
         this.text = text;
         this.date = date;
@@ -45,12 +45,14 @@ public class Post {
                 picture = HomeActivity.IMG_BASEURL + jObjPost.getString("pic");
             if(!jObjPost.isNull("text"))
                 text = jObjPost.getString("text");
-            if(!jObjPost.isNull("date"))
-                date = jObjPost.getString("date");
+            if(!jObjPost.isNull("date")) {
+                SimpleDateFormat format = new SimpleDateFormat("y-LL-F H:m:s");
+                date = format.parse(jObjPost.getString("date"));
+            }
             if(!jObjPost.isNull("place"))
                 place = jObjPost.getString("place");
 
-            if(!jObjPost.isNull("users")) { //TODO non fa quello per cui è qui (getJSONobject continua a ravanare nei null...)
+            if(!jObjPost.isNull("users")) {
                 JSONObject jUsers = jObjPost.getJSONObject("users");
                 JSONArray idUsers = jUsers.names();                 //recupera elenco ID degli utenti
                 for (int i = 0; i < idUsers.length(); i++) {        //per ogni utente nell'obj

@@ -2,6 +2,9 @@ package com.example.matte.mypet_testlogin;
 
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * Memorizza un animale
  */
@@ -11,7 +14,7 @@ public class Animal {
     public String species;
     public String gender;
     public String profilepic;
-    public String birthdate; //TODO trovare miglior tipo di variabile
+    public Date birthdate;
 
     public Animal(){}
 
@@ -23,8 +26,10 @@ public class Animal {
                 species = jObjPet.getString("species");
             if(!jObjPet.isNull("gender"))
                 gender = jObjPet.getString("gender");
-            if(!jObjPet.isNull("birthdate"))
-                birthdate = jObjPet.getString("birthdate");
+            if(!jObjPet.isNull("birthdate")){
+                SimpleDateFormat format = new SimpleDateFormat("y-LL-F");
+                birthdate = format.parse(jObjPet.getString("birthdate"));
+            }
             if(!jObjPet.isNull("profilePic"))
                 profilepic = HomeActivity.IMG_BASEURL + jObjPet.getString("profilePic");
         } catch (Exception e) {

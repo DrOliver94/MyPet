@@ -36,6 +36,8 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
@@ -341,9 +343,15 @@ public class PostDataFragment extends Fragment {
             try {
                 post.text = p[0];
                 post.place = p[1];
-                post.date = p[2];
                 post.picture = p[3];
                 String serverPic = p[4];
+
+                SimpleDateFormat format = new SimpleDateFormat("y-LL-F H:m:s");
+                try {
+                    post.date = format.parse(p[2]);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
 
                 String postArgs = "insertPost=" +
                         "&iduser=" + idUser +

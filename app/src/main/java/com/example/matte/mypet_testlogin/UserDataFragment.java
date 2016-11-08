@@ -36,6 +36,8 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Hashtable;
 import java.util.Map;
 
@@ -140,7 +142,9 @@ public class UserDataFragment extends Fragment {
             uNameEditTxt.setText(u.name);
             uSurnameEditTxt.setText(u.surname);
             uGenderEditTxt.setText(u.gender);
-            uBirthdateEditTxt.setText(u.birthdate);
+
+            //Todo sistema datePicker
+            //uBirthdateEditTxt.setText(u.birthdate);
 
             //Si nascondono i campi delle pw
             uPasswordEditTxt.setVisibility(View.GONE);
@@ -432,9 +436,15 @@ public class UserDataFragment extends Fragment {
                 user.name = p[1];
                 user.surname = p[2];
                 user.gender = p[3];
-                user.birthdate = p[4];
                 user.profilepic = p[5];
                 String serverPic = p[6];
+
+                SimpleDateFormat format = new SimpleDateFormat("y-LL-F");
+                try {
+                    user.birthdate = format.parse(p[4]);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
 
                 String postArgs = "updateUser=" + user.id +
                         "&token=" + uToken +
@@ -622,10 +632,16 @@ public class UserDataFragment extends Fragment {
                 user.name = p[1];
                 user.surname = p[2];
                 user.gender = p[3];
-                user.birthdate = p[4];
                 String password = p[5];
                 user.profilepic = p[6];
                 String serverPic = p[7];
+
+                SimpleDateFormat format = new SimpleDateFormat("y-LL-F");
+                try {
+                    user.birthdate = format.parse(p[4]);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
 
                 String postArgs = "insertUser=" +
                         "&username=" + user.username +
