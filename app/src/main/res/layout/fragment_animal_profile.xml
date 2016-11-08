@@ -6,10 +6,14 @@
     android:background="#ffffff"
     tools:context="com.example.matte.mypet_testlogin.AnimalProfileFragment">
 
+
     <ListView
         android:id="@+id/animal_profile_listView"
+        android:layout_margin="20sp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:scrollbars="none" />
 
 </FrameLayout>
+
+
