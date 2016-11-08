@@ -18,7 +18,6 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_margin="5dp">
-                <!--android:weightSum="1"-->
 
                 <TableRow
                     android:layout_width="match_parent"
@@ -128,6 +127,7 @@
                 android:layout_weight="1" />
 
         </GridLayout>
+
     </ScrollView>
 
 </FrameLayout>

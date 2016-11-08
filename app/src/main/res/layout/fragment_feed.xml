@@ -6,20 +6,11 @@
     android:background="#ffffff"
     tools:context="com.example.matte.mypet_testlogin.FeedFragment">
 
-    <!--<TextView-->
-        <!--android:id="@+id/feed_title"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="100dp"-->
-        <!--android:text="Feed"-->
-        <!--android:textAppearance="@style/TextAppearance.AppCompat.Large"-->
-        <!--android:textAlignment="center"-->
-        <!--android:fontFamily="sans-serif"-->
-        <!--android:padding="20dp" />-->
-
     <ListView
         android:id="@+id/feed_postsListView"
-        android:padding="0dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:dividerHeight="0dp"
+        android:divider="#00000000"/>
 
 </LinearLayout>
