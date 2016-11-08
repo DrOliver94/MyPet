@@ -16,6 +16,7 @@ import java.util.ArrayList;
 /**
  * Gestisce il layout del singolo post
  */
+
 public class PostLayout extends LinearLayout {
 
     private Post post;
@@ -44,7 +45,6 @@ public class PostLayout extends LinearLayout {
         pText = (TextView) findViewById(R.id.post_text);
         pPlace = (TextView) findViewById(R.id.post_place);
         pImageView = (ImageView) findViewById(R.id.post_imageView);
-//        pPicListView = (ListView) findViewById(R.id.picListView);
         pPicLayout = (LinearLayout) findViewById(R.id.picListView);
 
         //TODO sistemare click Listener
@@ -53,8 +53,7 @@ public class PostLayout extends LinearLayout {
         setPost(p);
     }
 
-    public void setPost(Post p){
-        post = p;
+    public void setPost(Post post){
 
         //Caricamento dati
         pText.setText(post.text);

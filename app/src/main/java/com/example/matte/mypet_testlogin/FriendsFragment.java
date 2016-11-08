@@ -96,31 +96,12 @@ public class FriendsFragment extends Fragment {
      * @param idUser
      */
     public void getFriends(String idUser) {
-        //recupero elenco dei post dal DB
-        ArrayList<User> friends = HomeActivity.dbManager.getFriendsByUser(idUser);
 
-//        Log.d("MyPet", feedListView.toString());
+        HomeActivity.dbManager.getFriendsByUser(idUser);
+        ArrayList<User> users = HomeActivity.dbManager.getFriendsByUser(idUser);
+        UserListAdapter ula = new UserListAdapter(getActivity(), users);
+        friendsListView.setAdapter(ula);
 
-        //caricamento dei post in un array di HashMap
-        ArrayList<HashMap<String, String>> data = new ArrayList<>();
-        for(User u : friends) {
-            HashMap<String, String> map = new HashMap<>();
-            map.put("id", u.id);
-            map.put("name", u.name);
-            map.put("surname", u.surname);
-            data.add(map);
-//            Log.d("MyPet", u.name);
-        }
-
-        //risorse
-        int res = R.layout.listview_user;
-        String [] from = {"id", "name", "surname"};
-        int[] to = {R.id.user_id, R.id.user_name, R.id.user_surname};
-
-        //caricamento dei dati nell'adapter
-        SimpleAdapter adapter = new SimpleAdapter(getActivity(), data, res, from, to);
-        //adapter.getCount();
-        friendsListView.setAdapter(adapter);
     }
 
 }

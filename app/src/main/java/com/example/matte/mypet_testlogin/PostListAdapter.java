@@ -10,6 +10,7 @@ import java.util.ArrayList;
 /**
  * Created by matte on 161031.
  */
+
 public class PostListAdapter extends BaseAdapter {
 
     private Context context;
@@ -35,14 +36,6 @@ public class PostListAdapter extends BaseAdapter {
         return i;
     }
 
-    /**
-     * Restituisce il PostLayout nella posizione specificata
-     *
-     * @param pos
-     * @param view
-     * @param viewGroup
-     * @return
-     */
     @Override
     public View getView(int pos, View view, ViewGroup viewGroup) {
         PostLayout postLayout = null;

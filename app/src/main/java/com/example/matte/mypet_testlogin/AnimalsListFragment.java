@@ -73,7 +73,7 @@ public class AnimalsListFragment extends Fragment {
             idUser = getArguments().getString(ARG_PARAM1);
         }
 
-        //recupero elenco dei post dal DB
+        //recupero elenco degli animali dal DB
         animals = HomeActivity.dbManager.getAnimalsByOwner(idUser);
 
         setHasOptionsMenu(true);
@@ -113,12 +113,6 @@ public class AnimalsListFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-//        if (context instanceof OnFragmentInteractionListener) {
-//            mListener = (OnFragmentInteractionListener) context;
-//        } else {
-//            throw new RuntimeException(context.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
     }
 
     @Override
@@ -165,57 +159,10 @@ public class AnimalsListFragment extends Fragment {
 //    }
 
     public void showAnimalsByUser(String idUser) {
-        Log.d("MyPet", animalsListView.toString());
 
-        //caricamento degli animali in un array di HashMap
-        ArrayList<HashMap<String, String>> data = new ArrayList<>();
-        for(Animal a : animals) {
-            HashMap<String, String> map = new HashMap<>();
-            map.put("id", a.id);
-            map.put("name", a.name);
-            map.put("profilepic", a.profilepic);
-            data.add(map);
-            Log.d("MyPet", a.name + "in arrayList");
-        }
+        AnimalListAdapter ala = new AnimalListAdapter(getActivity(), animals);
+        animalsListView.setAdapter(ala);
 
-        //risorse
-        int res = R.layout.listview_animal;
-        String [] from = {"id", "name"};
-        int[] to = {R.id.animal_id, R.id.animal_name};
-
-        //caricamento dei dati nell'adapter
-        SimpleAdapter adapter = new SimpleAdapter(getActivity(), data, res, from, to);
-        //adapter.getCount();
-        animalsListView.setAdapter(adapter);
-    }
-
-    public void debugUsersAnim() {
-        //recupero elenco dei post dal DB
-//        ArrayList<Animal> animals = HomeActivity.dbManager.getAnimalsByOwner(idUser);
-        ArrayList<String> strs = HomeActivity.dbManager.debugUsersAnimals();
-
-//        Log.d("MyPet", animalsListView.toString());
-
-        //caricamento degli animali in un array di HashMap
-        ArrayList<HashMap<String, String>> data = new ArrayList<>();
-        for(String s: strs) {
-            HashMap<String, String> map = new HashMap<>();
-            map.put("id", s);
-//            map.put("name", a.name);
-            //TODO complete
-            data.add(map);
-//            Log.d("MyPet", a.name + "in arrayList");
-        }
-
-        //risorse
-        int res = R.layout.listview_animal;
-        String [] from = {"id"};
-        int[] to = {R.id.animal_id};
-
-        //caricamento dei dati nell'adapter
-        SimpleAdapter adapter = new SimpleAdapter(getActivity(), data, res, from, to);
-        adapter.getCount();
-        animalsListView.setAdapter(adapter);
     }
 
 }
