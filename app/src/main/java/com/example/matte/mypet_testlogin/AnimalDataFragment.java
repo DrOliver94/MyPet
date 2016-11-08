@@ -35,6 +35,8 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Hashtable;
 import java.util.Map;
 
@@ -125,8 +127,10 @@ public class AnimalDataFragment extends Fragment {
 
             aNameEditTxt.setText(a.name);
             aSpeciesEditTxt.setText(a.species);
-            aBirthdateEditTxt.setText(a.birthdate);
             aGenderEditTxt.setText(a.gender);
+
+            SimpleDateFormat format = new SimpleDateFormat("dd LLLL y");
+            aBirthdateEditTxt.setText(format.format(a.birthdate));
 
             //Memorizzo percorso ultima img usata
             oldImgPath = a.profilepic;
@@ -391,9 +395,15 @@ public class AnimalDataFragment extends Fragment {
                 anim.name = p[0];
                 anim.species = p[1];
                 anim.gender = p[2];
-                anim.birthdate = p[3];
                 anim.profilepic = p[4];
                 String serverPic = p[5];
+
+                SimpleDateFormat format = new SimpleDateFormat("y-LL-F");
+                try {
+                    anim.birthdate = format.parse(p[3]);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
 
                 String postArgs = "insertAnimal=" + anim.id +
                         "&iduser=" + idUser +
@@ -495,9 +505,15 @@ public class AnimalDataFragment extends Fragment {
                 anim.name = p[0];
                 anim.species = p[1];
                 anim.gender = p[2];
-                anim.birthdate = p[3];
                 anim.profilepic = p[4];
                 String serverPic = p[5];
+
+                SimpleDateFormat format = new SimpleDateFormat("y-LL-F");
+                try {
+                    anim.birthdate = format.parse(p[3]);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
 
                 String postArgs = "updateAnimal=" + anim.id +
                         "&iduser=" + idUser +

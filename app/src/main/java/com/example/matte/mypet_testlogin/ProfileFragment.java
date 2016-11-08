@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import jp.wasabeef.picasso.transformations.CropCircleTransformation;
@@ -93,7 +94,9 @@ public class ProfileFragment extends Fragment {
         userNameText.setText(currUser.name);
         userSurnameText.setText(currUser.surname);
         userGenderText.setText(currUser.gender);
-        userBirthDateText.setText(currUser.birthdate);
+
+        SimpleDateFormat format = new SimpleDateFormat("dd LLLL y");
+        userBirthDateText.setText(format.format(currUser.birthdate));
 
         //Immagine
         Picasso.with(view.getContext()).setIndicatorsEnabled(true);

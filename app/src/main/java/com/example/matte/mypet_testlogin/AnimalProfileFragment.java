@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -94,7 +95,9 @@ public class AnimalProfileFragment extends Fragment {
         animalNameText.setText(currAnim.name);
         animalSpeciesText.setText(currAnim.species);
         animalGenderText.setText(currAnim.gender);
-        animalBirthDateText.setText(currAnim.birthdate);
+
+        SimpleDateFormat format = new SimpleDateFormat("dd LLLL y");
+        animalBirthDateText.setText(format.format(currAnim.birthdate));
 
         Picasso.with(view.getContext()).setIndicatorsEnabled(true);
         Picasso.with(view.getContext())

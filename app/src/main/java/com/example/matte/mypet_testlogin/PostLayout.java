@@ -11,6 +11,8 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 /**
@@ -23,10 +25,11 @@ public class PostLayout extends LinearLayout {
     private Context c;
 
     private TextView pText;
-    private ImageView pImageView;
     private TextView pPlace;
-    private ListView pPicListView;
+    private TextView pTime;
+    private ImageView pImageView;
     private LinearLayout pPicLayout;
+
 
     public PostLayout(Context context){
         super(context);
@@ -44,8 +47,8 @@ public class PostLayout extends LinearLayout {
         pText = (TextView) findViewById(R.id.post_text);
         pPlace = (TextView) findViewById(R.id.post_place);
         pImageView = (ImageView) findViewById(R.id.post_imageView);
-//        pPicListView = (ListView) findViewById(R.id.picListView);
         pPicLayout = (LinearLayout) findViewById(R.id.picListView);
+        pTime = (TextView) findViewById(R.id.post_time);
 
         //TODO sistemare click Listener
 
@@ -59,6 +62,8 @@ public class PostLayout extends LinearLayout {
         //Caricamento dati
         pText.setText(post.text);
         pPlace.setText(post.place);
+        SimpleDateFormat format = new SimpleDateFormat("dd LLLL y HH:mm");
+        pTime.setText(format.format(post.date));
 
         Picasso.with(getContext()).setIndicatorsEnabled(true);
         Picasso.with(getContext())

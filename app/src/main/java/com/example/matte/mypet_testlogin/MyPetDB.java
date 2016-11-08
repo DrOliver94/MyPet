@@ -9,6 +9,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.util.Log;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -365,9 +367,11 @@ public class MyPetDB {
             cv.put(USERS_NAME, u.name);
             cv.put(USERS_USERNAME, u.username);
             cv.put(USERS_SURNAME, u.surname);
-            cv.put(USERS_BIRTHDATE, u.birthdate);
             cv.put(USERS_GENDER, u.gender);
             cv.put(USERS_PROFILEPIC, u.profilepic);
+
+            SimpleDateFormat format = new SimpleDateFormat("y-LL-F");
+            cv.put(USERS_BIRTHDATE, format.format(u.birthdate));
 
             this.openWriteableDB();
             long rowID = db.insert(USERS_TABLE, null, cv);
@@ -393,8 +397,14 @@ public class MyPetDB {
         user.name = cursor.getString(USERS_NAME_COL);
         user.surname = cursor.getString(USERS_SURNAME_COL);
         user.gender = cursor.getString(USERS_GENDER_COL);
-        user.birthdate = cursor.getString(USERS_BIRTHDATE_COL);
         user.profilepic = cursor.getString(USERS_PROFILEPIC_COL);
+
+        SimpleDateFormat format = new SimpleDateFormat("y-MM-dd");
+        try {
+            user.birthdate = format.parse(cursor.getString(USERS_BIRTHDATE_COL));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         //TODO controllare per errori
 
@@ -411,8 +421,10 @@ public class MyPetDB {
         cv.put(USERS_NAME, user.name);
         cv.put(USERS_SURNAME, user.surname);
         cv.put(USERS_GENDER, user.gender);
-        cv.put(USERS_BIRTHDATE, user.birthdate);
         cv.put(USERS_PROFILEPIC, user.profilepic);
+
+        SimpleDateFormat format = new SimpleDateFormat("y-LL-F");
+        cv.put(USERS_BIRTHDATE, format.format(user.birthdate));
 
         String where = USERS_ID + "= ?";
         String[] whereArgs = { String.valueOf(user.id) };
@@ -480,8 +492,14 @@ public class MyPetDB {
                 user.name = cursor.getString(USERS_NAME_COL);
                 user.surname = cursor.getString(USERS_SURNAME_COL);
                 user.gender = cursor.getString(USERS_GENDER_COL);
-                user.birthdate = cursor.getString(USERS_BIRTHDATE_COL);
                 user.profilepic = cursor.getString(USERS_PROFILEPIC_COL);
+
+                SimpleDateFormat format = new SimpleDateFormat("y-LL-F");
+                try {
+                    user.birthdate = format.parse(cursor.getString(USERS_BIRTHDATE_COL));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
 
                 friends.add(user);
             }
@@ -532,9 +550,15 @@ public class MyPetDB {
             animal.id = cursor.getString(ANIMALS_ID_COL);
             animal.name = cursor.getString(ANIMALS_NAME_COL);
             animal.species = cursor.getString(ANIMALS_SPECIES_COL);
-            animal.birthdate = cursor.getString(ANIMALS_BIRTHDATE_COL);
             animal.gender = cursor.getString(ANIMALS_GENDER_COL);
             animal.profilepic = cursor.getString(ANIMALS_PROFILEPIC_COL);
+
+            SimpleDateFormat format = new SimpleDateFormat("y-LL-F");
+            try {
+                animal.birthdate = format.parse(cursor.getString(ANIMALS_BIRTHDATE_COL));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
 
             cursor.close();
 
@@ -630,8 +654,14 @@ public class MyPetDB {
             animal.id = cursor.getString(cursor.getColumnIndex(ANIMALS_ID));
             animal.species = cursor.getString(cursor.getColumnIndex(ANIMALS_SPECIES));
             animal.gender = cursor.getString(cursor.getColumnIndex(ANIMALS_GENDER));
-            animal.birthdate = cursor.getString(cursor.getColumnIndex(ANIMALS_BIRTHDATE));
             animal.profilepic = cursor.getString(cursor.getColumnIndex(ANIMALS_PROFILEPIC));
+
+            SimpleDateFormat format = new SimpleDateFormat("y-LL-F");
+            try {
+                animal.birthdate = format.parse(cursor.getString(cursor.getColumnIndex(ANIMALS_BIRTHDATE)));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
 
             animals.add(animal);
         }
@@ -677,9 +707,11 @@ public class MyPetDB {
             cv.put(ANIMALS_ID, a.id);
             cv.put(ANIMALS_NAME, a.name);
             cv.put(ANIMALS_GENDER, a.gender);
-            cv.put(ANIMALS_BIRTHDATE, a.birthdate);
             cv.put(ANIMALS_SPECIES, a.species);
             cv.put(ANIMALS_PROFILEPIC, a.profilepic);
+
+            SimpleDateFormat format = new SimpleDateFormat("y-LL-F");
+            cv.put(ANIMALS_BIRTHDATE, format.format(a.birthdate));
 
             this.openWriteableDB();
             rowIDAnim = db.insert(ANIMALS_TABLE, null, cv);
@@ -704,8 +736,10 @@ public class MyPetDB {
         cv.put(ANIMALS_NAME, a.name);
         cv.put(ANIMALS_GENDER, a.gender);
         cv.put(ANIMALS_SPECIES, a.species);
-        cv.put(ANIMALS_BIRTHDATE, a.birthdate);
         cv.put(ANIMALS_PROFILEPIC, a.profilepic);
+
+        SimpleDateFormat format = new SimpleDateFormat("y-LL-F");
+        cv.put(ANIMALS_BIRTHDATE, format.format(a.birthdate));
 
         String where = ANIMALS_ID + "= ?";
         String[] whereArgs = { String.valueOf(a.id) };
@@ -806,8 +840,14 @@ public class MyPetDB {
             post.id = cursor.getString(POSTS_ID_COL);
             post.text = cursor.getString(POSTS_TEXT_COL);
             post.place = cursor.getString(POSTS_PLACE_COL);
-            post.date = cursor.getString(POSTS_DATE_COL);
             post.idauthor = cursor.getString(POSTS_IDAUTHOR_COL);
+
+            SimpleDateFormat format = new SimpleDateFormat("y-LL-F H:m:s");
+            try {
+                post.date = format.parse(cursor.getString(POSTS_DATE_COL));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
 
             User author = getUser(post.idauthor);
             post.nameauthor = author.username;
@@ -852,8 +892,14 @@ public class MyPetDB {
             post.id = cursor.getString(cursor.getColumnIndex(POSTS_ID));
             post.text = cursor.getString(cursor.getColumnIndex(POSTS_TEXT));
             post.place = cursor.getString(cursor.getColumnIndex(POSTS_PLACE));
-            post.date = cursor.getString(cursor.getColumnIndex(POSTS_DATE));
             post.idauthor = cursor.getString(cursor.getColumnIndex(POSTS_IDAUTHOR));
+
+            SimpleDateFormat format = new SimpleDateFormat("y-LL-F H:m:s");
+            try {
+                post.date = format.parse(cursor.getString(cursor.getColumnIndex(POSTS_DATE)));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
 
             User author = getUser(post.idauthor);
             post.nameauthor = author.username;
@@ -903,11 +949,16 @@ public class MyPetDB {
 
             post.id = cursor.getString(cursor.getColumnIndex(POSTS_ID));
             post.text = cursor.getString(cursor.getColumnIndex(POSTS_TEXT));
-            post.date = cursor.getString(cursor.getColumnIndex(POSTS_DATE));
             post.place = cursor.getString(cursor.getColumnIndex(POSTS_PLACE));
-            post.date = cursor.getString(cursor.getColumnIndex(POSTS_DATE));
             post.idauthor = cursor.getString(cursor.getColumnIndex(POSTS_IDAUTHOR));
             post.picture = cursor.getString(cursor.getColumnIndex(POSTS_PICTURE));
+
+            SimpleDateFormat format = new SimpleDateFormat("y-LL-F H:m:s");
+            try {
+                post.date = format.parse(cursor.getString(cursor.getColumnIndex(POSTS_DATE)));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
 
             User author = getUser(post.idauthor);
             post.picauthor = author.profilepic;
@@ -954,9 +1005,12 @@ public class MyPetDB {
             cv.put(POSTS_ID, p.id);
             cv.put(POSTS_IDAUTHOR, p.idauthor);
             cv.put(POSTS_TEXT, p.text);
-            cv.put(POSTS_DATE, p.date);
             cv.put(POSTS_PLACE, p.place);
             cv.put(POSTS_PICTURE, p.picture);
+
+            SimpleDateFormat format = new SimpleDateFormat("y-LL-F H:m:s");
+            cv.put(POSTS_DATE, format.format(p.date));
+
             //Aggiunta di animali e utenti taggati
             for(User u : p.users){
                 insertUser(u);
