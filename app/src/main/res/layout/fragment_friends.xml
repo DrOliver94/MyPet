@@ -9,13 +9,15 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10sp">
+        android:layout_margin="10dp">
 
         <ListView
             android:id="@+id/friendsListView"
-            android:layout_margin="20sp"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:dividerHeight="0dp"
+            android:divider="#00000000"/>
+
     </LinearLayout>
 
 </FrameLayout>
