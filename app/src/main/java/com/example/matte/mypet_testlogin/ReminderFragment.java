@@ -102,7 +102,10 @@ public class ReminderFragment extends Fragment {
         //recupero elenco dei post dal DB
         ArrayList<Reminder> reminders = HomeActivity.dbManager.getRemindersByUser(idUser);
 
-//        Log.d("MyPet", remindersListView.toString());
+        if(reminders == null || reminders.isEmpty()){
+            //TODO  indicare assenza promemoria
+            return;
+        }
 
         //caricamento dei post in un array di HashMap
         ArrayList<HashMap<String, String>> data = new ArrayList<>();

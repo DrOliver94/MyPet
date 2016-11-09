@@ -103,7 +103,7 @@ public class AnimalProfileFragment extends Fragment {
         }
         animalGenderText.setText(gender);
 
-        SimpleDateFormat format = new SimpleDateFormat("dd LLLL y");
+        SimpleDateFormat format = new SimpleDateFormat("dd MMMM y");
         animalBirthDateText.setText(format.format(currAnim.birthdate));
 
         Picasso.with(view.getContext()).setIndicatorsEnabled(true);

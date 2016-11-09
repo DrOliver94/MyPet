@@ -27,7 +27,7 @@ public class Animal {
             if(!jObjPet.isNull("gender"))
                 gender = jObjPet.getString("gender");
             if(!jObjPet.isNull("birthdate")){
-                SimpleDateFormat format = new SimpleDateFormat("y-LL-F");
+                SimpleDateFormat format = new SimpleDateFormat("y-MM-dd");
                 birthdate = format.parse(jObjPet.getString("birthdate"));
             }
             if(!jObjPet.isNull("profilePic"))

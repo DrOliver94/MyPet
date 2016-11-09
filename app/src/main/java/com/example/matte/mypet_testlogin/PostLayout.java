@@ -62,8 +62,10 @@ public class PostLayout extends LinearLayout {
         //Caricamento dati
         pText.setText(post.text);
         pPlace.setText(post.place);
-        SimpleDateFormat format = new SimpleDateFormat("dd LLLL y HH:mm");
-        pTime.setText(format.format(post.date));
+        if(post.date != null) {
+            SimpleDateFormat format = new SimpleDateFormat("dd MMMM y HH:mm");
+            pTime.setText(format.format(post.date));
+        }
 
         Picasso.with(getContext()).setIndicatorsEnabled(true);
         Picasso.with(getContext())

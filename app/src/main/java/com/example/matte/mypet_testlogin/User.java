@@ -31,7 +31,7 @@ public class User {
             if(!jObjUser.isNull("gender"))
                 gender = jObjUser.getString("gender");
             if(!jObjUser.isNull("birthDate")) {
-                SimpleDateFormat format = new SimpleDateFormat("y-LL-F");
+                SimpleDateFormat format = new SimpleDateFormat("y-MM-dd");
                 birthdate = format.parse(jObjUser.getString("birthDate"));
             }
             if(!jObjUser.isNull("profilePic"))

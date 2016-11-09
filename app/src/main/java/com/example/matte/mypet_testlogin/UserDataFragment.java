@@ -439,7 +439,7 @@ public class UserDataFragment extends Fragment {
                 user.profilepic = p[5];
                 String serverPic = p[6];
 
-                SimpleDateFormat format = new SimpleDateFormat("y-LL-F");
+                SimpleDateFormat format = new SimpleDateFormat("y-MM-dd");
                 try {
                     user.birthdate = format.parse(p[4]);
                 } catch (ParseException e) {
@@ -636,7 +636,7 @@ public class UserDataFragment extends Fragment {
                 user.profilepic = p[6];
                 String serverPic = p[7];
 
-                SimpleDateFormat format = new SimpleDateFormat("y-LL-F");
+                SimpleDateFormat format = new SimpleDateFormat("y-MM-dd");
                 try {
                     user.birthdate = format.parse(p[4]);
                 } catch (ParseException e) {

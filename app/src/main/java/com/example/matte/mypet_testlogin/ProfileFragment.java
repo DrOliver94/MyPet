@@ -102,7 +102,7 @@ public class ProfileFragment extends Fragment {
         }
         userGenderText.setText(gender);
 
-        SimpleDateFormat format = new SimpleDateFormat("dd LLLL y");
+        SimpleDateFormat format = new SimpleDateFormat("dd MMMM y");
         userBirthDateText.setText(format.format(currUser.birthdate));
 
         //Immagine

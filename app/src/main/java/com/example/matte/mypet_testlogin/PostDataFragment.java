@@ -70,6 +70,10 @@ public class PostDataFragment extends Fragment {
     private Button uploadImg;
     private ImageView imgPostData;
 
+    private ArrayList<User> friends;
+    private ArrayList<User> taggedFriends;
+    private ArrayList<Animal> taggedAnimals;
+
     private ProgressDialog pDialog;
 
     private SharedPreferences shPref;
@@ -105,6 +109,8 @@ public class PostDataFragment extends Fragment {
         shPref = getActivity().getSharedPreferences("MyPetPrefs", Context.MODE_PRIVATE);
 
         idUser = shPref.getString("IdUser", "");
+
+        friends = HomeActivity.dbManager.getFriendsByUser(idUser);
     }
 
     @Override
@@ -129,7 +135,7 @@ public class PostDataFragment extends Fragment {
             }
         });
 
-        uploadImg = (Button) view .findViewById(R.id.buttonUploadPostImg);
+        uploadImg = (Button) view.findViewById(R.id.buttonUploadPostImg);
         uploadImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -149,14 +155,21 @@ public class PostDataFragment extends Fragment {
 
         //Test multispinner
         MultiCustomSpinner multiSpinner = (MultiCustomSpinner) view.findViewById(R.id.multispinner);
+
         ArrayList<String> items = new ArrayList<>();
-        items.add("A");
-        items.add("B");
-        items.add("C");
+        for(User u : friends){
+            items.add(u.username);
+        }
+
         multiSpinner.setItems(items, "Default", new MultiCustomSpinner.MultiSpinnerListener() {
             @Override
             public void onItemsSelected(boolean[] selected) {
-                Log.d("MyPet", "" + selected);
+                ArrayList<User> tagged = new ArrayList<>();
+                for(int i=0; i<selected.length; i++){
+                    if(selected[i])
+                        tagged.add(friends.get(i));     //se è stato selezionato, inserisce l'i-esimo amico in tagged
+                }
+                taggedFriends = tagged;
                 return;
             }
         });
@@ -346,7 +359,7 @@ public class PostDataFragment extends Fragment {
                 post.picture = p[3];
                 String serverPic = p[4];
 
-                SimpleDateFormat format = new SimpleDateFormat("y-LL-F H:m:s");
+                SimpleDateFormat format = new SimpleDateFormat("y-MM-dd H:m:s");
                 try {
                     post.date = format.parse(p[2]);
                 } catch (ParseException e) {

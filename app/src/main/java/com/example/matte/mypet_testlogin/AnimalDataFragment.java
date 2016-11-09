@@ -129,7 +129,7 @@ public class AnimalDataFragment extends Fragment {
             aSpeciesEditTxt.setText(a.species);
             aGenderEditTxt.setText(a.gender);
 
-            SimpleDateFormat format = new SimpleDateFormat("dd LLLL y");
+            SimpleDateFormat format = new SimpleDateFormat("dd MMMM y");
             aBirthdateEditTxt.setText(format.format(a.birthdate));
 
             //Memorizzo percorso ultima img usata
@@ -398,7 +398,7 @@ public class AnimalDataFragment extends Fragment {
                 anim.profilepic = p[4];
                 String serverPic = p[5];
 
-                SimpleDateFormat format = new SimpleDateFormat("y-LL-F");
+                SimpleDateFormat format = new SimpleDateFormat("y-MM-dd");
                 try {
                     anim.birthdate = format.parse(p[3]);
                 } catch (ParseException e) {
@@ -508,7 +508,7 @@ public class AnimalDataFragment extends Fragment {
                 anim.profilepic = p[4];
                 String serverPic = p[5];
 
-                SimpleDateFormat format = new SimpleDateFormat("y-LL-F");
+                SimpleDateFormat format = new SimpleDateFormat("y-MM-dd");
                 try {
                     anim.birthdate = format.parse(p[3]);
                 } catch (ParseException e) {

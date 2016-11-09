@@ -46,7 +46,7 @@ public class Post {
             if(!jObjPost.isNull("text"))
                 text = jObjPost.getString("text");
             if(!jObjPost.isNull("date")) {
-                SimpleDateFormat format = new SimpleDateFormat("y-LL-F H:m:s");
+                SimpleDateFormat format = new SimpleDateFormat("y-MM-dd H:m:s");
                 date = format.parse(jObjPost.getString("date"));
             }
             if(!jObjPost.isNull("place"))
