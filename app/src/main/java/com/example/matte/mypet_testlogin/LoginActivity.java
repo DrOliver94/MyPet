@@ -108,10 +108,12 @@ public class LoginActivity extends AppCompatActivity {
         mUserView = (EditText) findViewById(R.id.username);
         mUserView.setText(shPref.getString("Username", ""));
 
-        //Verifica se l'utente è già riconosciuto dal server
+        //Verifica se l'utente ha un token valido
         //In tal caso salta il login
-        checkLoginTask checkTask = new checkLoginTask(shPref.getString("Token", ""), shPref.getString("IdUser", ""));
-        checkTask.execute();
+        if(shPref.getString("Token", "").isEmpty()) {
+            checkLoginTask checkTask = new checkLoginTask(shPref.getString("Token", ""), shPref.getString("IdUser", ""));
+            checkTask.execute();
+        }
     }
 
     /**
