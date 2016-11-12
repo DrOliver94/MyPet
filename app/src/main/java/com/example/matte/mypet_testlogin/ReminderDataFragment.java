@@ -209,13 +209,21 @@ public class ReminderDataFragment extends Fragment {
                     //Aggiorna token nelle SharedPref
                     shPref.edit().putString("Token", jObj.getString("token")).apply();
 
+                    if (pDialog.isShowing()) {
+                        pDialog.dismiss();
+                    }
+
                     //Torna al fragment precedente
                     getFragmentManager().popBackStack();
 
+                    return;
                 } else {
+                    if (pDialog.isShowing()) {
+                        pDialog.dismiss();
+                    }
 
                     //TODO indicare l'errore all'utente. es: uUsernameEditTxt.setError();
-
+                    return;
                 }
             } catch(Exception e) {
                 e.fillInStackTrace();

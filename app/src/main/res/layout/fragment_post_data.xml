@@ -83,16 +83,51 @@
                         android:maxLines="1" />
                 </TableRow>
 
-                <TableRow>
-                    <Spinner
-                        android:id="@+id/postUsersSpinner"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:weightSum="1">
+
+                    <TextView
+                        android:text="Utenti:"
+                        android:layout_width="0dp"
+                        android:gravity="right|fill_vertical"
+                        android:layout_weight="0.4"
+                        android:layout_height="35dp"
+                        android:textStyle="bold"
+                        android:id="@+id/textViewMultiSpinUsers"
+                        android:layout_margin="10dp"
+                        android:textSize="20sp"
+                        android:textColor="?attr/colorControlNormal" />
+
+                    <com.example.matte.mypet_testlogin.MultiCustomSpinner
+                        android:id="@+id/multispinUsers"/>
+
                 </TableRow>
 
-                <TableRow>
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:weightSum="1">
+
+                    <TextView
+                        android:text="Animali:"
+                        android:layout_width="0dp"
+                        android:gravity="right|fill_vertical"
+                        android:layout_weight="0.4"
+                        android:layout_height="35dp"
+                        android:textStyle="bold"
+                        android:id="@+id/textViewMultiSpinAnimals"
+                        android:layout_margin="10dp"
+                        android:textSize="20sp"
+                        android:textColor="?attr/colorControlNormal" />
+
                     <com.example.matte.mypet_testlogin.MultiCustomSpinner
-                        android:id="@+id/multispinner"/>
+                        android:id="@+id/multispinAnimals"
+                        />
+
                 </TableRow>
 
             </TableLayout>

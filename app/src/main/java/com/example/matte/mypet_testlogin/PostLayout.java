@@ -67,14 +67,16 @@ public class PostLayout extends LinearLayout {
             pTime.setText(format.format(post.date));
         }
 
-        Picasso.with(getContext()).setIndicatorsEnabled(true);
-        Picasso.with(getContext())
-                .load(post.picture)
-                .resize(750, 750)   //Aggiusta le dimensioni per non pesare troppo
-                .centerInside()
-                .into(pImageView);
+        if(post.picture != null && !post.picture.isEmpty()) {
+            Picasso.with(getContext()).setIndicatorsEnabled(true);
+            Picasso.with(getContext())
+                    .load(post.picture)
+                    .resize(750, 750)   //Aggiusta le dimensioni per non pesare troppo
+                    .centerInside()
+                    .into(pImageView);
+        }
 
-        //Immagini
+        //Tag
         ArrayList<String> imgs = new ArrayList<>();
         imgs.add(post.picauthor);
         if(post.users != null) {

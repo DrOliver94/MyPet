@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.app.Fragment;
 import android.provider.MediaStore;
 import android.util.Base64;
+import android.util.JsonWriter;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,6 +37,9 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.StringWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -44,6 +48,8 @@ import java.util.List;
 import java.util.Map;
 
 import jp.wasabeef.picasso.transformations.CropCircleTransformation;
+
+import static java.lang.System.out;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -72,6 +78,7 @@ public class PostDataFragment extends Fragment {
 
     private ArrayList<User> friends;
     private ArrayList<User> taggedFriends;
+    private ArrayList<Animal> animals;
     private ArrayList<Animal> taggedAnimals;
 
     private ProgressDialog pDialog;
@@ -111,6 +118,7 @@ public class PostDataFragment extends Fragment {
         idUser = shPref.getString("IdUser", "");
 
         friends = HomeActivity.dbManager.getFriendsByUser(idUser);
+        animals = HomeActivity.dbManager.getAnimalsByOwner(idUser);
     }
 
     @Override
@@ -154,23 +162,43 @@ public class PostDataFragment extends Fragment {
                 .into((ImageView) view.findViewById(R.id.imageViewPostData));
 
         //Test multispinner
-        MultiCustomSpinner multiSpinner = (MultiCustomSpinner) view.findViewById(R.id.multispinner);
+        MultiCustomSpinner multiSpinnerUsers = (MultiCustomSpinner) view.findViewById(R.id.multispinUsers);
 
-        ArrayList<String> items = new ArrayList<>();
+        ArrayList<String> friendsName = new ArrayList<>();
         for(User u : friends){
-            items.add(u.username);
+            friendsName.add(u.username);
         }
 
-        multiSpinner.setItems(items, "Default", new MultiCustomSpinner.MultiSpinnerListener() {
+        multiSpinnerUsers.setItems(friendsName, "Selezione vuota", new MultiCustomSpinner.MultiSpinnerListener() {
             @Override
             public void onItemsSelected(boolean[] selected) {
-            ArrayList<User> tagged = new ArrayList<>();
+            ArrayList<User> tFriends = new ArrayList<>();
             for(int i=0; i<selected.length; i++){
                 if(selected[i])
-                    tagged.add(friends.get(i));     //se è stato selezionato, inserisce l'i-esimo amico in tagged
+                    tFriends.add(friends.get(i));     //se è stato selezionato, inserisce l'i-esimo amico in tagged
             }
-            taggedFriends = tagged;
+            taggedFriends = tFriends;
             return;
+            }
+        });
+
+        MultiCustomSpinner multiSpinnerAnimals = (MultiCustomSpinner) view.findViewById(R.id.multispinAnimals);
+
+        ArrayList<String> animalsName = new ArrayList<>();
+        for(Animal a : animals){
+            animalsName.add(a.name);
+        }
+
+        multiSpinnerAnimals.setItems(animalsName, "Selezione vuota", new MultiCustomSpinner.MultiSpinnerListener() {
+            @Override
+            public void onItemsSelected(boolean[] selected) {
+                ArrayList<Animal> tAnimals = new ArrayList<>();
+                for(int i=0; i<selected.length; i++){
+                    if(selected[i])
+                        tAnimals.add(animals.get(i));     //se è stato selezionato, inserisce l'i-esimo animale in tagged
+                }
+                taggedAnimals = tAnimals;
+                return;
             }
         });
 
@@ -218,6 +246,7 @@ public class PostDataFragment extends Fragment {
         pDialog.setIndeterminate(false);
         pDialog.setCancelable(false);
         pDialog.show();
+
         StringRequest stringRequest = new StringRequest(Request.Method.POST,
                 "http://webdev.dibris.unige.it/~S3951060/mobile_login.php",
                 new Response.Listener<String>() {
@@ -225,24 +254,31 @@ public class PostDataFragment extends Fragment {
                     public void onResponse(String s) {
                         String imgPath = "";
                         boolean success = false;
+                        String errorJson = "";
                         try {
                             JSONObject jObj = new JSONObject(s);
                             imgPath = jObj.getString("imgpath");
                             success = jObj.getBoolean("success");
+                            if(!jObj.isNull("error")) {
+                                errorJson = jObj.getString("error");
+                            }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-
-                        if(success) {
-                            insertPost(imgPath);
-                        }
-
-                        //TODO controllare per insuccesso
 
                         //Disimissing the progress dialog
                         if (pDialog.isShowing()) {
                             pDialog.dismiss();
                         }
+
+                        if(success) {
+                            insertPost(imgPath);
+                        } else {
+                            Toast.makeText(getActivity(), errorJson, Toast.LENGTH_SHORT).show();
+                        }
+
+                        //TODO controllare per insuccesso
+
                     }
                 },
                 new Response.ErrorListener() {
@@ -298,7 +334,7 @@ public class PostDataFragment extends Fragment {
         //TODO fare controlli. usare TextView.setError()
         String pTextTxt = pTextEditTxt.getText().toString();
         String pPlaceTxt = pPlaceEditTxt.getText().toString();
-        String pDateTxt = null;    //gestire data (fatto su server)
+        String pDateTxt = "2016-11-28 11:21:42";
 
         String clientImgPath = "";
         if(chosenImgUri != null) {
@@ -354,12 +390,47 @@ public class PostDataFragment extends Fragment {
             try {
                 post.text = p[0];
                 post.place = p[1];
+                String dateStr = p[2];
                 post.picture = p[3];
                 String serverPic = p[4];
+                post.animals = taggedAnimals;
+                post.users = taggedFriends;
+
+                String jsonTagFriends = new String();
+                String jsonTagAnimals = new String();
+                try {
+                    //Creazione JSON per elenco user taggati
+                    if(taggedFriends!=null) {
+                        StringWriter strWriter = new StringWriter();
+                        JsonWriter writer = new JsonWriter(strWriter);
+                        writer.beginArray();
+                        for (User u : taggedFriends) {
+                            writer.value(u.id);
+                        }
+                        writer.endArray();
+                        writer.close();
+                        jsonTagFriends = strWriter.toString();
+                    }
+                    //Creazione JSON per elenco animali taggati
+                    if(taggedAnimals != null) {
+                        StringWriter strWriter = new StringWriter();
+                        JsonWriter writer = new JsonWriter(strWriter);
+                        writer.beginArray();
+                        for (Animal a : taggedAnimals) {
+                            writer.value(a.id);
+                        }
+                        writer.endArray();
+                        writer.close();
+                        jsonTagAnimals = strWriter.toString();
+                    }
+                } catch(IOException e){
+                    e.printStackTrace();
+                }
+
 
                 SimpleDateFormat format = new SimpleDateFormat("y-MM-dd H:m:s");
                 try {
-                    post.date = format.parse(p[2]);
+                    post.date = format.parse(dateStr);
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
@@ -369,7 +440,9 @@ public class PostDataFragment extends Fragment {
                         "&token=" + uToken +
                         "&text=" + post.text +
                         "&place=" + post.place +
-                        "&date=" + post.date +
+                        "&date=" + dateStr +
+                        "&tagfriends=" + jsonTagFriends +
+                        "&taganim=" + jsonTagAnimals +
                         "&picture=" + serverPic;
 
                 Log.d("MyPet", postArgs);
@@ -387,7 +460,7 @@ public class PostDataFragment extends Fragment {
                     //Se va a buon fine, recuperra l'ID e fa update nel DB locale
                     post.id = jObj.getString("idpost");
 
-                    long idNewAnim = HomeActivity.dbManager.insertPost(post); //FIXME Non dovrebbe essere il nuovo id quello...
+                    long idNewAnim = HomeActivity.dbManager.insertPost(post);
 
                     //Aggiorna token nelle SharedPref
                     shPref.edit().putString("Token", jObj.getString("token")).apply();
@@ -404,13 +477,28 @@ public class PostDataFragment extends Fragment {
                             .commit();
                     return;
 
-                } else {
+                } else {    //Problema sul server
+                    if(!jObj.isNull("token") && jObj.getBoolean("token")) {
+                        shPref.edit().putString("Token", jObj.getString("token")).apply();
+                    }
+
                     if (pDialog.isShowing()) {
                         pDialog.dismiss();
                     }
-                    //TODO Altrimenti indicare l'errore all'utente. Aggiorna token.
+
+                    if(!jObj.isNull("token") && jObj.getBoolean("token")) {
+                        Toast.makeText(getActivity(), jObj.getString("error"), Toast.LENGTH_SHORT).show();
+                    }
+
+                    //TODO Altrimenti indicare l'errore all'utente
+
+                    return;
                 }
             } catch(Exception e) {
+                if (pDialog.isShowing()) {
+                    pDialog.dismiss();
+                }
+                Toast.makeText(getActivity(), "Errore", Toast.LENGTH_SHORT).show();
                 e.fillInStackTrace();
             }
         }

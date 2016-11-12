@@ -46,24 +46,26 @@ public class MultiCustomSpinner extends Spinner implements
             // refresh text on spinner
             StringBuffer spinnerBuffer = new StringBuffer();
             boolean someUnselected = false;
+            boolean someSelected = false;
             for (int i = 0; i < items.size(); i++) {
                 if (selected[i] == true) {
                     spinnerBuffer.append(items.get(i));
                     spinnerBuffer.append(", ");
+                    someSelected = true;
                 } else {
                     someUnselected = true;
                 }
             }
             String spinnerText;
-            if (someUnselected) {
+            if (someSelected) {
                 spinnerText = spinnerBuffer.toString();
                 if (spinnerText.length() > 2)
-                    spinnerText = spinnerText.substring(0, spinnerText.length() - 2);
+                    spinnerText = spinnerText.substring(0, spinnerText.length() - 2);   //Cuts last comma
             } else {
                 spinnerText = defaultText;
             }
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(),
-                    android.R.layout.simple_spinner_item,
+                    R.layout.spinner_layout,
                     new String[] { spinnerText });
             setAdapter(adapter);
             listener.onItemsSelected(selected);

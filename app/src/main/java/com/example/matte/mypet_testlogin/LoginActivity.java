@@ -575,7 +575,9 @@ public class LoginActivity extends AppCompatActivity {
             //Download di ogni img caricata in lista
             for(String imgUrl : imgList){
                 try {
-                    Picasso.with(getBaseContext()).load(imgUrl).get();
+                    if(imgUrl != null) {
+                        Picasso.with(getBaseContext()).load(imgUrl).get();
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
