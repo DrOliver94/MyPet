@@ -36,4 +36,9 @@ public class Animal {
             e.printStackTrace();
         }
     }
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }

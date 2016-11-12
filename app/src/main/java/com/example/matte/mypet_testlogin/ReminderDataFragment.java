@@ -10,12 +10,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 
 /**
@@ -36,6 +39,7 @@ public class ReminderDataFragment extends Fragment {
     private String mParam1;
     private String mParam2;
     private Button sendReminder;
+    private Spinner spinAnimals;
 
     private SharedPreferences shPref;
 
@@ -90,6 +94,15 @@ public class ReminderDataFragment extends Fragment {
             }
         });
 
+        //Spinner
+        ArrayList<Animal> animals = HomeActivity.dbManager.getAnimalsByOwner(idUser);
+//        ArrayAdapter<Animal> adapter = new ArrayAdapter<Animal>(getActivity(), android.R.layout.simple_spinner_item, animals);
+//        ArrayAdapter<Animal> adapter = ArrayAdapter.createFromResource(getActivity(), android.R.layout.simple_spinner_item, R.layout.spinner_layout);
+
+        ArrayAdapter<Animal> adapter = new ArrayAdapter<Animal>(getActivity(), R.layout.spinner_layout, animals);
+        spinAnimals = (Spinner) view.findViewById(R.id.reminderDataAnimalSpin);
+        spinAnimals.setAdapter(adapter);
+
         getActivity().setTitle("Nuovo promemoria");
 
         return view;
@@ -111,13 +124,13 @@ public class ReminderDataFragment extends Fragment {
         //TODO fare controlli. usare TextView.setError()
         String nameTxt = rNameEditText.getText().toString();
         String placeTxt = rPlaceEditText.getText().toString();
-        String dateTxt = "date";
-        String idAnim = "9";
-        //TODO gestire data
+        String dateTxt = "date";    //TODO gestire data
+//        String idAnim = "9";
+        Animal selectedAnim = (Animal) spinAnimals.getSelectedItem();
 
         //Inviare richiesta al server per l'update
         InsertReminderTask insertReminder = new InsertReminderTask(shPref.getString("Token", ""));
-        insertReminder.execute(nameTxt, placeTxt, dateTxt, idAnim, idUser);
+        insertReminder.execute(nameTxt, placeTxt, dateTxt, selectedAnim.id, idUser);
     }
 
 
@@ -195,7 +208,6 @@ public class ReminderDataFragment extends Fragment {
 
                     //Aggiorna token nelle SharedPref
                     shPref.edit().putString("Token", jObj.getString("token")).apply();
-                    //TODO ripulisci shPref, copia login
 
                     //Torna al fragment precedente
                     getFragmentManager().popBackStack();

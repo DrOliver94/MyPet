@@ -122,16 +122,15 @@
                 android:textSize="20sp"
                 android:textColor="?attr/colorControlNormal" />
 
-            <EditText
-                android:text=""
+            <Spinner
                 android:layout_width="0dp"
                 android:layout_height="45dp"
-                android:paddingStart="10dp"
-                android:id="@+id/reminderAnimEditText"
+                android:id="@+id/reminderDataAnimalSpin"
                 android:layout_weight="0.6"
-                android:gravity="left|fill_vertical"
+                android:textSize="20sp"
                 android:layout_margin="10dp"
-                android:textSize="20sp" />
+                android:paddingStart="10dp"/>
+
         </TableRow>
 
         <TableRow android:gravity="center">

@@ -223,7 +223,6 @@ public class AnimalDataFragment extends Fragment {
         }
     }
 
-
     private void uploadImage(){
         try {
             bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), chosenImgUri);

@@ -16,6 +16,8 @@ import java.net.URL;
 
 import android.app.Activity;
 import android.content.Context;
+import android.widget.Toast;
+
 import java.io.Reader;
 import java.io.InputStreamReader;
 
@@ -120,6 +122,7 @@ public class ServerComm {
             // finished using it.
         } catch (Exception e) {
             e.printStackTrace();
+//            Toast.makeText(getActivity(), "Errore di rete. Riprovare.", Toast.LENGTH_SHORT).show();
         } finally {
             if (is != null) {
                 is.close();

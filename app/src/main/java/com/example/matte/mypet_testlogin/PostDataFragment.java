@@ -164,24 +164,22 @@ public class PostDataFragment extends Fragment {
         multiSpinner.setItems(items, "Default", new MultiCustomSpinner.MultiSpinnerListener() {
             @Override
             public void onItemsSelected(boolean[] selected) {
-                ArrayList<User> tagged = new ArrayList<>();
-                for(int i=0; i<selected.length; i++){
-                    if(selected[i])
-                        tagged.add(friends.get(i));     //se è stato selezionato, inserisce l'i-esimo amico in tagged
-                }
-                taggedFriends = tagged;
-                return;
+            ArrayList<User> tagged = new ArrayList<>();
+            for(int i=0; i<selected.length; i++){
+                if(selected[i])
+                    tagged.add(friends.get(i));     //se è stato selezionato, inserisce l'i-esimo amico in tagged
+            }
+            taggedFriends = tagged;
+            return;
             }
         });
 
         return view;
-
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-
     }
 
     @Override
