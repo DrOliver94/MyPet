@@ -64,8 +64,8 @@ public class FriendsFragment extends Fragment {
         friendsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-            User data = (User) adapterView.getItemAtPosition(i); //TODO si casta a Animal e funziona? Testare
-
+            User data = (User) adapterView.getItemAtPosition(i); //TODO si casta a Animal e funziona? Testare.
+                // TODO la riga sopra NON VAAAAAA è__é 12/11/2016
 //          Animal a = animals.get(i);
 
             getFragmentManager()
