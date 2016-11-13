@@ -1,8 +1,12 @@
 package com.example.matte.mypet_testlogin;
 
+import android.content.Context;
+import android.location.Location;
+import android.location.LocationManager;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 
+import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -13,6 +17,10 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
+    private LocationManager locManager;
+    private LocationListener locListener;
+
+    private boolean isChoosingLoc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,6 +29,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
+
+        //True se si sta scegliendo una posizione
+        //False se si vuole visualizzare una posizione
+        isChoosingLoc = (boolean) getIntent().getExtras().get("com.example.matte.mypet_testlogin.isChoosingLoc");
+
         mapFragment.getMapAsync(this);
     }
 
@@ -40,6 +53,46 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         // Add a marker in Sydney and move the camera
         LatLng sydney = new LatLng(-34, 151);
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+//        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 10)); //1 - molto lontano; ~20 molto vicino
+
+        if(isChoosingLoc){
+            //Se si vuole scegliere una location
+
+            //Posizionare sulla posizione corrente, se disponibile
+            locManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+            locListener = new MyLocationListener();
+            //Rimanere in ascolto di una scelta di posizione
+            //Reinviare al fragment richiesto la posizione scelta
+        } else {
+            //Se si vuole visualizzare una location
+            //Mostrare la posizione passata con marker
+        }
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        //Al ripristino, richiede di aggiornare la view con la posizione corrente
+        locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locListener);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        //Mette in pausa la lettura della posizione corrente
+        locManager.removeUpdates(locListener);
+    }
+
+    private class MyLocationListener implements LocationListener{
+        @Override
+        public void onLocationChanged(Location location) {
+            if(location != null){
+                //leggere location
+            }
+        }
+    }
+
 }
