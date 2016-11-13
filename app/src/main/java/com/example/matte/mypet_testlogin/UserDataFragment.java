@@ -11,6 +11,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.provider.MediaStore;
+import android.support.v4.widget.DrawerLayout;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -89,9 +90,10 @@ public class UserDataFragment extends Fragment {
      * this fragment using the provided parameters.
      *
      * @param idUser Parameter 1.
+     * @param isEdit true if user is editing his profile.
+ *                   false if a new user is being created.
      * @return A new instance of fragment UserDataFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static UserDataFragment newInstance(String idUser, Boolean isEdit) {
         UserDataFragment fragment = new UserDataFragment();
         Bundle args = new Bundle();
@@ -177,7 +179,13 @@ public class UserDataFragment extends Fragment {
             getActivity().setTitle("Modifica utente");
         } else {
 
-            //TODO cancella token, blocca drawer
+            //TODO blocca drawer
+            //Cancella token
+            shPref.edit().remove("Token").apply();
+
+            //Tenere chiuso drawer
+//            DrawerLayout drawer = (DrawerLayout) view.findViewById(R.id.drawer_layout);
+
 
             //Richiama la sequenza di azioni per aggiungere l'user
             sendData.setOnClickListener(new View.OnClickListener() {
