@@ -143,7 +143,7 @@ public class HomeActivity extends AppCompatActivity
                         .addToBackStack(null)
                         .commit();
         } else if(id == R.id.nav_settings) {
-            startActivity(new Intent(HomeActivity.this, MapsActivity.class));
+
         } else if (id == R.id.nav_logout) {
             //Cancella token in shPref => e' come fare logout
             SharedPreferences.Editor editor = shPref.edit();

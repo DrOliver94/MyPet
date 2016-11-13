@@ -110,7 +110,7 @@ public class LoginActivity extends AppCompatActivity {
 
         //Verifica se l'utente ha un token valido
         //In tal caso salta il login
-        if(shPref.getString("Token", "").isEmpty()) {
+        if(!shPref.getString("Token", "").isEmpty()) {
             checkLoginTask checkTask = new checkLoginTask(shPref.getString("Token", ""), shPref.getString("IdUser", ""));
             checkTask.execute();
         }

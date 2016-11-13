@@ -74,6 +74,7 @@ public class PostDataFragment extends Fragment {
     private EditText pPlaceEditTxt;
     private Button sendData;
     private Button uploadImg;
+    private Button chooseLocation;
     private ImageView imgPostData;
 
     private ArrayList<User> friends;
@@ -152,6 +153,16 @@ public class PostDataFragment extends Fragment {
                 intent.setType("image/*");
                 intent.setAction(Intent.ACTION_GET_CONTENT);  //Always show the chooser (if there are multiple options available)
                 startActivityForResult(Intent.createChooser(intent, "Seleziona immagine profilo"), PICK_IMAGE_REQUEST);
+            }
+        });
+
+        chooseLocation = (Button) view.findViewById(R.id.buttonChooseLocation);
+        chooseLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getActivity(), MapsActivity.class);
+                i.putExtra("com.example.matte.mypet_testlogin.isChoosingLoc", true);
+                startActivity(i);
             }
         });
 

@@ -70,17 +70,25 @@
                         android:labelFor="@+id/postPlaceEditText"
                         android:textSize="20sp" />
 
-                    <EditText
-                        android:text=""
-                        android:layout_width="0dp"
-                        android:layout_height="35dp"
-                        android:id="@+id/postPlaceEditText"
-                        android:layout_weight="0.6"
-                        android:gravity="left|fill_vertical"
-                        android:padding="0dp"
-                        android:layout_margin="10dp"
-                        android:textSize="20sp"
-                        android:maxLines="1" />
+                    <!--<EditText-->
+                        <!--android:text=""-->
+                        <!--android:layout_width="0dp"-->
+                        <!--android:layout_height="35dp"-->
+                        <!--android:id="@+id/postPlaceEditText"-->
+                        <!--android:layout_weight="0.6"-->
+                        <!--android:gravity="left|fill_vertical"-->
+                        <!--android:padding="0dp"-->
+                        <!--android:layout_margin="10dp"-->
+                        <!--android:textSize="20sp"-->
+                        <!--android:maxLines="1" />-->
+
+                    <Button
+                        android:text="Scegli..."
+                        android:layout_height="87dp"
+                        android:id="@+id/buttonChooseLocation"
+                        android:layout_gravity="center"
+                        android:textSize="20sp" />
+                        <!--android:layout_width="225dp"-->
                 </TableRow>
 
                 <TableRow
