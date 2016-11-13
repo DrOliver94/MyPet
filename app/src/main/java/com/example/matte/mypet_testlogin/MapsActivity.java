@@ -1,12 +1,16 @@
 package com.example.matte.mypet_testlogin;
 
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 
 import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -19,6 +23,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleMap mMap;
     private LocationManager locManager;
     private LocationListener locListener;
+    private LocationRequest locRequest;
 
     private boolean isChoosingLoc;
 
@@ -56,12 +61,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 //        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 10)); //1 - molto lontano; ~20 molto vicino
 
-        if(isChoosingLoc){
+        if (isChoosingLoc) {
             //Se si vuole scegliere una location
 
             //Posizionare sulla posizione corrente, se disponibile
             locManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
             locListener = new MyLocationListener();
+            locRequest = new LocationRequest();
             //Rimanere in ascolto di una scelta di posizione
             //Reinviare al fragment richiesto la posizione scelta
         } else {
@@ -75,7 +81,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         super.onResume();
 
         //Al ripristino, richiede di aggiornare la view con la posizione corrente
-        locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locListener);
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            LocationServices.FusedLocationApi.requestLocationUpdates(HomeActivity.gApiBuilder.build(), locRequest, locListener);
+            return;
+        }
+
     }
 
     @Override
@@ -83,7 +100,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         super.onPause();
 
         //Mette in pausa la lettura della posizione corrente
-        locManager.removeUpdates(locListener);
+//        locManager.removeUpdates(locListener);
+        LocationServices.FusedLocationApi.removeLocationUpdates(HomeActivity.gApiBuilder.build(), locListener);
     }
 
     private class MyLocationListener implements LocationListener{

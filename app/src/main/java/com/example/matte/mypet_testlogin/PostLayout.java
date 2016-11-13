@@ -61,7 +61,7 @@ public class PostLayout extends LinearLayout {
 
         //Caricamento dati
         pText.setText(post.text);
-        pPlace.setText(post.place);
+        pPlace.setText(post.place.getId());
         if(post.date != null) {
             SimpleDateFormat format = new SimpleDateFormat("dd MMMM y HH:mm");
             pTime.setText(format.format(post.date));

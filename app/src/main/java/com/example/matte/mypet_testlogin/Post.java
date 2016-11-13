@@ -1,5 +1,13 @@
 package com.example.matte.mypet_testlogin;
 
+import android.support.annotation.NonNull;
+
+import com.google.android.gms.common.api.GoogleApiActivity;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.PlaceBuffer;
+import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONArray;
@@ -20,13 +28,13 @@ public class Post {
     public String picture;
     public String text;
     public Date date;
-    public LatLng place;
+    public Place place;
     public ArrayList<User> users;
     public ArrayList<Animal> animals;
 
     public Post() {}
 
-    public Post(String idPost, String text, Date date, LatLng place, String pic) {
+    public Post(String idPost, String text, Date date, Place place, String pic) {
         this.id = idPost;
         this.text = text;
         this.date = date;
@@ -37,6 +45,7 @@ public class Post {
     public Post(String idPost, JSONObject jObjPost) {
         users = new ArrayList<User>();
         animals = new ArrayList<Animal>();
+        String placeId;
 
         try {
             id = idPost;
@@ -51,9 +60,9 @@ public class Post {
                 SimpleDateFormat format = new SimpleDateFormat("y-MM-dd H:m:s");
                 date = format.parse(jObjPost.getString("date"));
             }
-            if(!jObjPost.isNull("lat") && !jObjPost.isNull("lon"))
-                place = new LatLng(jObjPost.getDouble("lat"), jObjPost.getDouble("lon"));
-
+            if(!jObjPost.isNull("place")) {
+                setPlace(jObjPost.getString("place"));
+            }
             if(!jObjPost.isNull("users")) {
                 JSONObject jUsers = jObjPost.getJSONObject("users");
                 JSONArray idUsers = jUsers.names();                 //recupera elenco ID degli utenti
@@ -80,6 +89,22 @@ public class Post {
             e.printStackTrace();
         }
     }
+
+    public void setPlace(String placeId){
+        Places.GeoDataApi
+                .getPlaceById(HomeActivity.gApiBuilder.build(), placeId)
+                .setResultCallback(new ResultCallback<PlaceBuffer>() {
+                    @Override
+                    public void onResult(@NonNull PlaceBuffer places) {
+                        if (places.getStatus().isSuccess() && places.getCount() > 0) {
+                            place = places.get(0);
+                        } else {
+                        }
+                        places.release();
+                    }
+                });
+    }
+
 
     //TODO memorizzare in un array gli user e gli animal taggati nel post = due ArrayList
     //TODO scrivere metodi che dati gli id possano recuperare le info dei suddetti (meglio in Post o in User e Animal?)

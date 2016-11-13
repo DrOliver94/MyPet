@@ -13,11 +13,15 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.google.android.gms.common.api.GoogleApiClient;
+
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
 
     public static MyPetDB dbManager;
     public static SharedPreferences shPref;
+
+    public static GoogleApiClient.Builder gApiBuilder;
 
     public static final String IMG_BASEURL = "https://webdev.dibris.unige.it/~S3951060/";
 
@@ -29,6 +33,8 @@ public class HomeActivity extends AppCompatActivity
         setContentView(R.layout.activity_home);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        gApiBuilder = new GoogleApiClient.Builder(this);
 
         //Drawer
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

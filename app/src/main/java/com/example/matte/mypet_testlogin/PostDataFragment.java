@@ -92,6 +92,7 @@ public class PostDataFragment extends Fragment {
 
     private Button chooseLocation;
     private int PLACE_PICKER_REQUEST = 81293;
+    private Place chosenPlace;
     private LatLng chosenLocation;
 
     public PostDataFragment() {}
@@ -259,9 +260,9 @@ public class PostDataFragment extends Fragment {
                     .into((ImageView) getActivity().findViewById(R.id.imageViewPostData));
         } else if(requestCode == PLACE_PICKER_REQUEST && resultCode == Activity.RESULT_OK){
             //Se si è scelto un luogo, memorizzarne la posizione
-            Place place = PlacePicker.getPlace(getActivity(), data);
+            chosenPlace = PlacePicker.getPlace(getActivity(), data);
             //TODO si può raccogliere un nome, un testo, qualcosa? Salvarlo in db?
-            chosenLocation = place.getLatLng();
+            chosenLocation = chosenPlace.getLatLng();
         }
 
     }
@@ -375,8 +376,8 @@ public class PostDataFragment extends Fragment {
 
         //Inviare richiesta al server per l'update
         InsertPostTask insertPost = new InsertPostTask(shPref.getString("Token", ""), idUser);
-        insertPost.execute(pTextTxt, pDateTxt, clientImgPath, serverPicPath,
-                String.valueOf(chosenLocation.latitude), String.valueOf(chosenLocation.longitude));
+        insertPost.execute(pTextTxt, pDateTxt, clientImgPath, serverPicPath, chosenPlace.getId());
+//        String.valueOf(chosenLocation.latitude), String.valueOf(chosenLocation.longitude)
     }
 
     /**
@@ -423,7 +424,8 @@ public class PostDataFragment extends Fragment {
                 String dateStr = p[1];
                 post.picture = p[2];
                 String serverPic = p[3];
-                post.place = new LatLng(Double.parseDouble(p[4]), Double.parseDouble(p[5]));
+//                post.place = new LatLng(Double.parseDouble(p[4]), Double.parseDouble(p[5]));
+                post.setPlace(p[4]);
                 post.animals = taggedAnimals;
                 post.users = taggedFriends;
 
@@ -470,7 +472,7 @@ public class PostDataFragment extends Fragment {
                         "&iduser=" + idUser +
                         "&token=" + uToken +
                         "&text=" + post.text +
-                        "&place=" + post.place +        //TODO come lo stampa?
+                        "&place=" + post.place.getId() +
                         "&date=" + dateStr +
                         "&tagfriends=" + jsonTagFriends +
                         "&taganim=" + jsonTagAnimals +
