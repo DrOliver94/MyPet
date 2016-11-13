@@ -1,5 +1,7 @@
 package com.example.matte.mypet_testlogin;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 import java.text.SimpleDateFormat;
@@ -18,13 +20,13 @@ public class Post {
     public String picture;
     public String text;
     public Date date;
-    public String place;
+    public LatLng place;
     public ArrayList<User> users;
     public ArrayList<Animal> animals;
 
     public Post() {}
 
-    public Post(String idPost, String text, Date date, String place, String pic) {
+    public Post(String idPost, String text, Date date, LatLng place, String pic) {
         this.id = idPost;
         this.text = text;
         this.date = date;
@@ -49,8 +51,8 @@ public class Post {
                 SimpleDateFormat format = new SimpleDateFormat("y-MM-dd H:m:s");
                 date = format.parse(jObjPost.getString("date"));
             }
-            if(!jObjPost.isNull("place"))
-                place = jObjPost.getString("place");
+            if(!jObjPost.isNull("lat") && !jObjPost.isNull("lon"))
+                place = new LatLng(jObjPost.getDouble("lat"), jObjPost.getDouble("lon"));
 
             if(!jObjPost.isNull("users")) {
                 JSONObject jUsers = jObjPost.getJSONObject("users");

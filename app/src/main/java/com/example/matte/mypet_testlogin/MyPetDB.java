@@ -66,6 +66,12 @@ public class MyPetDB {
     public static final String POSTS_PLACE = "Place";
     public static final int    POSTS_PLACE_COL = 4;
 
+    public static final String POSTS_PLACE_LAT = "Latitude";
+    public static final int    POSTS_PLACE_LAT_COL = 5;
+
+    public static final String POSTS_PLACE_LON = "Longitude";
+    public static final int    POSTS_PLACE_LON_COL = 6;
+
     public static final String POSTS_DATE = "Date";
     public static final int    POSTS_DATE_COL = 5;
 
@@ -1081,7 +1087,8 @@ public class MyPetDB {
             cv.put(POSTS_ID, p.id);
             cv.put(POSTS_IDAUTHOR, p.idauthor);
             cv.put(POSTS_TEXT, p.text);
-            cv.put(POSTS_PLACE, p.place);
+            cv.put(POSTS_PLACE_LAT, p.place.latitude);
+            cv.put(POSTS_PLACE_LON, p.place.longitude);
             cv.put(POSTS_PICTURE, p.picture);
 
             SimpleDateFormat format = new SimpleDateFormat("y-MM-dd HH:mm:ss");
