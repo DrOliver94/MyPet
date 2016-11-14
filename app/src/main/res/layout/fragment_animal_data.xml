@@ -115,7 +115,7 @@
                         android:padding="0dp"
                         android:layout_margin="10dp"
                         android:textSize="20sp"
-                        android:maxLines="1" />
+                        android:maxLines="1"/>
 
                     <Button
                         android:text="CHANGE THE DATE :D"
