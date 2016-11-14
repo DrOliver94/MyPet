@@ -1,6 +1,9 @@
 package com.example.matte.mypet_testlogin;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -17,8 +20,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -37,6 +42,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Hashtable;
 import java.util.Map;
 
@@ -63,10 +69,11 @@ public class AnimalDataFragment extends Fragment {
 
     private EditText aNameEditTxt;
     private EditText aSpeciesEditTxt;
-    private EditText aBirthdateEditTxt;
+    private TextView aBirthdateTextView;
     private EditText aGenderEditTxt;
     private Button sendData;
     private Button uploadImg;
+    private Button changeAnimalBirthDate;
     private ImageView imgAnimalData;
 
     private Bitmap bitmap;
@@ -115,7 +122,7 @@ public class AnimalDataFragment extends Fragment {
 
         aNameEditTxt = (EditText) view.findViewById(R.id.animalNameEditText);
         aSpeciesEditTxt = (EditText) view.findViewById(R.id.animalSpeciesEditText);
-        aBirthdateEditTxt = (EditText) view.findViewById(R.id.animalBirthDateEditText);
+        aBirthdateTextView = (TextView) view.findViewById(R.id.animalBirthDateEditText);
         aGenderEditTxt = (EditText) view.findViewById(R.id.animalGenderEditText);
         imgAnimalData = (ImageView) view.findViewById(R.id.imageViewAnimalData);
 
@@ -130,7 +137,7 @@ public class AnimalDataFragment extends Fragment {
             aGenderEditTxt.setText(a.gender);
 
             SimpleDateFormat format = new SimpleDateFormat("dd MMMM y");
-            aBirthdateEditTxt.setText(format.format(a.birthdate));
+            aBirthdateTextView.setText(format.format(a.birthdate));
 
             //Memorizzo percorso ultima img usata
             oldImgPath = a.profilepic;
@@ -189,6 +196,14 @@ public class AnimalDataFragment extends Fragment {
                 intent.setType("image/*");
                 intent.setAction(Intent.ACTION_GET_CONTENT);  //Always show the chooser (if there are multiple options available)
                 startActivityForResult(Intent.createChooser(intent, "Seleziona immagine profilo"), PICK_IMAGE_REQUEST);
+            }
+        });
+
+        changeAnimalBirthDate = (Button) view .findViewById(R.id.changeAnimalBirthDateButton);
+        changeAnimalBirthDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showDatePickerDialog(view);
             }
         });
 
@@ -319,7 +334,7 @@ public class AnimalDataFragment extends Fragment {
         String nameTxt = aNameEditTxt.getText().toString();
         String speciesTxt = aSpeciesEditTxt.getText().toString();
         String genderTxt = aGenderEditTxt.getText().toString();
-        String birthdateTxt = aBirthdateEditTxt.getText().toString();   //TODO gestire data
+        String birthdateTxt = aBirthdateTextView.getText().toString();   //TODO gestire data
 
         String clientImgPath = "";
         if(chosenImgUri != null) {
@@ -339,7 +354,7 @@ public class AnimalDataFragment extends Fragment {
         String nameTxt = aNameEditTxt.getText().toString();
         String speciesTxt = aSpeciesEditTxt.getText().toString();
         String genderTxt = aGenderEditTxt.getText().toString();
-        String birthdateTxt = aBirthdateEditTxt.getText().toString();   //TODO gestire data
+        String birthdateTxt = aBirthdateTextView.getText().toString();   //TODO gestire data
 
         String clientImgPath = "";
         if(chosenImgUri != null)
@@ -573,6 +588,38 @@ public class AnimalDataFragment extends Fragment {
                 pDialog.dismiss();
             }
         }
+    }
+
+
+    public static class DatePickerFragment extends DialogFragment
+            implements DatePickerDialog.OnDateSetListener {
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            // Use the current date as the default date in the picker
+            final Calendar c = Calendar.getInstance();
+            int year = c.get(Calendar.YEAR);
+            int month = c.get(Calendar.MONTH);
+            int day = c.get(Calendar.DAY_OF_MONTH);
+
+            // Create a new instance of DatePickerDialog and return it
+            return new DatePickerDialog(getActivity(), this, year, month, day);
+        }
+
+        @Override
+        public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
+
+        }
+
+
+
+
+
+    }
+
+    public void showDatePickerDialog(View v) {
+        DialogFragment newFragment = new DatePickerFragment();
+        newFragment.show(getFragmentManager(), "datePicker");
     }
 
 }

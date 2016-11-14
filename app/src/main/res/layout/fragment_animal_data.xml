@@ -104,7 +104,7 @@
                         android:layout_margin="10dp"
                         android:textSize="20sp" />
 
-                    <EditText
+                    <TextView
                         android:text=""
                         android:layout_width="0dp"
                         android:layout_height="35dp"
@@ -116,6 +116,13 @@
                         android:layout_margin="10dp"
                         android:textSize="20sp"
                         android:maxLines="1" />
+
+                    <Button
+                        android:text="CHANGE THE DATE :D"
+                        android:layout_width="261dp"
+                        android:layout_height="81dp"
+                        android:id="@+id/changeAnimalBirthDateButton"
+                        android:layout_gravity="center_horizontal" />
 
                 </TableRow>
 
@@ -179,7 +186,8 @@
                 android:layout_width="250dp"
                 android:layout_height="250dp"
                 android:id="@+id/imageViewAnimalData"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:layout_gravity="center" />
 
         </GridLayout>
     </ScrollView>
