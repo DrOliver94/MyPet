@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.android.gms.location.places.Place;
 import com.squareup.picasso.Picasso;
 
 import java.text.ParseException;
@@ -61,7 +62,9 @@ public class PostLayout extends LinearLayout {
 
         //Caricamento dati
         pText.setText(post.text);
-        pPlace.setText(post.place.getId());
+        if(post.place != null) {
+            pPlace.setText(post.placeAddress);
+        }
         if(post.date != null) {
             SimpleDateFormat format = new SimpleDateFormat("dd MMMM y HH:mm");
             pTime.setText(format.format(post.date));

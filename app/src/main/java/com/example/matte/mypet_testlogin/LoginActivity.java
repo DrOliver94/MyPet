@@ -488,7 +488,7 @@ public class LoginActivity extends AppCompatActivity {
                     for (int i = 0; i < idPosts.length(); i++) {        //per ogni post nell'obj
                         String idPost = (String) idPosts.get(i);        //recupera ID
                         JSONObject jPost = jPosts.getJSONObject(idPost);//recupera post
-                        Post p = new Post(idPost, jPost);               //Crea obj
+                        Post p = new Post(idPost, jPost, getBaseContext());               //Crea obj
                         dbHand.insertPost(p);                           //Inserisce nel DB
                         imgsList.add(p.picture);
                     }

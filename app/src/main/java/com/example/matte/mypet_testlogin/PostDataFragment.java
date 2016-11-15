@@ -92,7 +92,7 @@ public class PostDataFragment extends Fragment {
 
     private Button chooseLocation;
     private int PLACE_PICKER_REQUEST = 81293;
-    private Place chosenPlace;
+    public Place chosenPlace;
     private LatLng chosenLocation;
 
     public PostDataFragment() {}
@@ -425,7 +425,8 @@ public class PostDataFragment extends Fragment {
                 post.picture = p[2];
                 String serverPic = p[3];
 //                post.place = new LatLng(Double.parseDouble(p[4]), Double.parseDouble(p[5]));
-                post.setPlace(p[4]);
+//                post.setPlace(p[4]);
+                post.place=chosenPlace;
                 post.animals = taggedAnimals;
                 post.users = taggedFriends;
 

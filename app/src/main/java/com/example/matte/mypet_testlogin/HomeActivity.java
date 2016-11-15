@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -13,7 +14,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.places.Places;
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
@@ -21,7 +24,7 @@ public class HomeActivity extends AppCompatActivity
     public static MyPetDB dbManager;
     public static SharedPreferences shPref;
 
-    public static GoogleApiClient.Builder gApiBuilder;
+    public static GoogleApiClient gApiClient;
 
     public static final String IMG_BASEURL = "https://webdev.dibris.unige.it/~S3951060/";
 
@@ -34,7 +37,17 @@ public class HomeActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        gApiBuilder = new GoogleApiClient.Builder(this);
+        gApiClient = new GoogleApiClient
+                .Builder(this)
+                .addApi(Places.GEO_DATA_API)
+                .addApi(Places.PLACE_DETECTION_API)
+                .enableAutoManage(this, new GoogleApiClient.OnConnectionFailedListener() {
+                    @Override
+                    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+                        return;
+                    }
+                })
+                .build();
 
         //Drawer
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

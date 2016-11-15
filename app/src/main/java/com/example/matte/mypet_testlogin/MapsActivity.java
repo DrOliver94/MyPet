@@ -4,13 +4,17 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -27,6 +31,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private boolean isChoosingLoc;
 
+    private GoogleApiClient gApiClient;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +40,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
+
+        gApiClient = new GoogleApiClient
+                .Builder(this)
+                .addApi(Places.GEO_DATA_API)
+                .addApi(Places.PLACE_DETECTION_API)
+                .enableAutoManage(this, new GoogleApiClient.OnConnectionFailedListener() {
+                    @Override
+                    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+                        return;
+                    }
+                })
+                .build();
+
 
         //True se si sta scegliendo una posizione
         //False se si vuole visualizzare una posizione
@@ -89,7 +108,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             //                                          int[] grantResults)
             // to handle the case where the user grants the permission. See the documentation
             // for ActivityCompat#requestPermissions for more details.
-            LocationServices.FusedLocationApi.requestLocationUpdates(HomeActivity.gApiBuilder.build(), locRequest, locListener);
+            LocationServices.FusedLocationApi.requestLocationUpdates(gApiClient, locRequest, locListener);
             return;
         }
 
@@ -101,7 +120,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         //Mette in pausa la lettura della posizione corrente
 //        locManager.removeUpdates(locListener);
-        LocationServices.FusedLocationApi.removeLocationUpdates(HomeActivity.gApiBuilder.build(), locListener);
+        LocationServices.FusedLocationApi.removeLocationUpdates(gApiClient, locListener);
     }
 
     private class MyLocationListener implements LocationListener{

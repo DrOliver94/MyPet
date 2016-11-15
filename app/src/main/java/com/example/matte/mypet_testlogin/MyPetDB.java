@@ -245,9 +245,12 @@ public class MyPetDB {
 
     private static class DBHelper extends SQLiteOpenHelper {
 
+        public Context context;
+
         public DBHelper(Context context, String name,
                         CursorFactory factory, int version) {
             super(context, name, factory, version);
+            this.context=context;
         }
 
         @Override
@@ -922,7 +925,7 @@ public class MyPetDB {
             post.id = cursor.getString(POSTS_ID_COL);
             post.text = cursor.getString(POSTS_TEXT_COL);
             post.idauthor = cursor.getString(POSTS_IDAUTHOR_COL);
-            post.setPlace(cursor.getString(POSTS_PLACE_COL));
+            post.setPlace(dbHelper.context, cursor.getString(POSTS_PLACE_COL));
 
             SimpleDateFormat format = new SimpleDateFormat("y-MM-dd H:m:s");
             try {
@@ -974,7 +977,7 @@ public class MyPetDB {
             post.id = cursor.getString(cursor.getColumnIndex(POSTS_ID));
             post.text = cursor.getString(cursor.getColumnIndex(POSTS_TEXT));
             post.idauthor = cursor.getString(cursor.getColumnIndex(POSTS_IDAUTHOR));
-            post.setPlace(cursor.getString(cursor.getColumnIndex(POSTS_PLACE)));
+            post.setPlace(dbHelper.context, cursor.getString(cursor.getColumnIndex(POSTS_PLACE)));
 
             SimpleDateFormat format = new SimpleDateFormat("y-MM-dd H:m:s");
             try {
@@ -1033,7 +1036,7 @@ public class MyPetDB {
             post.text = cursor.getString(cursor.getColumnIndex(POSTS_TEXT));
             post.idauthor = cursor.getString(cursor.getColumnIndex(POSTS_IDAUTHOR));
             post.picture = cursor.getString(cursor.getColumnIndex(POSTS_PICTURE));
-            post.setPlace(cursor.getString(cursor.getColumnIndex(POSTS_PLACE)));
+            post.setPlace(dbHelper.context, cursor.getString(cursor.getColumnIndex(POSTS_PLACE)));
 
             SimpleDateFormat format = new SimpleDateFormat("y-MM-dd H:m:s");
             try {
@@ -1089,7 +1092,9 @@ public class MyPetDB {
             cv.put(POSTS_TEXT, p.text);
 //            cv.put(POSTS_PLACE_LAT, p.place.latitude);
 //            cv.put(POSTS_PLACE_LON, p.place.longitude);
-            cv.put(POSTS_PLACE, p.place.getId());
+            if(p.place != null) {
+                cv.put(POSTS_PLACE, p.place.getId());
+            }
             cv.put(POSTS_PICTURE, p.picture);
 
             SimpleDateFormat format = new SimpleDateFormat("y-MM-dd HH:mm:ss");

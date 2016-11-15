@@ -1,5 +1,6 @@
 package com.example.matte.mypet_testlogin;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.google.android.gms.common.api.GoogleApiActivity;
@@ -29,6 +30,7 @@ public class Post {
     public String text;
     public Date date;
     public Place place;
+    public String placeAddress;
     public ArrayList<User> users;
     public ArrayList<Animal> animals;
 
@@ -42,7 +44,7 @@ public class Post {
         this.picture = pic;
     }
 
-    public Post(String idPost, JSONObject jObjPost) {
+    public Post(String idPost, JSONObject jObjPost, Context c) {
         users = new ArrayList<User>();
         animals = new ArrayList<Animal>();
         String placeId;
@@ -61,7 +63,7 @@ public class Post {
                 date = format.parse(jObjPost.getString("date"));
             }
             if(!jObjPost.isNull("place")) {
-                setPlace(jObjPost.getString("place"));
+                setPlace(c, jObjPost.getString("place"));
             }
             if(!jObjPost.isNull("users")) {
                 JSONObject jUsers = jObjPost.getJSONObject("users");
@@ -90,19 +92,22 @@ public class Post {
         }
     }
 
-    public void setPlace(String placeId){
-        Places.GeoDataApi
-                .getPlaceById(HomeActivity.gApiBuilder.build(), placeId)
-                .setResultCallback(new ResultCallback<PlaceBuffer>() {
-                    @Override
-                    public void onResult(@NonNull PlaceBuffer places) {
-                        if (places.getStatus().isSuccess() && places.getCount() > 0) {
-                            place = places.get(0);
-                        } else {
+    public void setPlace(Context c, String placeId){
+        if(placeId != null && !placeId.isEmpty()) {
+            Places.GeoDataApi
+                    .getPlaceById(HomeActivity.gApiClient, placeId)
+                    .setResultCallback(new ResultCallback<PlaceBuffer>() {
+                        @Override
+                        public void onResult(@NonNull PlaceBuffer places) {
+                            if (places.getStatus().isSuccess() && places.getCount() > 0) {
+                                place = (Place) places.get(0);
+                                placeAddress = place.getAddress().toString();
+                            } else {
+                            }
+                            places.release();
                         }
-                        places.release();
-                    }
-                });
+                    });
+        }
     }
 
 
