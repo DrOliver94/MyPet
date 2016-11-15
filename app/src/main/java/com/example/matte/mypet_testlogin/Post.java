@@ -31,6 +31,7 @@ public class Post {
     public Date date;
     public Place place;
     public String placeAddress;
+    public String placeName;
     public ArrayList<User> users;
     public ArrayList<Animal> animals;
 
@@ -102,6 +103,7 @@ public class Post {
                             if (places.getStatus().isSuccess() && places.getCount() > 0) {
                                 place = (Place) places.get(0);
                                 placeAddress = place.getAddress().toString();
+                                placeName = place.getName().toString();
                             } else {
                             }
                             places.release();
