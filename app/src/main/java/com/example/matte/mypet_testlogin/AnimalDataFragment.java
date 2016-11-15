@@ -43,6 +43,7 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Hashtable;
 import java.util.Map;
 
@@ -122,7 +123,7 @@ public class AnimalDataFragment extends Fragment {
 
         aNameEditTxt = (EditText) view.findViewById(R.id.animalNameEditText);
         aSpeciesEditTxt = (EditText) view.findViewById(R.id.animalSpeciesEditText);
-        aBirthdateTextView = (TextView) view.findViewById(R.id.animalBirthDateEditText);
+        aBirthdateTextView = (TextView) view.findViewById(R.id.animalBirthDateTextView);
         aGenderEditTxt = (EditText) view.findViewById(R.id.animalGenderEditText);
         imgAnimalData = (ImageView) view.findViewById(R.id.imageViewAnimalData);
 
@@ -136,8 +137,9 @@ public class AnimalDataFragment extends Fragment {
             aSpeciesEditTxt.setText(a.species);
             aGenderEditTxt.setText(a.gender);
 
-            SimpleDateFormat format = new SimpleDateFormat("dd MMMM y");
-            aBirthdateTextView.setText(format.format(a.birthdate));
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM y");
+            newDate = dateFormat.format(a.birthdate);
+            aBirthdateTextView.setText(newDate);
 
             //Memorizzo percorso ultima img usata
             oldImgPath = a.profilepic;
@@ -354,7 +356,7 @@ public class AnimalDataFragment extends Fragment {
         String nameTxt = aNameEditTxt.getText().toString();
         String speciesTxt = aSpeciesEditTxt.getText().toString();
         String genderTxt = aGenderEditTxt.getText().toString();
-        String birthdateTxt = aBirthdateTextView.getText().toString();   //TODO gestire data
+        String birthdateTxt = newDate;
 
         String clientImgPath = "";
         if(chosenImgUri != null)
@@ -496,7 +498,7 @@ public class AnimalDataFragment extends Fragment {
             this.uToken = token;
             this.idUser = idUser;
 
-            pDialog = new ProgressDialog(getContext());
+            pDialog = new ProgressDialog(getActivity());
             serverComm = new ServerComm();
         }
 
@@ -519,12 +521,13 @@ public class AnimalDataFragment extends Fragment {
                 anim.name = p[0];
                 anim.species = p[1];
                 anim.gender = p[2];
+                String birthdate = p[3];
                 anim.profilepic = p[4];
                 String serverPic = p[5];
 
                 SimpleDateFormat format = new SimpleDateFormat("y-MM-dd");
                 try {
-                    anim.birthdate = format.parse(p[3]);
+                    anim.birthdate = format.parse(birthdate);
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
@@ -535,7 +538,7 @@ public class AnimalDataFragment extends Fragment {
                         "&name=" + anim.name +
                         "&species=" + anim.species +
                         "&gender=" + anim.gender +
-                        "&birthdate=" + anim.birthdate +
+                        "&birthdate=" + birthdate +
                         "&profilepic=" + serverPic;
 
                 Log.d("MyPet", postArgs);
@@ -590,36 +593,43 @@ public class AnimalDataFragment extends Fragment {
         }
     }
 
+    public int year;
+    public int month;
+    public int day;
+    public String newDate;
 
-    public static class DatePickerFragment extends DialogFragment
-            implements DatePickerDialog.OnDateSetListener {
+    public DatePickerDialog.OnDateSetListener datePickerListener
+            = new DatePickerDialog.OnDateSetListener(){
 
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            // Use the current date as the default date in the picker
-            final Calendar c = Calendar.getInstance();
-            int year = c.get(Calendar.YEAR);
-            int month = c.get(Calendar.MONTH);
-            int day = c.get(Calendar.DAY_OF_MONTH);
-
-            // Create a new instance of DatePickerDialog and return it
-            return new DatePickerDialog(getActivity(), this, year, month, day);
-        }
+        public Date newBirthDate;
 
         @Override
-        public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
+        public void onDateSet(DatePicker view, int Year, int monthOfYear, int dayOfMonth) {
+            newDate = new StringBuilder()
+                                .append(Year).append("-")
+                                .append(monthOfYear+1).append("-")
+                                .append(dayOfMonth).toString();
+
+            SimpleDateFormat format = new SimpleDateFormat("y-MM-dd");
+            try {
+                newBirthDate = format.parse(newDate);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            format = new SimpleDateFormat("dd MMMM y");
+            aBirthdateTextView.setText(format.format(newBirthDate));
 
         }
-
-
-
-
-
-    }
+    };
 
     public void showDatePickerDialog(View v) {
-        DialogFragment newFragment = new DatePickerFragment();
-        newFragment.show(getFragmentManager(), "datePicker");
+        final Calendar c = Calendar.getInstance();
+        year = c.get(Calendar.YEAR);
+        month = c.get(Calendar.MONTH);
+        day = c.get(Calendar.DAY_OF_MONTH);
+        Dialog newD = new DatePickerDialog(getActivity(), datePickerListener, year, month, day);
+        newD.show();
     }
 
 }

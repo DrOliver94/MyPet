@@ -89,8 +89,7 @@
                 <TableRow
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="horizontal"
-                    android:weightSum="1">
+                    android:orientation="horizontal">
 
                     <TextView
                         android:text="Data di Nascita:"
@@ -109,7 +108,7 @@
                         android:layout_width="0dp"
                         android:layout_height="35dp"
                         android:inputType="date"
-                        android:id="@+id/animalBirthDateEditText"
+                        android:id="@+id/animalBirthDateTextView"
                         android:layout_weight="0.6"
                         android:gravity="left|fill_vertical"
                         android:padding="0dp"
