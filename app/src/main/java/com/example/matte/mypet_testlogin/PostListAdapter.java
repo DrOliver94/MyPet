@@ -47,6 +47,8 @@ public class PostListAdapter extends BaseAdapter {
             postLayout = (PostLayout) view;
             postLayout.setPost(p);
         }
+
+
         return postLayout;
     }
 }

@@ -10,6 +10,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import java.util.ArrayList;
 
@@ -82,6 +83,22 @@ public class FeedFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_feed, container, false);
 
         feedListView = (ListView) view.findViewById(R.id.feed_postsListView);
+
+        feedListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Post p = (Post) adapterView.getItemAtPosition(i); //TODO si casta a Animal e funziona? Testare
+
+//                Animal a = animals.get(i);
+
+//                getFragmentManager()
+//                        .beginTransaction()
+//                        .replace(R.id.main_fragment, AnimalProfileFragment.newInstance(a.id))
+//                        .addToBackStack(null)
+//                        .commit();
+            }
+        });
+
         getFeedPost(shPref.getString("IdUser", ""));
 
         getActivity().setTitle("Feed");

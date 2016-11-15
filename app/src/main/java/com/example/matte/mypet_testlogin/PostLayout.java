@@ -1,18 +1,17 @@
 package com.example.matte.mypet_testlogin;
 
+import android.app.Activity;
+import android.app.FragmentManager;
 import android.content.Context;
-import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 
-import com.google.android.gms.location.places.Place;
 import com.squareup.picasso.Picasso;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
@@ -31,7 +30,6 @@ public class PostLayout extends LinearLayout {
     private TextView pTime;
     private ImageView pImageView;
     private LinearLayout pPicLayout;
-
 
     public PostLayout(Context context){
         super(context);
@@ -53,6 +51,12 @@ public class PostLayout extends LinearLayout {
         pTime = (TextView) findViewById(R.id.post_time);
 
         //TODO sistemare click Listener
+        this.setOnTouchListener(new OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                return false;
+            }
+        });
 
         //Imposta dati del post nel layout
         setPost(p);
@@ -82,6 +86,8 @@ public class PostLayout extends LinearLayout {
                     .resize(750, 750)   //Aggiusta le dimensioni per non pesare troppo
                     .centerInside()
                     .into(pImageView);
+        } else {
+            //TODO pulire img
         }
 
         //Tag
@@ -97,23 +103,26 @@ public class PostLayout extends LinearLayout {
                 imgs.add(a.profilepic);
             }
         }
-//        InterprExCircleAdapter adapter = new InterprExCircleAdapter(c, imgs);
-//        pPicListView.setAdapter(adapter);
 
         pPicLayout.removeAllViews();
         for(int i = 0; i<imgs.size(); i++){
             String img = imgs.get(i);
-            View v = new InterprExCircleLayout(c, img);
+            View v = new InterprExCircleLayout(c, img, "id");
+            v.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    View v = view;
+                }
+            });
             pPicLayout.addView(v, i);
         }
 
-        //Tentativo di non far comparire mille circle
-//        if(pPicLayout.findViewById(i) == null){
-//            View v = new InterprExCircleLayout(c, img);
-//            int id = Integer.parseInt(p.id + i + "");
-//            v.setId(id);
-//            pPicLayout.addView(v, i);
-//        }
+//        pPicLayout.setOnClickListener(new OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                View v = view;
+//            }
+//        });
 
     }
 }
