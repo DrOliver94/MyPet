@@ -1,6 +1,8 @@
 package com.example.matte.mypet_testlogin;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -17,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -38,6 +41,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Hashtable;
 import java.util.Map;
 
@@ -69,9 +74,10 @@ public class UserDataFragment extends Fragment {
     private EditText uNameEditTxt;
     private EditText uSurnameEditTxt;
     private EditText uGenderEditTxt;
-    private EditText uBirthdateEditTxt;
+    private TextView uBirthdateTextView;
     private Button sendData;
     private Button uploadImg;
+    private Button changeUserBirthDate;
     private ImageView imgUserData;
     private EditText uPasswordEditTxt;
     private TextView uPasswordLbl;
@@ -123,7 +129,7 @@ public class UserDataFragment extends Fragment {
         uNameEditTxt = (EditText) view.findViewById(R.id.userNameEditText);
         uSurnameEditTxt = (EditText) view.findViewById(R.id.userSurnameEditText);
         uGenderEditTxt = (EditText) view.findViewById(R.id.userGenderEditText);
-        uBirthdateEditTxt = (EditText) view.findViewById(R.id.userBirthDateEditText);
+        uBirthdateTextView = (TextView) view.findViewById(R.id.userBirthDateTextView);
         imgUserData = (ImageView) view.findViewById(R.id.imageViewUserData);
 
         //PW
@@ -138,19 +144,20 @@ public class UserDataFragment extends Fragment {
 
         if (isEdit) {     //Se si vuole modificare i dati di un user
             User u = HomeActivity.dbManager.getUser(idUser);    //Raccolta dati dell'utente
+
             uUsernameEditTxt.setText(u.username);
             uNameEditTxt.setText(u.name);
             uSurnameEditTxt.setText(u.surname);
             uGenderEditTxt.setText(u.gender);
-
-            //Todo sistema datePicker
-            //uBirthdateEditTxt.setText(u.birthdate);
-
             //Si nascondono i campi delle pw
             uPasswordEditTxt.setVisibility(View.GONE);
             uPasswordLbl.setVisibility(View.GONE);
             uPasswordConfirmEditTxt.setVisibility(View.GONE);
             uPasswordCOnfirmLbl.setVisibility(View.GONE);
+
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM y");
+            newDate = dateFormat.format(u.birthdate);
+            uBirthdateTextView.setText(newDate);
 
             oldImgPath = u.profilepic;
 
@@ -204,6 +211,14 @@ public class UserDataFragment extends Fragment {
                 intent.setType("image/*");
                 intent.setAction(Intent.ACTION_GET_CONTENT);  //Always show the chooser (if there are multiple options available)
                 startActivityForResult(Intent.createChooser(intent, "Seleziona immagine profilo"), PICK_IMAGE_REQUEST);
+            }
+        });
+
+        changeUserBirthDate = (Button) view .findViewById(R.id.changeUserBirthDateButton);
+        changeUserBirthDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showDatePickerDialog(view);
             }
         });
 
@@ -380,7 +395,7 @@ public class UserDataFragment extends Fragment {
         String nameTxt = uNameEditTxt.getText().toString();
         String surnameTxt = uSurnameEditTxt.getText().toString();
         String genderTxt = uGenderEditTxt.getText().toString();
-        String birthdateTxt = uBirthdateEditTxt.getText().toString();   //TODO gestire data
+        String birthdateTxt = newDate;
 
         String clientImgPath = "";
         if(chosenImgUri != null)
@@ -412,7 +427,7 @@ public class UserDataFragment extends Fragment {
 
             this.uToken = token;
 
-            pDialog = new ProgressDialog(getContext());
+            pDialog = new ProgressDialog(getActivity());
             serverComm = new ServerComm();
         }
 
@@ -436,12 +451,13 @@ public class UserDataFragment extends Fragment {
                 user.name = p[1];
                 user.surname = p[2];
                 user.gender = p[3];
+                String birthdate = p[4];
                 user.profilepic = p[5];
                 String serverPic = p[6];
 
                 SimpleDateFormat format = new SimpleDateFormat("y-MM-dd");
                 try {
-                    user.birthdate = format.parse(p[4]);
+                    user.birthdate = format.parse(birthdate);
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
@@ -452,7 +468,7 @@ public class UserDataFragment extends Fragment {
                         "&name=" + user.name +
                         "&surname=" + user.surname +
                         "&gender=" + user.gender +
-                        "&birthdate=" + user.birthdate +
+                        "&birthdate=" + birthdate +
                         "&profilepic=" + serverPic;
 
                 Log.d("MyPet", postArgs);
@@ -486,7 +502,6 @@ public class UserDataFragment extends Fragment {
             } catch(Exception e) {
                 e.fillInStackTrace();
             }
-
         }
 
         @Override
@@ -500,77 +515,6 @@ public class UserDataFragment extends Fragment {
         }
     }
 
-//
-//    public static Boolean uploadFile(String serverURL, File file) {
-//        final OkHttpClient client = new OkHttpClient();
-//
-////        final MediaType MEDIA_TYPE = sourceImageFile.endsWith("png") ?
-////                MediaType.parse("image/png") : MediaType.parse("image/jpeg");
-//
-//        try {
-//            RequestBody requestBody = new MultipartBody.Builder()
-//                    .setType(MultipartBody.FORM)
-//                    .addFormDataPart("img", file.getName(),
-//                            RequestBody.create(MediaType.parse("image/jpeg"), file))
-//                    .build();
-//
-//            Request request = new Request.Builder()
-//                    .url(serverURL)
-//                    .post(requestBody)
-//                    .build();
-//
-//            client.newCall(request).enqueue(new Callback() {
-//                @Override
-//                public void onFailure(Call call, IOException e) {
-//                    // Handle the error
-//                    Log.d("MyPet", "failed");
-//                }
-//
-//                @Override
-//                public void onResponse(Call call, Response response) throws IOException {
-//                    if (!response.isSuccessful()) {
-//                        // Handle the error
-//                    }
-//                    // Upload successful
-//                }
-//            });
-//
-//            return true;
-//        } catch (Exception ex) {
-//            // Handle the error
-//        }
-//        return false;
-//    }
-//    private void insertAnimal(){
-//        //Recuperare dati, fare controlli se necessario
-////        ArrayList<String> par = new ArrayList<String>();
-////
-//        String nameTxt = aNameEditTxt.getText().toString();
-//        String speciesTxt = aSpeciesEditTxt.getText().toString();
-//        String genderTxt = aGenderEditTxt.getText().toString();
-//        String birthdateTxt = aBirthdateEditTxt.getText().toString();   //TODO gestire data
-//        String profilepicTxt = "profilepic";
-//
-//        //Inviare richiesta al server per l'update
-//        InsertAnimalTask insertAnim = new InsertAnimalTask(shPref.getString("Token", ""), "0", idUser);
-//        insertAnim.execute(nameTxt, speciesTxt, genderTxt, birthdateTxt, profilepicTxt);
-//    }
-
-//    public String getPath(Uri uri) {
-//        String result;
-//        Cursor cursor = getActivity().getContentResolver().query(uri, null, null, null, null);
-//        if (cursor == null) { // Source is Dropbox or other similar local file path
-//            result = uri.getPath();
-//        } else {
-//            cursor.moveToFirst();
-//            int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
-//            result = cursor.getString(idx);
-//            cursor.close();
-//        }
-//        return result;
-//    }
-
-
     private void insertUser(String serverPicPath) {
         //Recuperare dati
         //TODO fare controlli. usare TextView.setError()
@@ -578,7 +522,7 @@ public class UserDataFragment extends Fragment {
         String nameTxt = uNameEditTxt.getText().toString();
         String surnameTxt = uSurnameEditTxt.getText().toString();
         String genderTxt = uGenderEditTxt.getText().toString();
-        String birthdateTxt = uBirthdateEditTxt.getText().toString();   //TODO gestire data
+        String birthdateTxt = uBirthdateTextView.getText().toString();   //TODO gestire data
         String passwordTxt = uPasswordEditTxt.getText().toString();
 
         String clientImgPath = "";
@@ -608,7 +552,7 @@ public class UserDataFragment extends Fragment {
         InsertUserTask() {
             user = new User();
 
-            pDialog = new ProgressDialog(getContext());
+            pDialog = new ProgressDialog(getActivity());
             serverComm = new ServerComm();
         }
 
@@ -632,13 +576,14 @@ public class UserDataFragment extends Fragment {
                 user.name = p[1];
                 user.surname = p[2];
                 user.gender = p[3];
+                String birthdate = p[4];
                 String password = p[5];
                 user.profilepic = p[6];
                 String serverPic = p[7];
 
                 SimpleDateFormat format = new SimpleDateFormat("y-MM-dd");
                 try {
-                    user.birthdate = format.parse(p[4]);
+                    user.birthdate = format.parse(birthdate);
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
@@ -649,7 +594,7 @@ public class UserDataFragment extends Fragment {
                         "&surname=" + user.surname +
                         "&gender=" + user.gender +
                         "&password=" + password +
-                        "&birthdate=" + user.birthdate +
+                        "&birthdate=" + birthdate +
                         "&profilepic=" + serverPic;
 
                 Log.d("MyPet", postArgs);
@@ -705,5 +650,46 @@ public class UserDataFragment extends Fragment {
             }
         }
     }
+
+    public int year;
+    public int month;
+    public int day;
+    public String newDate;
+
+    public DatePickerDialog.OnDateSetListener datePickerListener
+            = new DatePickerDialog.OnDateSetListener(){
+
+        public Date newBirthDate;
+
+        @Override
+        public void onDateSet(DatePicker view, int Year, int monthOfYear, int dayOfMonth) {
+            newDate = new StringBuilder()
+                    .append(Year).append("-")
+                    .append(monthOfYear+1).append("-")
+                    .append(dayOfMonth).toString();
+
+            SimpleDateFormat format = new SimpleDateFormat("y-MM-dd");
+            try {
+                newBirthDate = format.parse(newDate);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            format = new SimpleDateFormat("dd MMMM y");
+            uBirthdateTextView.setText(format.format(newBirthDate));
+
+        }
+    };
+
+    public void showDatePickerDialog(View v) {
+        final Calendar c = Calendar.getInstance();
+        year = c.get(Calendar.YEAR);
+        month = c.get(Calendar.MONTH);
+        day = c.get(Calendar.DAY_OF_MONTH);
+        Dialog newD = new DatePickerDialog(getActivity(), datePickerListener, year, month, day);
+        newD.show();
+    }
+
+
 
 }

@@ -117,7 +117,7 @@
                         android:maxLines="1"/>
 
                     <Button
-                        android:text="CHANGE THE DATE :D"
+                        android:text="Change Date"
                         android:layout_width="261dp"
                         android:layout_height="81dp"
                         android:id="@+id/changeAnimalBirthDateButton"

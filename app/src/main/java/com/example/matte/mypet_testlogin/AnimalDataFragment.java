@@ -121,12 +121,14 @@ public class AnimalDataFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_animal_data, container, false);
 
+        //Riferimenti UI
         aNameEditTxt = (EditText) view.findViewById(R.id.animalNameEditText);
         aSpeciesEditTxt = (EditText) view.findViewById(R.id.animalSpeciesEditText);
         aBirthdateTextView = (TextView) view.findViewById(R.id.animalBirthDateTextView);
         aGenderEditTxt = (EditText) view.findViewById(R.id.animalGenderEditText);
         imgAnimalData = (ImageView) view.findViewById(R.id.imageViewAnimalData);
 
+        //Due button
         sendData = (Button) view.findViewById(R.id.buttonSendAnimData);
         uploadImg = (Button) view .findViewById(R.id.buttonUploadAnimalImg);
 
@@ -374,6 +376,7 @@ public class AnimalDataFragment extends Fragment {
      * Inserisce l'animale inviato
      */
     public class InsertAnimalTask extends AsyncTask<String, Integer, JSONObject> {
+
         private final String uToken;
         private final String idUser;
         private final Animal anim;
@@ -562,27 +565,16 @@ public class AnimalDataFragment extends Fragment {
                     if (pDialog.isShowing()) {
                         pDialog.dismiss();
                     }
-
-                    //gira al fragment di profilo animale
-//                    getFragmentManager()
-//                            .beginTransaction()
-//                            .replace(R.id.main_fragment, AnimalProfileFragment.newInstance(anim.id))
-//                            .addToBackStack("")
-//                            .commit();
-
                     //Torna al fragment precedente
                     getFragmentManager().popBackStack();
 
                 } else {
 
-                    //Altrimenti indicare l'errore all'utente
+                    // TODO Altrimenti indicare l'errore all'utente
                 }
             } catch(Exception e) {
                 e.fillInStackTrace();
             }
-
-
-            return;
         }
 
         @Override
