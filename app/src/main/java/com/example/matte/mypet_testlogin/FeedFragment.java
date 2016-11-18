@@ -31,12 +31,10 @@ public class FeedFragment extends Fragment {
     private String mParam2;
 
     private ListView feedListView;
-//    private OnFragmentInteractionListener mListener;
 
     private SharedPreferences shPref;
-    private MyPetDB dbHandler;
 
-    private ServerComm srv;
+    private GoogleApiHelper gApiHelper;
 
     public FeedFragment() {}
 
@@ -69,10 +67,9 @@ public class FeedFragment extends Fragment {
         //Recupero delle SharedPreferences
         shPref = getActivity().getSharedPreferences("MyPetPrefs", Context.MODE_PRIVATE);
 
-        //Creazione handler database
-        dbHandler = new MyPetDB(getActivity());
-
         setHasOptionsMenu(true);    //Per mostrare il menu specifico
+
+        gApiHelper = new GoogleApiHelper(getActivity());
     }
 
     @Override
@@ -82,33 +79,17 @@ public class FeedFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_feed, container, false);
 
         feedListView = (ListView) view.findViewById(R.id.feed_postsListView);
-        getFeedPost(shPref.getString("IdUser", ""));
 
-        getActivity().setTitle("Feed");
-
-        //Test per controlli sessione
-//        srv = new ServerComm();
-//        Button btnTest = (Button) view.findViewById(R.id.feed_button);
-//        btnTest.setOnClickListener(new View.OnClickListener() {
+//        feedListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 //            @Override
-//            public void onClick(View view) {
-//                try {
-//                    //Lo strictmode evita che il thread principale vada troppo tempo in pausa con operazioni sulla rete
-                      //Questo codice lo disabilita
-//                    StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-//                    StrictMode.setThreadPolicy(policy);
-//                    JSONObject jObj = srv.makePostRequest("test=one");
-//
-//                    Log.d("MyPet", jObj.getString("test"));
-//                } catch (IOException | JSONException e) {
-//                    e.printStackTrace();
-//                }
+//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+//                Post p = (Post) adapterView.getItemAtPosition(i);
 //            }
 //        });
 
-        //Scrittura token (DEBUG)
-//        TextView usernameProfileText = (TextView) view.findViewById(R.id.feed_title);
-//        usernameProfileText.setText(shPref.getString("Token", "No token"));
+        getFeedPost(shPref.getString("IdUser", ""), gApiHelper);
+
+        getActivity().setTitle("Feed");
 
         return view;
     }
@@ -138,30 +119,16 @@ public class FeedFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-//        if (context instanceof OnFragmentInteractionListener) {
-//            mListener = (OnFragmentInteractionListener) context;
-//        } else {
-//            throw new RuntimeException(context.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-//        mListener = null;
     }
 
-//    public interface OnFragmentInteractionListener {
-//        // TODO: Update argument type and name
-//        void onFragmentInteraction(String name);
-//    }
-
-
-
-    public void getFeedPost(String idUser) {
+    public void getFeedPost(String idUser, GoogleApiHelper gApiHelper) {
         //recupero elenco dei post dal DB
-        ArrayList<Post> posts = HomeActivity.dbManager.getPostsByUser(idUser);
+        ArrayList<Post> posts = HomeActivity.dbManager.getPostsByUser(idUser, gApiHelper);
 
         PostListAdapter adapter = new PostListAdapter(getActivity(), posts);
         feedListView.setAdapter(adapter);

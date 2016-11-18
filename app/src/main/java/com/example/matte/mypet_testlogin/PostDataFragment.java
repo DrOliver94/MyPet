@@ -30,6 +30,11 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlacePicker;
+import com.google.android.gms.maps.model.LatLng;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
@@ -84,6 +89,11 @@ public class PostDataFragment extends Fragment {
     private ProgressDialog pDialog;
 
     private SharedPreferences shPref;
+
+    private Button chooseLocation;
+    private int PLACE_PICKER_REQUEST = 81293;
+    public Place chosenPlace;
+    private LatLng chosenLocation;
 
     public PostDataFragment() {}
 
@@ -155,6 +165,25 @@ public class PostDataFragment extends Fragment {
             }
         });
 
+        chooseLocation = (Button) view.findViewById(R.id.buttonChooseLocation);
+        chooseLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                Intent i = new Intent(getActivity(), MapsActivity.class);
+//                i.putExtra("com.example.matte.mypet_testlogin.isChoosingLoc", true);
+//                startActivity(i);
+                PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+                try {
+                    startActivityForResult(builder.build(getActivity()), PLACE_PICKER_REQUEST);
+                } catch (GooglePlayServicesRepairableException e) {
+                    e.printStackTrace();
+                } catch (GooglePlayServicesNotAvailableException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
+
         Picasso.with(view.getContext())
                 .load(R.drawable.img)
                 .resize(750, 750)
@@ -178,7 +207,6 @@ public class PostDataFragment extends Fragment {
                     tFriends.add(friends.get(i));     //se è stato selezionato, inserisce l'i-esimo amico in tagged
             }
             taggedFriends = tFriends;
-            return;
             }
         });
 
@@ -229,7 +257,13 @@ public class PostDataFragment extends Fragment {
                     .resize(750, 750)
                     .centerInside()
                     .into((ImageView) getActivity().findViewById(R.id.imageViewPostData));
+        } else if(requestCode == PLACE_PICKER_REQUEST && resultCode == Activity.RESULT_OK){
+            //Se si è scelto un luogo, memorizzarne la posizione
+            chosenPlace = PlacePicker.getPlace(getActivity(), data);
+            //TODO si può raccogliere un nome, un testo, qualcosa? Salvarlo in db?
+            chosenLocation = chosenPlace.getLatLng();
         }
+
     }
 
     private void uploadImage(){
@@ -265,12 +299,10 @@ public class PostDataFragment extends Fragment {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-
                         //Disimissing the progress dialog
                         if (pDialog.isShowing()) {
                             pDialog.dismiss();
                         }
-
                         if(success) {
                             insertPost(imgPath);
                         } else {
@@ -278,7 +310,6 @@ public class PostDataFragment extends Fragment {
                         }
 
                         //TODO controllare per insuccesso
-
                     }
                 },
                 new Response.ErrorListener() {
@@ -330,10 +361,9 @@ public class PostDataFragment extends Fragment {
 
     private void insertPost(String serverPicPath){
         //Recuperare dati, fare controlli se necessario
-
         //TODO fare controlli. usare TextView.setError()
         String pTextTxt = pTextEditTxt.getText().toString();
-        String pPlaceTxt = pPlaceEditTxt.getText().toString();
+//        String pPlaceTxt = pPlaceEditTxt.getText().toString();
         String pDateTxt = "2016-11-28 11:21:42";
 
         String clientImgPath = "";
@@ -344,8 +374,9 @@ public class PostDataFragment extends Fragment {
         }
 
         //Inviare richiesta al server per l'update
-        InsertPostTask insertAnim = new InsertPostTask(shPref.getString("Token", ""), idUser);
-        insertAnim.execute(pTextTxt, pPlaceTxt, pDateTxt, clientImgPath, serverPicPath);
+        InsertPostTask insertPost = new InsertPostTask(shPref.getString("Token", ""), idUser);
+        insertPost.execute(pTextTxt, pDateTxt, clientImgPath, serverPicPath, chosenPlace.getId());
+//        String.valueOf(chosenLocation.latitude), String.valueOf(chosenLocation.longitude)
     }
 
     /**
@@ -389,10 +420,13 @@ public class PostDataFragment extends Fragment {
         protected JSONObject doInBackground(String... p) {
             try {
                 post.text = p[0];
-                post.place = p[1];
-                String dateStr = p[2];
-                post.picture = p[3];
-                String serverPic = p[4];
+                String dateStr = p[1];
+                post.picture = p[2];
+                String serverPic = p[3];
+//                post.place = new LatLng(Double.parseDouble(p[4]), Double.parseDouble(p[5]));
+//                post.setPlace(p[4]);
+                post.place = chosenPlace;
+                post.placeId = chosenPlace.getId();
                 post.animals = taggedAnimals;
                 post.users = taggedFriends;
 
@@ -439,7 +473,7 @@ public class PostDataFragment extends Fragment {
                         "&iduser=" + idUser +
                         "&token=" + uToken +
                         "&text=" + post.text +
-                        "&place=" + post.place +
+                        "&place=" + post.place.getId() +
                         "&date=" + dateStr +
                         "&tagfriends=" + jsonTagFriends +
                         "&taganim=" + jsonTagAnimals +

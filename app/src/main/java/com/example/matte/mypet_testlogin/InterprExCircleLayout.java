@@ -2,6 +2,7 @@ package com.example.matte.mypet_testlogin;
 
 import android.content.Context;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -14,6 +15,7 @@ import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 public class InterprExCircleLayout extends LinearLayout {
 
     private ImageView picture;
+    public String id;
 
     public InterprExCircleLayout(Context context) {
         super(context);
@@ -27,6 +29,17 @@ public class InterprExCircleLayout extends LinearLayout {
 
         //Riferimenti
         picture = (ImageView) findViewById(R.id.circleimg);
+
+//        picture.setOnClickListener(new OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                getFragmentManager()
+//                        .beginTransaction()
+//                        .replace(R.id.main_fragment, ProfileFragment.newInstance(id))
+//                        .addToBackStack(null)
+//                        .commit();
+//            }
+//        });
 
         setPicture(img);
     }

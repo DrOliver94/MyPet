@@ -38,6 +38,7 @@ public class ProfileFragment extends Fragment {
 
     private ListView itemsListView;
     private View header;
+    private GoogleApiHelper gApiHelper;
 
     public ProfileFragment() {}
 
@@ -68,6 +69,8 @@ public class ProfileFragment extends Fragment {
 
         //Mostra il menu
         setHasOptionsMenu(true);
+
+        gApiHelper = new GoogleApiHelper(getActivity());
     }
 
     @Override
@@ -194,7 +197,7 @@ public class ProfileFragment extends Fragment {
      */
     public void showPostsByAuthor(String idAuthor) {
         //recupero elenco dei post dal DB
-        ArrayList<Post> posts = HomeActivity.dbManager.getPostsByAuthor(idAuthor);
+        ArrayList<Post> posts = HomeActivity.dbManager.getPostsByAuthor(idAuthor, gApiHelper);
 
         Log.d("MyPet", itemsListView.toString());
 

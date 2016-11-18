@@ -1,5 +1,17 @@
 package com.example.matte.mypet_testlogin;
 
+import android.content.Context;
+import android.support.annotation.NonNull;
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiActivity;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.PlaceBuffer;
+import com.google.android.gms.location.places.Places;
+import com.google.android.gms.maps.model.LatLng;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 import java.text.SimpleDateFormat;
@@ -18,13 +30,18 @@ public class Post {
     public String picture;
     public String text;
     public Date date;
-    public String place;
+    public Place place;
+    public String placeId;
+    public String placeAddress;
+    public String placeName;
+    public LatLng placeLatLon;
+
     public ArrayList<User> users;
     public ArrayList<Animal> animals;
 
     public Post() {}
 
-    public Post(String idPost, String text, Date date, String place, String pic) {
+    public Post(String idPost, String text, Date date, Place place, String pic) {
         this.id = idPost;
         this.text = text;
         this.date = date;
@@ -32,9 +49,10 @@ public class Post {
         this.picture = pic;
     }
 
-    public Post(String idPost, JSONObject jObjPost) {
+    public Post(String idPost, JSONObject jObjPost, GoogleApiHelper gApiHelper) {
         users = new ArrayList<User>();
         animals = new ArrayList<Animal>();
+//        String placeId;
 
         try {
             id = idPost;
@@ -49,9 +67,10 @@ public class Post {
                 SimpleDateFormat format = new SimpleDateFormat("y-MM-dd H:m:s");
                 date = format.parse(jObjPost.getString("date"));
             }
-            if(!jObjPost.isNull("place"))
-                place = jObjPost.getString("place");
-
+            if(!jObjPost.isNull("place")) {
+                placeId = jObjPost.getString("place");
+                setPlace(gApiHelper, placeId);
+            }
             if(!jObjPost.isNull("users")) {
                 JSONObject jUsers = jObjPost.getJSONObject("users");
                 JSONArray idUsers = jUsers.names();                 //recupera elenco ID degli utenti
@@ -78,6 +97,28 @@ public class Post {
             e.printStackTrace();
         }
     }
+
+    public void setPlace(GoogleApiHelper gApiHelper, String placeIdSet){
+        placeId = placeIdSet;
+        if(placeIdSet != null && !placeIdSet.isEmpty()) {
+            Places.GeoDataApi
+                    .getPlaceById(gApiHelper.getGoogleApiClient(), placeIdSet)
+                    .setResultCallback(new ResultCallback<PlaceBuffer>() {
+                        @Override
+                        public void onResult(@NonNull PlaceBuffer places) {
+                            if (places.getStatus().isSuccess() && places.getCount() > 0) {
+                                place = (Place) places.get(0);
+                                placeAddress = place.getAddress().toString();
+                                placeName = place.getName().toString();
+                                placeLatLon = place.getLatLng();
+                            } else {
+                            }
+                            places.release();
+                        }
+                    });
+        }
+    }
+
 
     //TODO memorizzare in un array gli user e gli animal taggati nel post = due ArrayList
     //TODO scrivere metodi che dati gli id possano recuperare le info dei suddetti (meglio in Post o in User e Animal?)

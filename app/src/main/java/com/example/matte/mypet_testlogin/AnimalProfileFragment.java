@@ -45,6 +45,8 @@ public class AnimalProfileFragment extends Fragment {
     private View headerAnimal;
 //    private OnFragmentInteractionListener mListener;
 
+    public GoogleApiHelper gApiHelper;
+
     public AnimalProfileFragment() {}
 
     /**
@@ -71,6 +73,7 @@ public class AnimalProfileFragment extends Fragment {
         }
         dbHandler2 = new MyPetDB(getActivity());
         setHasOptionsMenu(true);
+        gApiHelper = new GoogleApiHelper(getActivity());
     }
 
     @Override
@@ -177,7 +180,7 @@ public class AnimalProfileFragment extends Fragment {
 
     public void showPostsByAnimal(String idAuthor) {
         //recupero elenco dei post dal DB
-        ArrayList<Post> posts = HomeActivity.dbManager.getPostsByAnimal(idAnim);
+        ArrayList<Post> posts = HomeActivity.dbManager.getPostsByAnimal(idAnim, gApiHelper);
 
 //        Log.d("MyPet", itemsListView.toString());
 //

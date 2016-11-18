@@ -1,17 +1,24 @@
 package com.example.matte.mypet_testlogin;
 
+import android.app.Activity;
+import android.app.FragmentManager;
 import android.content.Context;
-import android.support.v4.content.ContextCompat;
+import android.content.Intent;
+import android.opengl.Visibility;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewParent;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 
+import android.app.FragmentManager;import android.app.Activity;
+
+import com.google.android.gms.maps.model.LatLng;
 import com.squareup.picasso.Picasso;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
@@ -30,7 +37,6 @@ public class PostLayout extends LinearLayout {
     private TextView pTime;
     private ImageView pImageView;
     private LinearLayout pPicLayout;
-
 
     public PostLayout(Context context){
         super(context);
@@ -52,6 +58,12 @@ public class PostLayout extends LinearLayout {
         pTime = (TextView) findViewById(R.id.post_time);
 
         //TODO sistemare click Listener
+        this.setOnTouchListener(new OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                return false;
+            }
+        });
 
         //Imposta dati del post nel layout
         setPost(p);
@@ -61,7 +73,16 @@ public class PostLayout extends LinearLayout {
 
         //Caricamento dati
         pText.setText(post.text);
-        pPlace.setText(post.place);
+
+        //TODO leggere latlng
+        if(post.place != null) {
+            if(!post.placeAddress.equals("")) {
+                pPlace.setText(post.placeAddress);
+            } else {
+                pPlace.setText(post.placeName);
+            }
+            pPlace.setOnClickListener(new OnClickOpenPostListener(post.placeLatLon));
+        }
         if(post.date != null) {
             SimpleDateFormat format = new SimpleDateFormat("dd MMMM y HH:mm");
             pTime.setText(format.format(post.date));
@@ -74,39 +95,106 @@ public class PostLayout extends LinearLayout {
                     .resize(750, 750)   //Aggiusta le dimensioni per non pesare troppo
                     .centerInside()
                     .into(pImageView);
+        } else {
+            //TODO pulire img
         }
 
-        //Tag
-        ArrayList<String> imgs = new ArrayList<>();
-        imgs.add(post.picauthor);
+        //##### TAG
+        int i=0;
+
+        //Img autore
+        View vAuth = new InterprExCircleLayout(c, post.picauthor);
+        vAuth.setOnClickListener(new OnClickOpenUserProfileListener(post.idauthor));
+        pPicLayout.addView(vAuth, i++);
+
+        //Img utenti
         if(post.users != null) {
             for (User u : post.users) {
-                imgs.add(u.profilepic);
+                View v = new InterprExCircleLayout(c, u.profilepic);
+                v.setOnClickListener(new OnClickOpenUserProfileListener(u.id));
+                pPicLayout.addView(v, i++);
             }
         }
+
+        //Img animali
         if(post.animals != null){
             for(Animal a : post.animals){
-                imgs.add(a.profilepic);
+                View v = new InterprExCircleLayout(c, a.profilepic);
+                v.setOnClickListener(new OnClickOpenAnimalProfileListener(a.id));
+                pPicLayout.addView(v, i++);
             }
         }
-//        InterprExCircleAdapter adapter = new InterprExCircleAdapter(c, imgs);
-//        pPicListView.setAdapter(adapter);
-
-        pPicLayout.removeAllViews();
-        for(int i = 0; i<imgs.size(); i++){
-            String img = imgs.get(i);
-            View v = new InterprExCircleLayout(c, img);
-            pPicLayout.addView(v, i);
-        }
-
-        //Tentativo di non far comparire mille circle
-//        if(pPicLayout.findViewById(i) == null){
+//
+//        pPicLayout.removeAllViews();
+//        for(int i = 0; i<imgs.size(); i++){
+//            String img = imgs.get(i);
 //            View v = new InterprExCircleLayout(c, img);
-//            int id = Integer.parseInt(p.id + i + "");
-//            v.setId(id);
+//            v.setOnClickListener(new OnClickOpenAnimalProfileListener("10"));
+//
 //            pPicLayout.addView(v, i);
 //        }
 
+//        pPicLayout.setOnClickListener(new OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                View v = view;
+//            }
+//        });
+
+    }
+
+    public class OnClickOpenPostListener implements OnClickListener {
+        LatLng latlng;
+
+        public OnClickOpenPostListener(LatLng latlng){
+            super();
+            this.latlng = latlng;
+        }
+
+        @Override
+        public void onClick(View view) {
+            Log.d("MyPet", latlng.toString());
+            Intent i = new Intent(view.getContext(), MapsActivity.class);
+            i.putExtra("com.example.matte.mypet.latlng", latlng);
+            view.getContext().startActivity(i);
+
+        }
+    }
+
+    public class OnClickOpenAnimalProfileListener implements OnClickListener {
+        String idAnimal;
+
+        public OnClickOpenAnimalProfileListener(String idAnimal){
+            super();
+            this.idAnimal = idAnimal;
+        }
+
+        @Override
+        public void onClick(View view) {
+            ((HomeActivity)view.getContext()).getFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.main_fragment, AnimalProfileFragment.newInstance(idAnimal))
+                    .addToBackStack(null)
+                    .commit();
+        }
+    }
+
+    public class OnClickOpenUserProfileListener implements OnClickListener {
+        String idUser;
+
+        public OnClickOpenUserProfileListener(String idUser){
+            super();
+            this.idUser = idUser;
+        }
+
+        @Override
+        public void onClick(View view) {
+            ((HomeActivity)view.getContext()).getFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.main_fragment, ProfileFragment.newInstance(idUser))
+                    .addToBackStack(null)
+                    .commit();
+        }
     }
 }
 
