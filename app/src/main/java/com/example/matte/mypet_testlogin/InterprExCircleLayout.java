@@ -21,7 +21,7 @@ public class InterprExCircleLayout extends LinearLayout {
         super(context);
     }
 
-    public InterprExCircleLayout(Context c, String img, String id){
+    public InterprExCircleLayout(Context c, String img){
         super(c);
 
         LayoutInflater inflater = (LayoutInflater) c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);

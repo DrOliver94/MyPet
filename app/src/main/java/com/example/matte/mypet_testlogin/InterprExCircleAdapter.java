@@ -40,7 +40,7 @@ public class InterprExCircleAdapter extends BaseAdapter {
         String img = imgs.get(i);
 
         if(view == null){
-            circleLayout = new InterprExCircleLayout(context, img, "id");
+            circleLayout = new InterprExCircleLayout(context, img);
         } else {
             circleLayout = (InterprExCircleLayout) view;
             circleLayout.setPicture(img);
