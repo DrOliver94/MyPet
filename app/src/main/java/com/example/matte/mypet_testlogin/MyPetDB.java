@@ -12,6 +12,7 @@ import android.util.Log;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class MyPetDB {
 
@@ -1064,7 +1065,7 @@ public class MyPetDB {
         posts.addAll(authPost);
 
         //TODO ordinare per data
-        //Collections.sort(posts);
+        Collections.sort(posts);
 
         return posts;
     }
@@ -1096,8 +1097,8 @@ public class MyPetDB {
             }
             cv.put(POSTS_PICTURE, p.picture);
 
-            SimpleDateFormat format = new SimpleDateFormat("y-MM-dd HH:mm:ss");
-            cv.put(POSTS_DATE, format.format(p.date));
+            SimpleDateFormat dateFormat = new SimpleDateFormat("y-MM-dd HH:mm:ss");
+            cv.put(POSTS_DATE, dateFormat.format(p.date));
 
             //Aggiunta di animali e utenti taggati
             for(User u : p.users){
@@ -1231,7 +1232,9 @@ public class MyPetDB {
             cv.put(REMINDERS_IDANIM, r.idanim);
             cv.put(REMINDERS_EVENTNAME, r.eventname);
             cv.put(REMINDERS_EVENTPLACE, r.eventplace);
-            cv.put(REMINDERS_EVENTTIME, r.eventtime);
+
+            SimpleDateFormat dateFormat = new SimpleDateFormat("y-MM-dd HH:mm:ss");
+            cv.put(REMINDERS_EVENTTIME, dateFormat.format(r.eventtime));
 
             this.openWriteableDB();
             rowIDRem = db.insert(REMINDERS_TABLE, null, cv);
@@ -1265,9 +1268,15 @@ public class MyPetDB {
                 r.idanim = cursor.getString(cursor.getColumnIndex(REMINDERS_IDANIM));
                 r.eventname = cursor.getString(cursor.getColumnIndex(REMINDERS_EVENTNAME));
                 r.eventplace = cursor.getString(cursor.getColumnIndex(REMINDERS_EVENTPLACE));
-                r.eventtime = cursor.getString(cursor.getColumnIndex(REMINDERS_EVENTTIME));
                 r.animname = cursor.getString(cursor.getColumnIndex(ANIMALS_NAME));
                 r.animpic = cursor.getString(cursor.getColumnIndex(ANIMALS_PROFILEPIC));
+
+                SimpleDateFormat dateFormat = new SimpleDateFormat("y-MM-dd HH:mm:ss");
+                try {
+                    r.eventtime = dateFormat.parse(cursor.getString(cursor.getColumnIndex(REMINDERS_EVENTTIME)));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
 
                 reminders.add(r);
             }

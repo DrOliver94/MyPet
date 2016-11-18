@@ -48,6 +48,7 @@ import java.io.StringWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
@@ -363,8 +364,10 @@ public class PostDataFragment extends Fragment {
         //Recuperare dati, fare controlli se necessario
         //TODO fare controlli. usare TextView.setError()
         String pTextTxt = pTextEditTxt.getText().toString();
-//        String pPlaceTxt = pPlaceEditTxt.getText().toString();
-        String pDateTxt = "2016-11-28 11:21:42";
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("y-MM-dd HH:mm:ss");
+        String pDateTxt = dateFormat.format(Calendar.getInstance().getTime());
+//        String pDateTxt = "2016-11-28 11:21:42";
 
         String clientImgPath = "";
         if(chosenImgUri != null) {
@@ -373,9 +376,15 @@ public class PostDataFragment extends Fragment {
             //TODO set img di default
         }
 
+        //non passa place se non è stato scelto un luogo
+        String chosenPlaceId = "";
+        if(chosenPlace != null && chosenPlace.isDataValid()){
+            chosenPlaceId = chosenPlace.getId();
+        }
+
         //Inviare richiesta al server per l'update
         InsertPostTask insertPost = new InsertPostTask(shPref.getString("Token", ""), idUser);
-        insertPost.execute(pTextTxt, pDateTxt, clientImgPath, serverPicPath, chosenPlace.getId());
+        insertPost.execute(pTextTxt, pDateTxt, clientImgPath, serverPicPath, chosenPlaceId);
 //        String.valueOf(chosenLocation.latitude), String.valueOf(chosenLocation.longitude)
     }
 
@@ -426,7 +435,9 @@ public class PostDataFragment extends Fragment {
 //                post.place = new LatLng(Double.parseDouble(p[4]), Double.parseDouble(p[5]));
 //                post.setPlace(p[4]);
                 post.place = chosenPlace;
-                post.placeId = chosenPlace.getId();
+                if(chosenPlace != null && chosenPlace.isDataValid()) {
+                    post.placeId = chosenPlace.getId();
+                }
                 post.animals = taggedAnimals;
                 post.users = taggedFriends;
 
@@ -462,7 +473,7 @@ public class PostDataFragment extends Fragment {
                 }
 
 
-                SimpleDateFormat format = new SimpleDateFormat("y-MM-dd H:m:s");
+                SimpleDateFormat format = new SimpleDateFormat("y-MM-dd HH:mm:ss");
                 try {
                     post.date = format.parse(dateStr);
                 } catch (ParseException e) {
@@ -473,7 +484,7 @@ public class PostDataFragment extends Fragment {
                         "&iduser=" + idUser +
                         "&token=" + uToken +
                         "&text=" + post.text +
-                        "&place=" + post.place.getId() +
+                        "&place=" + post.placeId +
                         "&date=" + dateStr +
                         "&tagfriends=" + jsonTagFriends +
                         "&taganim=" + jsonTagAnimals +

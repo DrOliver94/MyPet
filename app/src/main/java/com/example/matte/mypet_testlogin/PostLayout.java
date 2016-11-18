@@ -72,7 +72,11 @@ public class PostLayout extends LinearLayout {
     public void setPost(Post post){
 
         //Caricamento dati
-        pText.setText(post.text);
+        if(post.text != null) {
+            pText.setText(post.text);
+        } else {
+            pText.setVisibility(GONE);
+        }
 
         //TODO leggere latlng
         if(post.place != null) {
@@ -82,7 +86,10 @@ public class PostLayout extends LinearLayout {
                 pPlace.setText(post.placeName);
             }
             pPlace.setOnClickListener(new OnClickOpenPostListener(post.placeLatLon));
+        } else {
+            pPlace.setVisibility(GONE);
         }
+
         if(post.date != null) {
             SimpleDateFormat format = new SimpleDateFormat("dd MMMM y HH:mm");
             pTime.setText(format.format(post.date));
@@ -97,6 +104,7 @@ public class PostLayout extends LinearLayout {
                     .into(pImageView);
         } else {
             //TODO pulire img
+            pText.setVisibility(GONE);
         }
 
         //##### TAG

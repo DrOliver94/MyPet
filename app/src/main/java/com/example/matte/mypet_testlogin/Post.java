@@ -22,7 +22,7 @@ import java.util.Date;
  * Contiene le informazioni di un singolo post
  *
  */
-public class Post {
+public class Post implements Comparable<Post> {
     public String id;
     public String idauthor;
     public String nameauthor;
@@ -117,6 +117,15 @@ public class Post {
                         }
                     });
         }
+    }
+
+    @Override
+    public int compareTo(Post post) {
+        if(post == null)
+            return 0;
+        if(this.equals(post))
+            return 0;
+        return -(this.date.compareTo(post.date));
     }
 
 
