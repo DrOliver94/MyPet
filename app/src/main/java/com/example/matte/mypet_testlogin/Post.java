@@ -98,21 +98,16 @@ public class Post {
         }
     }
 
-    public void setPlace(GoogleApiHelper gApiHelper, String placeId){
-        if(placeId != null && !placeId.isEmpty()) {
-//            GoogleApiClient gApiClient = new GoogleApiClient
-//                    .Builder(c)
-//                    .addApi(Places.GEO_DATA_API)
-//                    .addApi(Places.PLACE_DETECTION_API)
-//                    .build();
+    public void setPlace(GoogleApiHelper gApiHelper, String placeIdSet){
+        placeId = placeIdSet;
+        if(placeIdSet != null && !placeIdSet.isEmpty()) {
             Places.GeoDataApi
-                    .getPlaceById(gApiHelper.getGoogleApiClient(), placeId)
+                    .getPlaceById(gApiHelper.getGoogleApiClient(), placeIdSet)
                     .setResultCallback(new ResultCallback<PlaceBuffer>() {
                         @Override
                         public void onResult(@NonNull PlaceBuffer places) {
                             if (places.getStatus().isSuccess() && places.getCount() > 0) {
                                 place = (Place) places.get(0);
-//                                placeId = place.getId();
                                 placeAddress = place.getAddress().toString();
                                 placeName = place.getName().toString();
                                 placeLatLon = place.getLatLng();

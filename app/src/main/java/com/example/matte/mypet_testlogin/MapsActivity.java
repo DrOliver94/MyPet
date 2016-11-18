@@ -29,7 +29,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private LocationListener locListener;
     private LocationRequest locRequest;
 
-    private boolean isChoosingLoc;
+    private LatLng latlng;
+
+//    private boolean isChoosingLoc;
 
     private GoogleApiClient gApiClient;
 
@@ -53,10 +55,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 })
                 .build();
 
+        latlng = (LatLng) getIntent().getExtras().get("com.example.matte.mypet.latlng");
 
-        //True se si sta scegliendo una posizione
+                //True se si sta scegliendo una posizione
         //False se si vuole visualizzare una posizione
-        isChoosingLoc = (boolean) getIntent().getExtras().get("com.example.matte.mypet_testlogin.isChoosingLoc");
+//        isChoosingLoc = (boolean) getIntent().getExtras().get("com.example.matte.mypet.isChoosingLoc");
 
         mapFragment.getMapAsync(this);
     }
@@ -74,43 +77,50 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
+
+
+
         // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
+//        LatLng sydney = new LatLng(-34, 151);
+        mMap.addMarker(new MarkerOptions().position(latlng).title("Marker in Sydney"));
 //        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 10)); //1 - molto lontano; ~20 molto vicino
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, 16)); //1 - molto lontano; ~20 molto vicino
 
-        if (isChoosingLoc) {
-            //Se si vuole scegliere una location
+//        if (isChoosingLoc) {
+//            //Se si vuole scegliere una location
+//
+//            //Posizionare sulla posizione corrente, se disponibile
+//            locManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+//            locListener = new MyLocationListener();
+//            locRequest = new LocationRequest();
+//            //Rimanere in ascolto di una scelta di posizione
+//            //Reinviare al fragment richiesto la posizione scelta
+//        } else {
 
-            //Posizionare sulla posizione corrente, se disponibile
-            locManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-            locListener = new MyLocationListener();
-            locRequest = new LocationRequest();
-            //Rimanere in ascolto di una scelta di posizione
-            //Reinviare al fragment richiesto la posizione scelta
-        } else {
+
             //Se si vuole visualizzare una location
             //Mostrare la posizione passata con marker
-        }
+
+
+
     }
 
     @Override
     protected void onResume() {
         super.onResume();
 
-        //Al ripristino, richiede di aggiornare la view con la posizione corrente
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            LocationServices.FusedLocationApi.requestLocationUpdates(gApiClient, locRequest, locListener);
-            return;
-        }
+//        //Al ripristino, richiede di aggiornare la view con la posizione corrente
+//        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//            // TODO: Consider calling
+//            //    ActivityCompat#requestPermissions
+//            // here to request the missing permissions, and then overriding
+//            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+//            //                                          int[] grantResults)
+//            // to handle the case where the user grants the permission. See the documentation
+//            // for ActivityCompat#requestPermissions for more details.
+//            LocationServices.FusedLocationApi.requestLocationUpdates(gApiClient, locRequest, locListener);
+//            return;
+//        }
 
     }
 
@@ -120,7 +130,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         //Mette in pausa la lettura della posizione corrente
 //        locManager.removeUpdates(locListener);
-        LocationServices.FusedLocationApi.removeLocationUpdates(gApiClient, locListener);
+//        LocationServices.FusedLocationApi.removeLocationUpdates(gApiClient, locListener);
     }
 
     private class MyLocationListener implements LocationListener{

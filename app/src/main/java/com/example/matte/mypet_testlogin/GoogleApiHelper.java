@@ -25,7 +25,7 @@ public class GoogleApiHelper implements GoogleApiClient.ConnectionCallbacks, Goo
                 .Builder(context)
                 .addConnectionCallbacks(this)
                 .addApi(Places.GEO_DATA_API)
-//                .addApi(Places.PLACE_DETECTION_API)
+                .addApi(Places.PLACE_DETECTION_API)
                 .addOnConnectionFailedListener(this)
                 .build();
 

@@ -3,14 +3,18 @@ package com.example.matte.mypet_testlogin;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.content.Context;
+import android.content.Intent;
 import android.opengl.Visibility;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewParent;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
@@ -68,12 +72,21 @@ public class PostLayout extends LinearLayout {
         //Caricamento dati
         pText.setText(post.text);
 
+        //TODO leggere latlng
         if(post.place != null) {
             if(!post.placeAddress.equals("")) {
                 pPlace.setText(post.placeAddress);
             } else {
                 pPlace.setText(post.placeName);
             }
+//            pPlace.setOnClickListener(new OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    View v = view;
+//                    ViewParent postView = v.getParent().getParent();
+//                }
+//            });
+            pPlace.setOnClickListener(new OnClickOpenPostListener(post.placeLatLon));
 
         }
         if(post.date != null) {
@@ -113,9 +126,10 @@ public class PostLayout extends LinearLayout {
             v.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    View v = view;
+                    View v = view;  //view è il singolo interprexcircle
                 }
             });
+
             pPicLayout.addView(v, i);
         }
 
@@ -126,6 +140,24 @@ public class PostLayout extends LinearLayout {
 //            }
 //        });
 
+    }
+
+    public class OnClickOpenPostListener implements OnClickListener {
+        LatLng latlng;
+
+        public OnClickOpenPostListener(LatLng latlng){
+            super();
+            this.latlng = latlng;
+        }
+
+        @Override
+        public void onClick(View view) {
+            Log.d("MyPet", latlng.toString());
+            Intent i = new Intent(view.getContext(), MapsActivity.class);
+            i.putExtra("com.example.matte.mypet.latlng", latlng);
+            view.getContext().startActivity(i);
+
+        }
     }
 }
 

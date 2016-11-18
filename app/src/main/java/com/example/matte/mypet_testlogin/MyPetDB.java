@@ -1092,8 +1092,8 @@ public class MyPetDB {
             cv.put(POSTS_TEXT, p.text);
 //            cv.put(POSTS_PLACE_LAT, p.place.latitude);
 //            cv.put(POSTS_PLACE_LON, p.place.longitude);
-            if(p.place != null) {
-                cv.put(POSTS_PLACE, p.place.getId());
+            if(p.placeId != null) {
+                cv.put(POSTS_PLACE, p.placeId);
             }
             cv.put(POSTS_PICTURE, p.picture);
 

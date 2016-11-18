@@ -207,7 +207,6 @@ public class PostDataFragment extends Fragment {
                     tFriends.add(friends.get(i));     //se è stato selezionato, inserisce l'i-esimo amico in tagged
             }
             taggedFriends = tFriends;
-            return;
             }
         });
 
@@ -426,7 +425,8 @@ public class PostDataFragment extends Fragment {
                 String serverPic = p[3];
 //                post.place = new LatLng(Double.parseDouble(p[4]), Double.parseDouble(p[5]));
 //                post.setPlace(p[4]);
-                post.place=chosenPlace;
+                post.place = chosenPlace;
+                post.placeId = chosenPlace.getId();
                 post.animals = taggedAnimals;
                 post.users = taggedFriends;
 
