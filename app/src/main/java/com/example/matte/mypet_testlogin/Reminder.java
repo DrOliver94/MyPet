@@ -2,19 +2,22 @@ package com.example.matte.mypet_testlogin;
 
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * Contiene le informazioni di un singolo promemoria
  */
 
 public class Reminder {
-    String id;
-    String iduser;
-    String idanim;
-    String eventname;
-    String eventplace;
-    String eventtime;
-    String animname;
-    String animpic;
+    public String id;
+    public String iduser;
+    public String idanim;
+    public String eventname;
+    public String eventplace;
+    public Date eventtime;
+    public String animname;
+    public String animpic;
 
     public Reminder(){}
 
@@ -29,8 +32,10 @@ public class Reminder {
                 eventname = jObjReminder.getString("rName");
             if(!jObjReminder.isNull("rPlace"))
                 eventplace = jObjReminder.getString("rPlace");
-            if(!jObjReminder.isNull("rTime"))
-                eventtime = jObjReminder.getString("rTime");
+            if(!jObjReminder.isNull("rTime")) {
+                SimpleDateFormat format = new SimpleDateFormat("y-MM-dd HH:mm:ss");
+                eventtime = format.parse(jObjReminder.getString("rTime"));
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

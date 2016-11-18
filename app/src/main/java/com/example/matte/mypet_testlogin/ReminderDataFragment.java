@@ -1,5 +1,7 @@
 package com.example.matte.mypet_testlogin;
 
+import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -12,13 +14,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 
 /**
@@ -39,8 +47,9 @@ public class ReminderDataFragment extends Fragment {
     private String mParam1;
     private String mParam2;
     private Button sendReminder;
+    private Button changeReminderDate;
     private Spinner spinAnimals;
-
+    private TextView rDateTextView;
     private SharedPreferences shPref;
 
     private String idUser;
@@ -83,9 +92,12 @@ public class ReminderDataFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_reminder_data, container, false);
 
+        //Riferimenti UI
         rNameEditText = (EditText) view.findViewById(R.id.reminderEventEditText);
         rPlaceEditText = (EditText) view.findViewById(R.id.reminderPlaceEditText);
+        rDateTextView = (TextView) view.findViewById(R.id.reminderDateTextView);
 
+        //Due button
         sendReminder = (Button) view.findViewById(R.id.buttonSendReminderData);
         sendReminder.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -150,7 +162,7 @@ public class ReminderDataFragment extends Fragment {
 
             uToken = token;
 
-            pDialog = new ProgressDialog(getContext());
+            pDialog = new ProgressDialog(getActivity());
             serverComm = new ServerComm();
         }
 
@@ -172,9 +184,16 @@ public class ReminderDataFragment extends Fragment {
             try {
                 reminder.eventname = p[0];
                 reminder.eventplace = p[1];
-                reminder.eventtime = p[2];
+                String eventtime = p[2];
                 reminder.idanim = p[3];
                 reminder.iduser = p[4];
+
+                SimpleDateFormat format = new SimpleDateFormat("y-MM-dd HH:mm:ss");
+                try {
+                    reminder.eventtime = format.parse(eventtime);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
 
                 Animal a = HomeActivity.dbManager.getAnimal(reminder.idanim);
                 reminder.animpic = a.profilepic;
@@ -184,7 +203,7 @@ public class ReminderDataFragment extends Fragment {
                         "&token=" + uToken +
                         "&name=" + reminder.eventname +
                         "&place=" + reminder.eventplace +
-                        "&time=" + reminder.eventtime +
+                        "&time=" + eventtime +
                         "&idanim=" + reminder.idanim;
 
                 Log.d("MyPet", postArgs);
@@ -242,6 +261,46 @@ public class ReminderDataFragment extends Fragment {
             }
         }
     }
+
+    public int year;
+    public int month;
+    public int day;
+    public String newDate;
+
+    public DatePickerDialog.OnDateSetListener datePickerListener
+            = new DatePickerDialog.OnDateSetListener(){
+
+        public Date newBirthDate;
+
+        @Override
+        public void onDateSet(DatePicker view, int Year, int monthOfYear, int dayOfMonth) {
+            newDate = new StringBuilder()
+                    .append(Year).append("-")
+                    .append(monthOfYear+1).append("-")
+                    .append(dayOfMonth).toString();
+
+            SimpleDateFormat format = new SimpleDateFormat("y-MM-dd HH:mm:ss");
+            try {
+                newBirthDate = format.parse(newDate);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            format = new SimpleDateFormat("dd MMMM y");
+            rDateTextView.setText(format.format(newBirthDate));
+
+        }
+    };
+
+    public void showDatePickerDialog(View v) {
+        final Calendar c = Calendar.getInstance();
+        year = c.get(Calendar.YEAR);
+        month = c.get(Calendar.MONTH);
+        day = c.get(Calendar.DAY_OF_MONTH);
+        Dialog newD = new DatePickerDialog(getActivity(), datePickerListener, year, month, day);
+        newD.show();
+    }
+
 
 
 }

@@ -274,29 +274,6 @@ public class UserDataFragment extends Fragment {
                     .placeholder(R.drawable.img)
                     .transform(new CropCircleTransformation())
                     .into((ImageView) getActivity().findViewById(R.id.imageViewUserData));
-
-// Tentativi per l'upload dell'img
-//
-//            String imagepath = getPath(chosenImgUri);
-//            File f = new File(imagepath);
-//******************************
-//            File f = new File(chosenImgUri.getPath());
-//            f.exists();
-//
-//            //tenta upload del file
-//            uploadFile("http://webdev.dibris.unige.it/~S3951060/testimg.php", f);
-//***********************************
-//            try {
-//                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), uri);
-//                // Log.d(TAG, String.valueOf(bitmap));
-//
-//                ImageView imageView = (ImageView) getActivity().findViewById(R.id.imageViewUserData);
-//                imageView.setImageBitmap(bitmap);
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//************************************
-
         }
     }
 
@@ -689,7 +666,5 @@ public class UserDataFragment extends Fragment {
         Dialog newD = new DatePickerDialog(getActivity(), datePickerListener, year, month, day);
         newD.show();
     }
-
-
 
 }
