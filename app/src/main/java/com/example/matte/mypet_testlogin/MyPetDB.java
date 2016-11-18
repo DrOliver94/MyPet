@@ -910,7 +910,7 @@ public class MyPetDB {
 //        return rowID;
 //    }
 
-    public ArrayList<Post> getPostsByAuthor(String idAuthor) {
+    public ArrayList<Post> getPostsByAuthor(String idAuthor, GoogleApiHelper gApiHelper) {
         ArrayList<Post> posts = new ArrayList<>();
         openReadableDB();
 
@@ -925,7 +925,7 @@ public class MyPetDB {
             post.id = cursor.getString(POSTS_ID_COL);
             post.text = cursor.getString(POSTS_TEXT_COL);
             post.idauthor = cursor.getString(POSTS_IDAUTHOR_COL);
-            post.setPlace(dbHelper.context, cursor.getString(POSTS_PLACE_COL));
+            post.setPlace(gApiHelper, cursor.getString(POSTS_PLACE_COL));
 
             SimpleDateFormat format = new SimpleDateFormat("y-MM-dd H:m:s");
             try {
@@ -952,7 +952,7 @@ public class MyPetDB {
         return posts;
     }
 
-    public ArrayList<Post> getPostsByAnimal(String idAnimal) {
+    public ArrayList<Post> getPostsByAnimal(String idAnimal, GoogleApiHelper gApiHelper) {
         ArrayList<Post> posts = new ArrayList<>();
         openReadableDB();
 
@@ -977,7 +977,7 @@ public class MyPetDB {
             post.id = cursor.getString(cursor.getColumnIndex(POSTS_ID));
             post.text = cursor.getString(cursor.getColumnIndex(POSTS_TEXT));
             post.idauthor = cursor.getString(cursor.getColumnIndex(POSTS_IDAUTHOR));
-            post.setPlace(dbHelper.context, cursor.getString(cursor.getColumnIndex(POSTS_PLACE)));
+            post.setPlace(gApiHelper, cursor.getString(cursor.getColumnIndex(POSTS_PLACE)));
 
             SimpleDateFormat format = new SimpleDateFormat("y-MM-dd H:m:s");
             try {
@@ -1010,7 +1010,7 @@ public class MyPetDB {
      * @param idUser id dell'utente da ricercare nel DB
      * @return ArrayList dei post cercati
      */
-    public ArrayList<Post> getPostsByUser(String idUser) {
+    public ArrayList<Post> getPostsByUser(String idUser, GoogleApiHelper gApiHelper) {
         ArrayList<Post> posts = new ArrayList<>();
         openReadableDB();
 
@@ -1036,7 +1036,7 @@ public class MyPetDB {
             post.text = cursor.getString(cursor.getColumnIndex(POSTS_TEXT));
             post.idauthor = cursor.getString(cursor.getColumnIndex(POSTS_IDAUTHOR));
             post.picture = cursor.getString(cursor.getColumnIndex(POSTS_PICTURE));
-            post.setPlace(dbHelper.context, cursor.getString(cursor.getColumnIndex(POSTS_PLACE)));
+            post.setPlace(gApiHelper, cursor.getString(cursor.getColumnIndex(POSTS_PLACE)));
 
             SimpleDateFormat format = new SimpleDateFormat("y-MM-dd H:m:s");
             try {
@@ -1060,7 +1060,7 @@ public class MyPetDB {
         closeDB();
 
         //########## POST in cui si è AUTORE ##########
-        ArrayList<Post> authPost = getPostsByAuthor(idUser);
+        ArrayList<Post> authPost = getPostsByAuthor(idUser, gApiHelper);
 
         posts.addAll(authPost);
 

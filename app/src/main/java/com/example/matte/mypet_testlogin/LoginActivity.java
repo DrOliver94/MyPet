@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -18,6 +19,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.PlaceBuffer;
+import com.google.android.gms.location.places.Places;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -41,7 +48,13 @@ public class LoginActivity extends AppCompatActivity {
 
     private ProgressDialog pDialog;
 
+    public static GoogleApiClient gApiClient;
+
     SharedPreferences shPref;
+
+    public GoogleApiHelper gApiHelper;
+
+    public Place place;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,8 +63,42 @@ public class LoginActivity extends AppCompatActivity {
 
         setTitle("MyPet");
 
-        shPref = this.getSharedPreferences("MyPetPrefs", MODE_PRIVATE);     //recupera sharedPref
+//***********************************
 
+        gApiClient = new GoogleApiClient.Builder(this)
+                .addApi(Places.GEO_DATA_API)
+//                .addApi(Places.PLACE_DETECTION_API)
+                .enableAutoManage(this, new GoogleApiClient.OnConnectionFailedListener() {
+                    @Override
+                    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+                        Log.d("MyPet", connectionResult.getErrorMessage());
+                        return;
+                    }
+                })
+                .build();
+
+        gApiHelper = new GoogleApiHelper(getApplicationContext());
+
+//        gah.getGoogleApiClient();
+
+//        Places.GeoDataApi
+//                .getPlaceById(gah.getGoogleApiClient(), "ChIJrZrU3FJB0xIRCmKBGPGEaiM")
+//                .setResultCallback(new ResultCallback<PlaceBuffer>() {
+//                    @Override
+//                    public void onResult(@NonNull PlaceBuffer places) {
+//                        if (places.getStatus().isSuccess() && places.getCount() > 0) {
+//                            place = (Place) places.get(0);
+//                            Log.d("MyPet", place.getId());
+//                            Log.d("MyPet", place.getAddress().toString());
+//                        } else {
+//                        }
+//                        places.release();
+//                    }
+//                });
+
+//*******************************************
+
+        shPref = this.getSharedPreferences("MyPetPrefs", MODE_PRIVATE);     //recupera sharedPref
         //pressione di Invio nel campo password
         mPasswordView = (EditText) findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -488,7 +535,7 @@ public class LoginActivity extends AppCompatActivity {
                     for (int i = 0; i < idPosts.length(); i++) {        //per ogni post nell'obj
                         String idPost = (String) idPosts.get(i);        //recupera ID
                         JSONObject jPost = jPosts.getJSONObject(idPost);//recupera post
-                        Post p = new Post(idPost, jPost, getBaseContext());               //Crea obj
+                        Post p = new Post(idPost, jPost, gApiHelper);               //Crea obj
                         dbHand.insertPost(p);                           //Inserisce nel DB
                         imgsList.add(p.picture);
                     }

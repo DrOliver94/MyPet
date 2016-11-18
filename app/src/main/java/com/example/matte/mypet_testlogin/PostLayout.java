@@ -3,6 +3,7 @@ package com.example.matte.mypet_testlogin;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.content.Context;
+import android.opengl.Visibility;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -66,6 +67,7 @@ public class PostLayout extends LinearLayout {
 
         //Caricamento dati
         pText.setText(post.text);
+
         if(post.place != null) {
             if(!post.placeAddress.equals("")) {
                 pPlace.setText(post.placeAddress);

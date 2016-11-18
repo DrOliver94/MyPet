@@ -3,6 +3,7 @@ package com.example.matte.mypet_testlogin;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
+import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiActivity;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
@@ -30,8 +31,11 @@ public class Post {
     public String text;
     public Date date;
     public Place place;
+    public String placeId;
     public String placeAddress;
     public String placeName;
+    public LatLng placeLatLon;
+
     public ArrayList<User> users;
     public ArrayList<Animal> animals;
 
@@ -45,10 +49,10 @@ public class Post {
         this.picture = pic;
     }
 
-    public Post(String idPost, JSONObject jObjPost, Context c) {
+    public Post(String idPost, JSONObject jObjPost, GoogleApiHelper gApiHelper) {
         users = new ArrayList<User>();
         animals = new ArrayList<Animal>();
-        String placeId;
+//        String placeId;
 
         try {
             id = idPost;
@@ -64,7 +68,8 @@ public class Post {
                 date = format.parse(jObjPost.getString("date"));
             }
             if(!jObjPost.isNull("place")) {
-                setPlace(c, jObjPost.getString("place"));
+                placeId = jObjPost.getString("place");
+                setPlace(gApiHelper, placeId);
             }
             if(!jObjPost.isNull("users")) {
                 JSONObject jUsers = jObjPost.getJSONObject("users");
@@ -93,17 +98,24 @@ public class Post {
         }
     }
 
-    public void setPlace(Context c, String placeId){
+    public void setPlace(GoogleApiHelper gApiHelper, String placeId){
         if(placeId != null && !placeId.isEmpty()) {
+//            GoogleApiClient gApiClient = new GoogleApiClient
+//                    .Builder(c)
+//                    .addApi(Places.GEO_DATA_API)
+//                    .addApi(Places.PLACE_DETECTION_API)
+//                    .build();
             Places.GeoDataApi
-                    .getPlaceById(HomeActivity.gApiClient, placeId)
+                    .getPlaceById(gApiHelper.getGoogleApiClient(), placeId)
                     .setResultCallback(new ResultCallback<PlaceBuffer>() {
                         @Override
                         public void onResult(@NonNull PlaceBuffer places) {
                             if (places.getStatus().isSuccess() && places.getCount() > 0) {
                                 place = (Place) places.get(0);
+//                                placeId = place.getId();
                                 placeAddress = place.getAddress().toString();
                                 placeName = place.getName().toString();
+                                placeLatLon = place.getLatLng();
                             } else {
                             }
                             places.release();

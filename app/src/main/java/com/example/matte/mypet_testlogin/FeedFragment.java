@@ -39,6 +39,8 @@ public class FeedFragment extends Fragment {
 
     private ServerComm srv;
 
+    private GoogleApiHelper gApiHelper;
+
     public FeedFragment() {}
 
     /**
@@ -74,6 +76,8 @@ public class FeedFragment extends Fragment {
         dbHandler = new MyPetDB(getActivity());
 
         setHasOptionsMenu(true);    //Per mostrare il menu specifico
+
+        gApiHelper = new GoogleApiHelper(getActivity());
     }
 
     @Override
@@ -99,7 +103,7 @@ public class FeedFragment extends Fragment {
             }
         });
 
-        getFeedPost(shPref.getString("IdUser", ""));
+        getFeedPost(shPref.getString("IdUser", ""), gApiHelper);
 
         getActivity().setTitle("Feed");
 
@@ -176,9 +180,9 @@ public class FeedFragment extends Fragment {
 
 
 
-    public void getFeedPost(String idUser) {
+    public void getFeedPost(String idUser, GoogleApiHelper gApiHelper) {
         //recupero elenco dei post dal DB
-        ArrayList<Post> posts = HomeActivity.dbManager.getPostsByUser(idUser);
+        ArrayList<Post> posts = HomeActivity.dbManager.getPostsByUser(idUser, gApiHelper);
 
         PostListAdapter adapter = new PostListAdapter(getActivity(), posts);
         feedListView.setAdapter(adapter);

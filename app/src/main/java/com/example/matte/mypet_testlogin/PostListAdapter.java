@@ -41,7 +41,8 @@ public class PostListAdapter extends BaseAdapter {
         PostLayout postLayout = null;
         Post p = posts.get(pos);
 
-        if(view == null){
+//        if(view == null){
+        if(true){
             postLayout = new PostLayout(context, p);
         } else {
             postLayout = (PostLayout) view;
