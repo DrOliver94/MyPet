@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -77,7 +78,7 @@ public class UserDataFragment extends Fragment {
     private TextView uBirthdateTextView;
     private Button sendData;
     private Button uploadImg;
-    private Button changeUserBirthDate;
+    private ImageButton changeUserBirthDate;
     private ImageView imgUserData;
     private EditText uPasswordEditTxt;
     private TextView uPasswordLbl;
@@ -221,7 +222,7 @@ public class UserDataFragment extends Fragment {
             }
         });
 
-        changeUserBirthDate = (Button) view .findViewById(R.id.changeUserBirthDateButton);
+        changeUserBirthDate = (ImageButton) view .findViewById(R.id.changeUserBirthDateButton);
         changeUserBirthDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -71,10 +71,10 @@
                 android:layout_margin="10dp"
                 android:textSize="20sp" />
 
-            <Button
-                android:text="Change Date"
-                android:layout_width="261dp"
-                android:layout_height="81dp"
+            <ImageButton
+                android:src="@drawable/ic_event_black_24dp"
+                android:layout_width="55dp"
+                android:layout_height="55dp"
                 android:id="@+id/changeReminderDateButton"
                 android:layout_gravity="center_horizontal" />
 

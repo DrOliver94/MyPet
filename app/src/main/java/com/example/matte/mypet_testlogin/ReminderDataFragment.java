@@ -18,6 +18,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONObject;
 
@@ -252,6 +253,11 @@ public class ReminderDataFragment extends Fragment {
                     if (pDialog.isShowing()) {
                         pDialog.dismiss();
                     }
+
+                    Toast.makeText(getActivity(), jObj.getString("error"), Toast.LENGTH_SHORT).show();
+
+                    //Aggiorna token nelle SharedPref
+                    shPref.edit().putString("Token", jObj.getString("token")).apply();
 
                     //TODO indicare l'errore all'utente. es: uUsernameEditTxt.setError();
                     return;

@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -91,7 +92,7 @@ public class PostDataFragment extends Fragment {
 
     private SharedPreferences shPref;
 
-    private Button chooseLocation;
+    private ImageButton chooseLocation;
     private int PLACE_PICKER_REQUEST = 81293;
     public Place chosenPlace;
     private LatLng chosenLocation;
@@ -166,7 +167,7 @@ public class PostDataFragment extends Fragment {
             }
         });
 
-        chooseLocation = (Button) view.findViewById(R.id.buttonChooseLocation);
+        chooseLocation = (ImageButton) view.findViewById(R.id.buttonChooseLocation);
         chooseLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

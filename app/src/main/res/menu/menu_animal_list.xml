@@ -4,7 +4,7 @@
 
     <item android:id="@+id/menuAddAnimal"
         android:title="Aggiungi animale"
+        android:icon="@drawable/ic_add_black_24dp"
         app:showAsAction="ifRoom" />
-        <!--android:icon="@drawable/ic_menu_manage"-->
 
 </menu>
