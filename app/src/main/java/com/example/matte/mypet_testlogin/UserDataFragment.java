@@ -672,6 +672,9 @@ public class UserDataFragment extends Fragment {
         year = c.get(Calendar.YEAR);
         month = c.get(Calendar.MONTH);
         day = c.get(Calendar.DAY_OF_MONTH);
+
+
+
         Dialog newD = new DatePickerDialog(getActivity(), datePickerListener, year, month, day);
         newD.show();
     }
