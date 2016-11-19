@@ -126,7 +126,6 @@ public class ReminderFragment extends Fragment {
         SimpleAdapter adapter = new SimpleAdapter(getActivity(), data, res, from, to);
         //adapter.getCount();
         remindersListView.setAdapter(adapter);
-
     }
 
     @Override
@@ -160,7 +159,4 @@ public class ReminderFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
     }
-
-
-
 }
