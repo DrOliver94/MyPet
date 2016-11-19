@@ -214,10 +214,10 @@
                         android:textSize="20sp"
                         android:maxLines="1"/>
 
-                    <Button
-                        android:text="Change Date"
-                        android:layout_width="261dp"
-                        android:layout_height="81dp"
+                    <ImageButton
+                        android:src="@drawable/ic_event_black_24dp"
+                        android:layout_width="55dp"
+                        android:layout_height="55dp"
                         android:id="@+id/changeUserBirthDateButton"
                         android:layout_gravity="center_horizontal" />
 

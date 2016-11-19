@@ -22,6 +22,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -74,7 +75,7 @@ public class AnimalDataFragment extends Fragment {
     private EditText aGenderEditTxt;
     private Button sendData;
     private Button uploadImg;
-    private Button changeAnimalBirthDate;
+    private ImageButton changeAnimalBirthDate;
     private ImageView imgAnimalData;
 
     private Bitmap bitmap;
@@ -203,7 +204,7 @@ public class AnimalDataFragment extends Fragment {
             }
         });
 
-        changeAnimalBirthDate = (Button) view .findViewById(R.id.changeAnimalBirthDateButton);
+        changeAnimalBirthDate = (ImageButton) view .findViewById(R.id.changeAnimalBirthDateButton);
         changeAnimalBirthDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
