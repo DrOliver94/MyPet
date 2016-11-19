@@ -18,6 +18,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONObject;
 
@@ -27,7 +28,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-
 
 /**
  * A simple {@link Fragment} subclass.
@@ -136,8 +136,7 @@ public class ReminderDataFragment extends Fragment {
         //TODO fare controlli. usare TextView.setError()
         String nameTxt = rNameEditText.getText().toString();
         String placeTxt = rPlaceEditText.getText().toString();
-        String dateTxt = "date";    //TODO gestire data
-//        String idAnim = "9";
+        String dateTxt = "2015-12-08 09:52:00";    //TODO gestire data
         Animal selectedAnim = (Animal) spinAnimals.getSelectedItem();
 
         //Inviare richiesta al server per l'update
@@ -240,6 +239,11 @@ public class ReminderDataFragment extends Fragment {
                     if (pDialog.isShowing()) {
                         pDialog.dismiss();
                     }
+
+                    Toast.makeText(getActivity(), jObj.getString("error"), Toast.LENGTH_SHORT).show();
+
+                    //Aggiorna token nelle SharedPref
+                    shPref.edit().putString("Token", jObj.getString("token")).apply();
 
                     //TODO indicare l'errore all'utente. es: uUsernameEditTxt.setError();
                     return;

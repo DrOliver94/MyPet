@@ -14,9 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.places.Places;
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
@@ -24,7 +22,7 @@ public class HomeActivity extends AppCompatActivity
     public static MyPetDB dbManager;
     public static SharedPreferences shPref;
 
-    public static GoogleApiClient gApiClient;
+//    public static GoogleApiClient gApiClient;
 
     public static final String IMG_BASEURL = "https://webdev.dibris.unige.it/~S3951060/";
 
