@@ -517,6 +517,8 @@ public class MyPetDB {
             cursor.close();
         closeDB();
 
+        Collections.sort(friends);
+
         return friends;
     }
 
@@ -753,6 +755,8 @@ public class MyPetDB {
             cursor.close();
         closeDB();
 
+        Collections.sort(animals);
+
         return animals;
     }
 
@@ -949,6 +953,8 @@ public class MyPetDB {
             cursor.close();
         closeDB();
 
+        Collections.sort(posts);
+
         return posts;
     }
 
@@ -1061,10 +1067,8 @@ public class MyPetDB {
 
         //########## POST in cui si è AUTORE ##########
         ArrayList<Post> authPost = getPostsByAuthor(idUser, gApiHelper);
-
         posts.addAll(authPost);
 
-        //TODO ordinare per data
         Collections.sort(posts);
 
         return posts;
