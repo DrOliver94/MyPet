@@ -9,7 +9,7 @@ import java.util.Date;
  * Contiene le informazioni di un singolo promemoria
  */
 
-public class Reminder {
+public class Reminder implements Comparable<Reminder> {
     public String id;
     public String iduser;
     public String idanim;
@@ -41,4 +41,20 @@ public class Reminder {
         }
     }
 
+    /**
+     * Confronta due reminder
+     *
+     * @param other altro reminder con cui fare il confronto
+     * @return 0 se sono non comparabili o hanno stessa data <br/>
+     *          1 se il reminder è più recente di other <br/>
+     *          -1 se il reminder è più vecchio di other <br/>
+     */
+    @Override
+    public int compareTo(Reminder other) {
+        if(other == null)
+            return 0;
+        if(this.equals(other))
+            return 0;
+        return -(this.eventtime.compareTo(other.eventtime));
+    }
 }

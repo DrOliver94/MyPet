@@ -119,16 +119,21 @@ public class Post implements Comparable<Post> {
         }
     }
 
+    /**
+     * Confronta due post
+     *
+     * @param other altro post con cui fare il confronto
+     * @return 0 se other è null o hanno stessa data <br/>
+     *          1 se il post è più recente di other <br/>
+     *          -1 se il post è più vecchio di other <br/>
+     */
     @Override
-    public int compareTo(Post post) {
-        if(post == null)
+    public int compareTo(Post other) {
+        if(other == null)
             return 0;
-        if(this.equals(post))
+        if(this.equals(other))
             return 0;
-        return -(this.date.compareTo(post.date));
+        return -(this.date.compareTo(other.date));
     }
 
-
-    //TODO memorizzare in un array gli user e gli animal taggati nel post = due ArrayList
-    //TODO scrivere metodi che dati gli id possano recuperare le info dei suddetti (meglio in Post o in User e Animal?)
 }

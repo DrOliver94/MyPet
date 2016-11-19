@@ -1284,6 +1284,8 @@ public class MyPetDB {
             cursor.close();
             closeDB();
 
+            Collections.sort(reminders);
+
             return reminders;
         } else {    //Se non ci sono risultati
             closeDB();

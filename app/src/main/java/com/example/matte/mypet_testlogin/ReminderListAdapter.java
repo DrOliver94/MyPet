@@ -8,27 +8,27 @@ import android.widget.BaseAdapter;
 import java.util.ArrayList;
 
 /**
- * Created by matte on 161031.
+ * Created by matte on 161119.
  */
 
 public class ReminderListAdapter extends BaseAdapter {
 
     private Context context;
-    private ArrayList<Post> posts;
+    private ArrayList<Reminder> reminders;
 
-    public ReminderListAdapter(Context context, ArrayList<Post> posts){
+    public ReminderListAdapter(Context context, ArrayList<Reminder> reminders){
         this.context = context;
-        this.posts = posts;
+        this.reminders = reminders;
     }
 
     @Override
     public int getCount() {
-        return posts.size();
+        return reminders.size();
     }
 
     @Override
     public Object getItem(int pos) {
-        return posts.get(pos);
+        return reminders.get(pos);
     }
 
     @Override
@@ -38,18 +38,17 @@ public class ReminderListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int pos, View view, ViewGroup viewGroup) {
-        PostLayout postLayout = null;
-        Post p = posts.get(pos);
+        ReminderLayout reminderLayout = null;
+        Reminder r = reminders.get(pos);
 
 //        if(view == null){
         if(true){
-            postLayout = new PostLayout(context, p);
+            reminderLayout = new ReminderLayout(context, r);
         } else {
-            postLayout = (PostLayout) view;
-            postLayout.setPost(p);
+            reminderLayout = (ReminderLayout) view;
+            reminderLayout.setReminder(r);
         }
 
-
-        return postLayout;
+        return reminderLayout;
     }
 }

@@ -101,30 +101,33 @@ public class ReminderFragment extends Fragment {
     private void getReminders(String idUser) {
         //recupero elenco dei post dal DB
         ArrayList<Reminder> reminders = HomeActivity.dbManager.getRemindersByUser(idUser);
-
-        if(reminders == null || reminders.isEmpty()){
-            //TODO  indicare assenza promemoria
-            return;
-        }
-
-        //caricamento dei post in un array di HashMap
-        ArrayList<HashMap<String, String>> data = new ArrayList<>();
-        for(Reminder r : reminders) {
-            HashMap<String, String> map = new HashMap<>();
-            map.put("id", r.id);
-            map.put("eventname", r.eventname);
-            data.add(map);
-            Log.d("Event in map ", r.eventname);
-        }
-
-        //risorse
-        int res = R.layout.listview_reminder;
-        String [] from = {"id", "eventname"};
-        int[] to = {R.id.reminder_id, R.id.reminder_eventname};
-
-        //caricamento dei dati nell'adapter
-        SimpleAdapter adapter = new SimpleAdapter(getActivity(), data, res, from, to);
+//
+//        if(reminders == null || reminders.isEmpty()){
+//            //TODO  indicare assenza promemoria
+//            return;
+//        }
+//
+//        //caricamento dei post in un array di HashMap
+//        ArrayList<HashMap<String, String>> data = new ArrayList<>();
+//        for(Reminder r : reminders) {
+//            HashMap<String, String> map = new HashMap<>();
+//            map.put("id", r.id);
+//            map.put("eventname", r.eventname);
+//            data.add(map);
+//            Log.d("Event in map ", r.eventname);
+//        }
+//
+//        //risorse
+//        int res = R.layout.listview_reminder;
+//        String [] from = {"id", "eventname"};
+//        int[] to = {R.id.reminder_id, R.id.reminder_eventname};
+//
+//        //caricamento dei dati nell'adapter
+//        SimpleAdapter adapter = new SimpleAdapter(getActivity(), data, res, from, to);
         //adapter.getCount();
+
+        ReminderListAdapter adapter = new ReminderListAdapter(getActivity(), reminders);
+
         remindersListView.setAdapter(adapter);
     }
 
