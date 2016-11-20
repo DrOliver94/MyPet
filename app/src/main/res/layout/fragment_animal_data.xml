@@ -143,6 +143,29 @@
                         android:layout_margin="10dp"
                         android:textSize="20sp" />
 
+                    <RadioGroup
+                        android:id="@+id/animalGenderRadioBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="35dp"
+                        android:layout_margin="10dp"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/animalGenderRadioBtnMale"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Maschio"
+                            android:checked="true"
+                            android:textSize="20sp"/>
+
+                        <RadioButton
+                            android:id="@+id/animalGenderRadioBtnFemale"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Femmina"
+                            android:textSize="20sp"/>
+                    </RadioGroup>
+
                     <EditText
                         android:text=""
                         android:layout_width="0dp"

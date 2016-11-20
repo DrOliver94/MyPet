@@ -46,8 +46,8 @@ public class Reminder implements Comparable<Reminder> {
      *
      * @param other altro reminder con cui fare il confronto
      * @return 0 se sono non comparabili o hanno stessa data <br/>
-     *          1 se il reminder è più recente di other <br/>
-     *          -1 se il reminder è più vecchio di other <br/>
+     *          1 se il reminder è più vecchio di other <br/>
+     *          -1 se il reminder è più recente di other <br/>
      */
     @Override
     public int compareTo(Reminder other) {
@@ -55,6 +55,6 @@ public class Reminder implements Comparable<Reminder> {
             return 0;
         if(this.equals(other))
             return 0;
-        return -(this.eventtime.compareTo(other.eventtime));
+        return (this.eventtime.compareTo(other.eventtime));
     }
 }

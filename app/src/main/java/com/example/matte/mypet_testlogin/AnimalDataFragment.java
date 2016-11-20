@@ -24,6 +24,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -77,6 +78,8 @@ public class AnimalDataFragment extends Fragment {
     private Button uploadImg;
     private ImageButton changeAnimalBirthDate;
     private ImageView imgAnimalData;
+    private RadioButton aGenderMale;
+    private RadioButton aGenderFemale;
 
     private Bitmap bitmap;
 
@@ -128,6 +131,8 @@ public class AnimalDataFragment extends Fragment {
         aBirthdateTextView = (TextView) view.findViewById(R.id.animalBirthDateTextView);
         aGenderEditTxt = (EditText) view.findViewById(R.id.animalGenderEditText);
         imgAnimalData = (ImageView) view.findViewById(R.id.imageViewAnimalData);
+        aGenderMale = (RadioButton) view.findViewById(R.id.animalGenderRadioBtnMale);
+        aGenderFemale = (RadioButton) view.findViewById(R.id.animalGenderRadioBtnFemale);
 
         //Due button
         sendData = (Button) view.findViewById(R.id.buttonSendAnimData);
@@ -138,11 +143,18 @@ public class AnimalDataFragment extends Fragment {
 
             aNameEditTxt.setText(a.name);
             aSpeciesEditTxt.setText(a.species);
-            aGenderEditTxt.setText(a.gender);
+//            aGenderEditTxt.setText(a.gender);
+            if(a.gender.equals("male")){
+                aGenderMale.setChecked(true);
+            } else {
+                aGenderFemale.setChecked(true);
+            }
 
+            //Gestione data
+            newBirthDate = a.birthdate;     //Memorizza obj Date
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM y");
-            newDate = dateFormat.format(a.birthdate);
-            aBirthdateTextView.setText(newDate);
+            newDate = dateFormat.format(a.birthdate);   //Ricorda data in formato String
+            aBirthdateTextView.setText(newDate);    //imposta il testo
 
             //Memorizzo percorso ultima img usata
             oldImgPath = a.profilepic;
@@ -204,6 +216,7 @@ public class AnimalDataFragment extends Fragment {
             }
         });
 
+        //Button di editing data
         changeAnimalBirthDate = (ImageButton) view .findViewById(R.id.changeAnimalBirthDateButton);
         changeAnimalBirthDate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -338,39 +351,31 @@ public class AnimalDataFragment extends Fragment {
         //TODO fare controlli. usare TextView.setError()
         String nameTxt = aNameEditTxt.getText().toString();
         String speciesTxt = aSpeciesEditTxt.getText().toString();
-        String genderTxt = aGenderEditTxt.getText().toString();
-        String birthdateTxt = aBirthdateTextView.getText().toString();   //TODO gestire data
+
+        if(newBirthDate == null){
+            aBirthdateTextView.setError("Data di nascita non inserita");
+            return;
+        }
+        SimpleDateFormat dateFormat = new SimpleDateFormat("y-MM-dd");
+        String birthdateTxt = dateFormat.format(newBirthDate);
+
+        String genderTxt = "";
+        if(aGenderMale.isChecked()){
+            genderTxt = "male";
+        } else {
+            genderTxt = "female";
+        }
 
         String clientImgPath = "";
         if(chosenImgUri != null) {
             clientImgPath = chosenImgUri.toString();
         } else {
-            //TODO set img di default
+            clientImgPath = HomeActivity.IMG_BASEURL + "img/default.png";
         }
 
         //Inviare richiesta al server per l'update
         InsertAnimalTask insertAnim = new InsertAnimalTask(shPref.getString("Token", ""), idUser);
         insertAnim.execute(nameTxt, speciesTxt, genderTxt, birthdateTxt, clientImgPath, serverPicPath);
-    }
-
-    private void updateAnimal(String serverPicPath){
-        //Recuperare dati
-        //TODO fai controlli
-        String nameTxt = aNameEditTxt.getText().toString();
-        String speciesTxt = aSpeciesEditTxt.getText().toString();
-        String genderTxt = aGenderEditTxt.getText().toString();
-        String birthdateTxt = newDate;
-
-        String clientImgPath = "";
-        if(chosenImgUri != null)
-            clientImgPath = chosenImgUri.toString();    //img scelta
-        else
-            clientImgPath = oldImgPath; //img non modificata, si lascia quella già presente
-
-        //Inviare richiesta al server per l'update
-        UpdateAnimalTask updateAnim = new UpdateAnimalTask(shPref.getString("Token", ""), idAnim, idUser);
-        updateAnim.execute(nameTxt, speciesTxt, genderTxt, birthdateTxt,
-                clientImgPath, serverPicPath);
     }
 
     /**
@@ -415,12 +420,13 @@ public class AnimalDataFragment extends Fragment {
                 anim.name = p[0];
                 anim.species = p[1];
                 anim.gender = p[2];
+                String birthdate = p[3];
                 anim.profilepic = p[4];
                 String serverPic = p[5];
 
                 SimpleDateFormat format = new SimpleDateFormat("y-MM-dd");
                 try {
-                    anim.birthdate = format.parse(p[3]);
+                    anim.birthdate = format.parse(birthdate);
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
@@ -431,7 +437,7 @@ public class AnimalDataFragment extends Fragment {
                         "&name=" + anim.name +
                         "&species=" + anim.species +
                         "&gender=" + anim.gender +
-                        "&birthdate=" + anim.birthdate +
+                        "&birthdate=" + birthdate +
                         "&profilepic=" + serverPic;
 
                 Log.d("MyPet", postArgs);
@@ -449,7 +455,7 @@ public class AnimalDataFragment extends Fragment {
                     //Se va a buon fine, recuperra l'ID e fa update nel DB locale
                     anim.id = jObj.getString("idpet");
 
-                    long idNewAnim = HomeActivity.dbManager.insertAnimal(anim, idUser); //FIXME Non dovrebbe essere il nuovo id quello...
+                    long idNewAnim = HomeActivity.dbManager.insertAnimal(anim, idUser);
 
                     //Aggiorna token nelle SharedPref
                     shPref.edit().putString("Token", jObj.getString("token")).apply();
@@ -482,6 +488,40 @@ public class AnimalDataFragment extends Fragment {
             }
         }
     }
+
+    private void updateAnimal(String serverPicPath){
+        //Recuperare dati
+        //TODO fai controlli
+        String nameTxt = aNameEditTxt.getText().toString();
+        String speciesTxt = aSpeciesEditTxt.getText().toString();
+
+        String genderTxt = "";
+        if(aGenderMale.isChecked()){
+            genderTxt = "male";
+        } else {
+            genderTxt = "female";
+        }
+
+        if(newBirthDate == null){
+            aBirthdateTextView.setError("Data di nascita non inserita");
+            return;
+        }
+        SimpleDateFormat dateFormat = new SimpleDateFormat("y-MM-dd");
+        String birthdateTxt = dateFormat.format(newBirthDate);
+
+        String clientImgPath = "";
+        if(chosenImgUri != null)
+            clientImgPath = chosenImgUri.toString();    //img scelta
+        else
+            clientImgPath = oldImgPath; //img non modificata, si lascia quella già presente
+
+        //Inviare richiesta al server per l'update
+        UpdateAnimalTask updateAnim = new UpdateAnimalTask(shPref.getString("Token", ""), idAnim, idUser);
+        updateAnim.execute(nameTxt, speciesTxt, genderTxt, birthdateTxt,
+                clientImgPath, serverPicPath);
+    }
+
+
 
     /**
      * Aggiorna l'animale inviato
@@ -590,11 +630,10 @@ public class AnimalDataFragment extends Fragment {
     public int month;
     public int day;
     public String newDate;
+    public Date newBirthDate;
 
     public DatePickerDialog.OnDateSetListener datePickerListener
             = new DatePickerDialog.OnDateSetListener(){
-
-        public Date newBirthDate;
 
         @Override
         public void onDateSet(DatePicker view, int Year, int monthOfYear, int dayOfMonth) {
