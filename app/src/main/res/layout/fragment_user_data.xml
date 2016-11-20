@@ -23,7 +23,7 @@
 
                 <TableRow
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:weightSum="1"
                     android:orientation="horizontal">
 
@@ -204,12 +204,11 @@
                         android:textColor="?attr/colorControlNormal" />
 
                     <TextView
-                        android:text=""
                         android:layout_width="0dp"
                         android:layout_height="35dp"
                         android:inputType="date"
                         android:id="@+id/userBirthDateTextView"
-                        android:layout_weight="0.6"
+                        android:layout_weight="0.5"
                         android:gravity="left|fill_vertical"
                         android:padding="0dp"
                         android:layout_margin="10dp"
