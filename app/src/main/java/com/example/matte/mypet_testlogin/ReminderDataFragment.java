@@ -50,6 +50,9 @@ public class ReminderDataFragment extends Fragment {
     public String chosenDate;
     public String chosenTime;
 
+    public Date newTime;
+    public Date newDate;
+
     private EditText rNameEditText;
     private EditText rPlaceEditText;
     private Button sendReminder;
@@ -116,11 +119,8 @@ public class ReminderDataFragment extends Fragment {
             }
         });
 
-        //Spinner
+        //Spinner scelta animale
         ArrayList<Animal> animals = HomeActivity.dbManager.getAnimalsByOwner(idUser);
-
-//        ArrayAdapter<Animal> adapter = new ArrayAdapter<Animal>(getActivity(), android.R.layout.simple_spinner_item, animals);
-//        ArrayAdapter<Animal> adapter = ArrayAdapter.createFromResource(getActivity(), android.R.layout.simple_spinner_item, R.layout.spinner_layout);
         ArrayAdapter<Animal> adapter = new ArrayAdapter<Animal>(getActivity(), R.layout.spinner_layout, animals);
         spinAnimals = (Spinner) view.findViewById(R.id.reminderDataAnimalSpin);
         spinAnimals.setAdapter(adapter);
@@ -147,9 +147,22 @@ public class ReminderDataFragment extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        //Inutile per come è fatto un fragment
+//        if(newTime != null) {
+//            SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+//            rTimeTextView.setText(timeFormat.format(newTime));
+//        }
+//        if(newDate != null) {
+//            SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM y");
+//            rDateTextView.setText(dateFormat.format(newDate));
+//        }
+    }
+
+    @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-
     }
 
     @Override
@@ -159,11 +172,35 @@ public class ReminderDataFragment extends Fragment {
 
     private void insertReminder() {
         //Recuperare dati
-        //TODO fare controlli. usare TextView.setError()
+        if(rNameEditText.getText().toString().isEmpty()){
+            rNameEditText.setError("Nome evento mancante");
+            rNameEditText.requestFocus();
+            return;
+        }
         String nameTxt = rNameEditText.getText().toString();
-        String placeTxt = rPlaceEditText.getText().toString();
 
-        //TODO controllare presenza data
+        if(chosenDate == null || chosenDate.isEmpty()){
+            rDateTextView.requestFocus();
+            rDateTextView.setError("Data evento mancante");
+            return;
+        } else {
+            rDateTextView.setError(null);   //Ripulisce errori
+        }
+
+        if(chosenTime == null || chosenTime.isEmpty()){
+            rTimeTextView.requestFocus();
+            rTimeTextView.setError("Ora evento mancante");
+            return;
+        } else {
+            rTimeTextView.setError(null);   //Ripulisce errori
+        }
+
+        if(rPlaceEditText.getText().toString().isEmpty()){
+            rPlaceEditText.requestFocus();
+            rPlaceEditText.setError("Luogo evento mancante");
+            return;
+        }
+        String placeTxt = rPlaceEditText.getText().toString();
 
         Animal selectedAnim = (Animal) spinAnimals.getSelectedItem();
 
@@ -293,7 +330,6 @@ public class ReminderDataFragment extends Fragment {
         }
     }
 
-    public Date newDate;
     public DatePickerDialog.OnDateSetListener datePickerListener
             = new DatePickerDialog.OnDateSetListener(){
 
@@ -313,6 +349,7 @@ public class ReminderDataFragment extends Fragment {
 
             format = new SimpleDateFormat("dd MMMM y");
             rDateTextView.setText(format.format(newDate));
+            rDateTextView.setError(null); //Ripulisce eventuali errori
 
         }
     };
@@ -332,10 +369,9 @@ public class ReminderDataFragment extends Fragment {
         newD.show();
     }
 
-    public Date newTime;
+
     public TimePickerDialog.OnTimeSetListener timePickerListener
             = new TimePickerDialog.OnTimeSetListener(){
-
 
         @Override
         public void onTimeSet(TimePicker timePicker, int h, int m) {
@@ -353,6 +389,7 @@ public class ReminderDataFragment extends Fragment {
 
             format = new SimpleDateFormat("HH:mm");
             rTimeTextView.setText(format.format(newTime));
+            rTimeTextView.setError(null); //Ripulisce eventuali errori
         }
 
     };
