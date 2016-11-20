@@ -13,6 +13,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.provider.MediaStore;
+import android.support.v4.widget.DrawerLayout;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,6 +24,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -84,6 +86,8 @@ public class UserDataFragment extends Fragment {
     private TextView uPasswordLbl;
     private EditText uPasswordConfirmEditTxt;
     private TextView uPasswordCOnfirmLbl;
+    private RadioButton uGenderMaleRadioBtn;
+    private RadioButton uGenderFemaleRadioBtn;
 
     private Bitmap bitmap;
 
@@ -130,9 +134,11 @@ public class UserDataFragment extends Fragment {
         uUsernameEditTxt = (EditText) view.findViewById(R.id.userUsernameEditText);
         uNameEditTxt = (EditText) view.findViewById(R.id.userNameEditText);
         uSurnameEditTxt = (EditText) view.findViewById(R.id.userSurnameEditText);
-        uGenderEditTxt = (EditText) view.findViewById(R.id.userGenderEditText);
+//        uGenderEditTxt = (EditText) view.findViewById(R.id.userGenderEditText);
         uBirthdateTextView = (TextView) view.findViewById(R.id.userBirthDateTextView);
         imgUserData = (ImageView) view.findViewById(R.id.imageViewUserData);
+        uGenderMaleRadioBtn = (RadioButton) view.findViewById(R.id.userGenderRadioBtnMale);
+        uGenderFemaleRadioBtn = (RadioButton) view.findViewById(R.id.userGenderRadioBtnFemale);
 
         //PW
         uPasswordEditTxt = (EditText) view.findViewById(R.id.userPasswordEditText);
@@ -150,16 +156,23 @@ public class UserDataFragment extends Fragment {
             uUsernameEditTxt.setText(u.username);
             uNameEditTxt.setText(u.name);
             uSurnameEditTxt.setText(u.surname);
-            uGenderEditTxt.setText(u.gender);
+//            uGenderEditTxt.setText(u.gender);
+            if(u.gender.equals("male")){
+                uGenderMaleRadioBtn.setChecked(true);
+            } else {
+                uGenderFemaleRadioBtn.setChecked(true);
+            }
+
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM y");
+            newBirthDate = u.birthdate;
+            newDate = dateFormat.format(u.birthdate);
+            uBirthdateTextView.setText(newDate);
+
             //Si nascondono i campi delle pw
             uPasswordEditTxt.setVisibility(View.GONE);
             uPasswordLbl.setVisibility(View.GONE);
             uPasswordConfirmEditTxt.setVisibility(View.GONE);
             uPasswordCOnfirmLbl.setVisibility(View.GONE);
-
-            SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM y");
-            newDate = dateFormat.format(u.birthdate);
-            uBirthdateTextView.setText(newDate);
 
             oldImgPath = u.profilepic;
 
@@ -185,14 +198,13 @@ public class UserDataFragment extends Fragment {
 
             getActivity().setTitle("Modifica utente");
         } else {
-
-            //TODO blocca drawer
             //Cancella token
             shPref.edit().remove("Token").apply();
 
+            //TODO blocca drawer
             //Tenere chiuso drawer
-//            DrawerLayout drawer = (DrawerLayout) view.findViewById(R.id.drawer_layout);
-
+            DrawerLayout drawer = (DrawerLayout) view.findViewById(R.id.drawer_layout);
+            drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
 
             //Richiama la sequenza di azioni per aggiungere l'user
             sendData.setOnClickListener(new View.OnClickListener() {
@@ -379,8 +391,16 @@ public class UserDataFragment extends Fragment {
         String usernameTxt = uUsernameEditTxt.getText().toString();
         String nameTxt = uNameEditTxt.getText().toString();
         String surnameTxt = uSurnameEditTxt.getText().toString();
-        String genderTxt = uGenderEditTxt.getText().toString();
+//        String genderTxt = uGenderEditTxt.getText().toString();
         String birthdateTxt = newDate;
+
+        //Gender
+        String genderTxt;
+        if(uGenderFemaleRadioBtn.isChecked()){
+            genderTxt = "female";
+        } else {
+            genderTxt = "male";
+        }
 
         String clientImgPath = "";
         if(chosenImgUri != null)
@@ -640,11 +660,10 @@ public class UserDataFragment extends Fragment {
     public int month;
     public int day;
     public String newDate;
+    public Date newBirthDate;
 
     public DatePickerDialog.OnDateSetListener datePickerListener
             = new DatePickerDialog.OnDateSetListener(){
-
-        public Date newBirthDate;
 
         @Override
         public void onDateSet(DatePicker view, int Year, int monthOfYear, int dayOfMonth) {
@@ -667,12 +686,16 @@ public class UserDataFragment extends Fragment {
     };
 
     public void showDatePickerDialog(View v) {
-        final Calendar c = Calendar.getInstance();
+        //Imposta il datepicker alla data precedente, o a quella corrente se non esiste
+        Calendar c = Calendar.getInstance();
+        if(newBirthDate != null){
+            c.setTime(newBirthDate);
+        } else {
+            c = Calendar.getInstance();
+        }
         year = c.get(Calendar.YEAR);
         month = c.get(Calendar.MONTH);
         day = c.get(Calendar.DAY_OF_MONTH);
-
-
 
         Dialog newD = new DatePickerDialog(getActivity(), datePickerListener, year, month, day);
         newD.show();

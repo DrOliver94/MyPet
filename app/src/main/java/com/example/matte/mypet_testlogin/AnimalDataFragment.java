@@ -129,7 +129,7 @@ public class AnimalDataFragment extends Fragment {
         aNameEditTxt = (EditText) view.findViewById(R.id.animalNameEditText);
         aSpeciesEditTxt = (EditText) view.findViewById(R.id.animalSpeciesEditText);
         aBirthdateTextView = (TextView) view.findViewById(R.id.animalBirthDateTextView);
-        aGenderEditTxt = (EditText) view.findViewById(R.id.animalGenderEditText);
+//        aGenderEditTxt = (EditText) view.findViewById(R.id.animalGenderEditText);
         imgAnimalData = (ImageView) view.findViewById(R.id.imageViewAnimalData);
         aGenderMale = (RadioButton) view.findViewById(R.id.animalGenderRadioBtnMale);
         aGenderFemale = (RadioButton) view.findViewById(R.id.animalGenderRadioBtnFemale);
@@ -656,10 +656,17 @@ public class AnimalDataFragment extends Fragment {
     };
 
     public void showDatePickerDialog(View v) {
-        final Calendar c = Calendar.getInstance();
+        //Imposta il datepicker alla data precedente, o a quella corrente se non esiste
+        Calendar c = Calendar.getInstance();
+        if(newBirthDate != null){
+            c.setTime(newBirthDate);
+        } else {
+            c = Calendar.getInstance();
+        }
         year = c.get(Calendar.YEAR);
         month = c.get(Calendar.MONTH);
         day = c.get(Calendar.DAY_OF_MONTH);
+
         Dialog newD = new DatePickerDialog(getActivity(), datePickerListener, year, month, day);
         newD.show();
     }

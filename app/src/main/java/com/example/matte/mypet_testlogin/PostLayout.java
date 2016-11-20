@@ -76,8 +76,10 @@ public class PostLayout extends LinearLayout {
         if(post.place != null) {
             if(!post.placeAddress.equals("")) {
                 pPlace.setText(post.placeAddress);
+                pPlace.setVisibility(VISIBLE);
             } else if(!post.placeName.equals("")){
                 pPlace.setText(post.placeName);
+                pPlace.setVisibility(VISIBLE);
             } else {
                 pPlace.setVisibility(GONE);
             }

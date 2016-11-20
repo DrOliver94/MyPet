@@ -166,17 +166,17 @@
                             android:textSize="20sp"/>
                     </RadioGroup>
 
-                    <EditText
-                        android:text=""
-                        android:layout_width="0dp"
-                        android:layout_height="35dp"
-                        android:id="@+id/animalGenderEditText"
-                        android:layout_weight="0.6"
-                        android:gravity="left|fill_vertical"
-                        android:padding="0dp"
-                        android:layout_margin="10dp"
-                        android:textSize="20sp"
-                        android:maxLines="1" />
+                    <!--<EditText-->
+                        <!--android:text=""-->
+                        <!--android:layout_width="0dp"-->
+                        <!--android:layout_height="35dp"-->
+                        <!--android:id="@+id/animalGenderEditText"-->
+                        <!--android:layout_weight="0.6"-->
+                        <!--android:gravity="left|fill_vertical"-->
+                        <!--android:padding="0dp"-->
+                        <!--android:layout_margin="10dp"-->
+                        <!--android:textSize="20sp"-->
+                        <!--android:maxLines="1" />-->
                 </TableRow>
 
             </TableLayout>

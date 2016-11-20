@@ -293,10 +293,9 @@ public class ReminderDataFragment extends Fragment {
         }
     }
 
+    public Date newDate;
     public DatePickerDialog.OnDateSetListener datePickerListener
             = new DatePickerDialog.OnDateSetListener(){
-
-        public Date newDate;
 
         @Override
         public void onDateSet(DatePicker view, int Year, int monthOfYear, int dayOfMonth) {
@@ -319,9 +318,12 @@ public class ReminderDataFragment extends Fragment {
     };
 
     public void showDatePickerDialog() {
-        //TODO fare solo se newDate vuoto
-
-        final Calendar c = Calendar.getInstance();
+        Calendar c = Calendar.getInstance();
+        if(newDate != null){
+            c.setTime(newDate);
+        } else {
+            c = Calendar.getInstance();
+        }
         int year = c.get(Calendar.YEAR);
         int month = c.get(Calendar.MONTH);
         int day = c.get(Calendar.DAY_OF_MONTH);
@@ -330,10 +332,10 @@ public class ReminderDataFragment extends Fragment {
         newD.show();
     }
 
+    public Date newTime;
     public TimePickerDialog.OnTimeSetListener timePickerListener
             = new TimePickerDialog.OnTimeSetListener(){
 
-        public Date newTime;
 
         @Override
         public void onTimeSet(TimePicker timePicker, int h, int m) {
@@ -356,9 +358,12 @@ public class ReminderDataFragment extends Fragment {
     };
 
     public void showTimePickerDialog() {
-        //TODO fare solo se newTime vuoto
-
-        final Calendar c = Calendar.getInstance();
+        Calendar c = Calendar.getInstance();
+        if(newTime != null){
+            c.setTime(newTime);
+        } else {
+            c = Calendar.getInstance();
+        }
         int hour = c.get(Calendar.HOUR_OF_DAY);
         int min = c.get(Calendar.MINUTE);
 
