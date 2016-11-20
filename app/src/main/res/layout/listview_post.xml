@@ -41,7 +41,7 @@
                 android:id="@+id/post_time"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Place"
+                android:text="Time"
                 android:textSize="20sp"
                 android:layout_margin="5dp" />
 

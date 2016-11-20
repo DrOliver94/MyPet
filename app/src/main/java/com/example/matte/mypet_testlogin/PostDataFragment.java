@@ -131,6 +131,9 @@ public class PostDataFragment extends Fragment {
 
         friends = HomeActivity.dbManager.getFriendsByUser(idUser);
         animals = HomeActivity.dbManager.getAnimalsByOwner(idUser);
+
+        taggedAnimals = new ArrayList<>();
+        taggedFriends = new ArrayList<>();
     }
 
     @Override
@@ -439,7 +442,7 @@ public class PostDataFragment extends Fragment {
                 if(chosenPlace != null && chosenPlace.isDataValid()) {
                     post.placeId = chosenPlace.getId();
                 }
-                post.animals = taggedAnimals;
+                post.animals = taggedAnimals;   //Sono null se vuoti
                 post.users = taggedFriends;
 
                 String jsonTagFriends = new String();

@@ -102,7 +102,7 @@ public class Post implements Comparable<Post> {
         placeId = placeIdSet;
         if(placeIdSet != null && !placeIdSet.isEmpty()) {
             Places.GeoDataApi
-                    .getPlaceById(gApiHelper.getGoogleApiClient(), placeIdSet)
+                    .getPlaceById(gApiHelper.getGoogleApiClient(), placeIdSet.replace(" ", "+"))
                     .setResultCallback(new ResultCallback<PlaceBuffer>() {
                         @Override
                         public void onResult(@NonNull PlaceBuffer places) {

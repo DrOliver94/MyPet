@@ -67,6 +67,7 @@ public class PostLayout extends LinearLayout {
         //Caricamento dati
         if(post.text != null) {
             pText.setText(post.text);
+            pText.setVisibility(VISIBLE);
         } else {
             pText.setVisibility(GONE);
         }
@@ -75,17 +76,23 @@ public class PostLayout extends LinearLayout {
         if(post.place != null) {
             if(!post.placeAddress.equals("")) {
                 pPlace.setText(post.placeAddress);
-            } else {
+            } else if(!post.placeName.equals("")){
                 pPlace.setText(post.placeName);
+            } else {
+                pPlace.setVisibility(GONE);
             }
-            pPlace.setOnClickListener(new OnClickOpenPostListener(post.placeLatLon));
+            if(post.placeLatLon != null && !post.placeLatLon.equals("")) {
+                pPlace.setOnClickListener(new OnClickOpenPostListener(post.placeLatLon));
+            }
         } else {
             pPlace.setVisibility(GONE);
         }
 
         if(post.date != null) {
-            SimpleDateFormat format = new SimpleDateFormat("dd MMMM y HH:mm");
+            SimpleDateFormat format = new SimpleDateFormat("d MMMM y HH:mm");
             pTime.setText(format.format(post.date));
+        } else {
+            pTime.setVisibility(GONE);
         }
 
         if(post.picture != null && !post.picture.isEmpty()) {
@@ -97,7 +104,7 @@ public class PostLayout extends LinearLayout {
                     .into(pImageView);
         } else {
             //TODO pulire img
-            pText.setVisibility(GONE);
+            pImageView.setVisibility(GONE);
         }
 
         //##### TAG
