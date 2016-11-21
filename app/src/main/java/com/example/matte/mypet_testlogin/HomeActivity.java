@@ -26,7 +26,7 @@ public class HomeActivity extends AppCompatActivity
 
     public static final String IMG_BASEURL = "https://webdev.dibris.unige.it/~S3951060/";
 
-    private DrawerLayout drawer;
+    public DrawerLayout drawer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

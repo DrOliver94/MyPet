@@ -89,6 +89,8 @@ public class UserDataFragment extends Fragment {
     private RadioButton uGenderMaleRadioBtn;
     private RadioButton uGenderFemaleRadioBtn;
 
+    private DrawerLayout drawer;
+
     private Bitmap bitmap;
 
     private ProgressDialog pDialog;
@@ -201,9 +203,8 @@ public class UserDataFragment extends Fragment {
             //Cancella token
             shPref.edit().remove("Token").apply();
 
-            //TODO blocca drawer
             //Tenere chiuso drawer
-            DrawerLayout drawer = (DrawerLayout) view.findViewById(R.id.drawer_layout);
+            drawer = ((HomeActivity)view.getContext()).drawer;
             drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
 
             //Richiama la sequenza di azioni per aggiungere l'user
@@ -272,7 +273,6 @@ public class UserDataFragment extends Fragment {
                 .placeholder(R.drawable.img)
                 .transform(new CropCircleTransformation())
                 .into((ImageView) getActivity().findViewById(R.id.imageViewUserData));
-
     }
 
     /**
@@ -526,9 +526,17 @@ public class UserDataFragment extends Fragment {
         String usernameTxt = uUsernameEditTxt.getText().toString();
         String nameTxt = uNameEditTxt.getText().toString();
         String surnameTxt = uSurnameEditTxt.getText().toString();
-        String genderTxt = uGenderEditTxt.getText().toString();
+//        String genderTxt = uGenderEditTxt.getText().toString();
         String birthdateTxt = uBirthdateTextView.getText().toString();   //TODO gestire data
         String passwordTxt = uPasswordEditTxt.getText().toString();
+
+        //Gender
+        String genderTxt;
+        if(uGenderFemaleRadioBtn.isChecked()){
+            genderTxt = "female";
+        } else {
+            genderTxt = "male";
+        }
 
         String clientImgPath = "";
         if(chosenImgUri != null) {
@@ -622,11 +630,17 @@ public class UserDataFragment extends Fragment {
                     long numRows = HomeActivity.dbManager.insertUser(user);
 
                     //Aggiorna token nelle SharedPref
-                    shPref.edit().putString("Token", jObj.getString("token")).apply();
-                    //TODO ripulisci shPref, copia login
+                    shPref.edit().putString("Token", jObj.getString("token"))
+                            .putString("IdUser", idUser)
+                            .putString("Username", user.username)
+                            .putString("Name", user.name)
+                            .putString("Surname", user.surname)
+                            .apply();
+
+                    //sblocca drawer
+                    drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNDEFINED);
 
                     //Vai al profilo
-                    //TODO sblocca drawer
                     getFragmentManager()
                             .beginTransaction()
                             .replace(R.id.main_fragment, ProfileFragment.newInstance(user.id))
