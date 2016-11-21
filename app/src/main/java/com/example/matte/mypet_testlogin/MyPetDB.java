@@ -266,7 +266,7 @@ public class MyPetDB {
             db.execSQL(CREATE_REMINDERS_TABLE);
 
             //insert sample post
-            Log.d("MyPet", "INSERT Samples");
+//            Log.d("MyPet", "INSERT Samples");
 
 //            db.execSQL("INSERT INTO post " +
 //                       "VALUES (1, 28, '', 'Ceci nest pas un post', '', '')");
@@ -352,7 +352,7 @@ public class MyPetDB {
      *         -1 in caso di errore
      */
     public long insertUser(User u) {
-        Log.d("MyPet", "Insert user " + u.id + ", " + u.surname);
+        Log.d("MyPet", "Insert user " + u.id + ", " + u.username);
         //Controlla se l'utente è già nel DB
         String where = USERS_ID + "= ?";
         String[] whereArgs = { u.id };
@@ -379,9 +379,12 @@ public class MyPetDB {
             cv.put(USERS_GENDER, u.gender);
             cv.put(USERS_PROFILEPIC, u.profilepic);
 
-            SimpleDateFormat format = new SimpleDateFormat("y-MM-dd");
-            cv.put(USERS_BIRTHDATE, format.format(u.birthdate));
-
+            if(u.birthdate != null) {
+                SimpleDateFormat format = new SimpleDateFormat("y-MM-dd");
+                cv.put(USERS_BIRTHDATE, format.format(u.birthdate));
+            } else {
+                cv.put(USERS_BIRTHDATE, "");
+            }
             this.openWriteableDB();
             long rowID = db.insert(USERS_TABLE, null, cv);
             this.closeDB();

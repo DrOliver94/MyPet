@@ -177,6 +177,7 @@ public class ReminderLayout extends LinearLayout {
 
 
     public void deleteReminder(View view, String idReminder){
+        ((View) view.getParent().getParent()).setVisibility(GONE);
         DeleteReminderTask deleteReminder = new DeleteReminderTask(shPref.getString("Token", ""), shPref.getString("IdUser", ""), view);
         deleteReminder.execute(idReminder);
     }
