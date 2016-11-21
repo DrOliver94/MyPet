@@ -14,20 +14,20 @@
         android:layout_height="wrap_content"
         card_view:cardCornerRadius="2dp"
         card_view:cardElevation="4dp"
-        android:layout_margin="10dp">
+        android:layout_margin="5dp">
 
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp">
+            android:layout_margin="10dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
                 android:id="@+id/picListView"
-                android:layout_margin="5dp" />
+                android:layout_marginTop="5dp" />
 
             <TextView
                 android:id="@+id/post_text"
@@ -35,7 +35,7 @@
                 android:layout_height="wrap_content"
                 android:text="Testo post"
                 android:textSize="26sp"
-                android:layout_margin="5dp" />
+                android:layout_marginTop="5dp" />
 
             <TextView
                 android:id="@+id/post_time"
@@ -43,14 +43,14 @@
                 android:layout_height="wrap_content"
                 android:text="Time"
                 android:textSize="20sp"
-                android:layout_margin="5dp" />
+                android:layout_marginTop="5dp" />
 
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/post_imageView"
                 android:adjustViewBounds="true"
-                android:layout_margin="5dp" />
+                android:layout_marginTop="5dp" />
 
             <TextView
                 android:id="@+id/post_place"
@@ -58,7 +58,7 @@
                 android:layout_height="wrap_content"
                 android:text="Place"
                 android:textSize="20sp"
-                android:layout_margin="5dp" />
+                android:layout_marginTop="5dp" />
 
         </LinearLayout>
 
