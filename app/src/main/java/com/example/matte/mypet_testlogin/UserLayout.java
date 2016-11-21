@@ -53,7 +53,7 @@ public class UserLayout extends LinearLayout {
         uName.setText(u.name);
         uSurname.setText(u.surname);
 
-        Picasso.with(getContext()).setIndicatorsEnabled(true);
+//        Picasso.with(getContext()).setIndicatorsEnabled(true);
         Picasso.with(getContext())
                 .load(u.profilepic)
                 .resize(150, 150)   //Aggiusta le dimensioni per non pesare troppo

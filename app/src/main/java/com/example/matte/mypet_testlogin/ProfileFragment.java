@@ -109,7 +109,7 @@ public class ProfileFragment extends Fragment {
         userBirthDateText.setText(format.format(currUser.birthdate));
 
         //Immagine
-        Picasso.with(view.getContext()).setIndicatorsEnabled(true);
+//        Picasso.with(view.getContext()).setIndicatorsEnabled(true);
         Picasso.with(view.getContext())
                 .load(currUser.profilepic)
                 .transform(new CropCircleTransformation())

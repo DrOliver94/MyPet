@@ -98,7 +98,7 @@ public class PostLayout extends LinearLayout {
         }
 
         if(post.picture != null && !post.picture.isEmpty()) {
-            Picasso.with(getContext()).setIndicatorsEnabled(true);
+//            Picasso.with(getContext()).setIndicatorsEnabled(true);
             Picasso.with(getContext())
                     .load(post.picture)
                     .resize(750, 750)   //Aggiusta le dimensioni per non pesare troppo

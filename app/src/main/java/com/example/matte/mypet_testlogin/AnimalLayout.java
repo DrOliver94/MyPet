@@ -54,7 +54,7 @@ public class AnimalLayout extends LinearLayout {
         //Caricamento dati
         aName.setText(animal.name);
 
-        Picasso.with(getContext()).setIndicatorsEnabled(true);
+//        Picasso.with(getContext()).setIndicatorsEnabled(true);
         Picasso.with(getContext())
                 .load(animal.profilepic)
                 .resize(150, 150)   //Aggiusta le dimensioni per non pesare troppo
