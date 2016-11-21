@@ -114,7 +114,7 @@
                 android:textSize="20sp" />
 
             <ImageButton
-                android:src="@drawable/ic_event_black_24dp"
+                android:src="@drawable/ic_schedule_black_24dp"
                 android:layout_width="55dp"
                 android:layout_height="55dp"
                 android:id="@+id/changeReminderTimeButton"
