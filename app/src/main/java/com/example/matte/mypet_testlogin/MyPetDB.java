@@ -1298,6 +1298,17 @@ public class MyPetDB {
 
     }
 
+    public int deleteReminder(String id) {
+        String where = REMINDERS_IDREMINDER + "= ?";
+        String[] whereArgs = { id };
+
+        this.openWriteableDB();
+        int rowCount = db.delete(REMINDERS_TABLE, where, whereArgs);
+        this.closeDB();
+
+        return rowCount;
+    }
+
 //    public int updateTask(Task task) {
 //        ContentValues cv = new ContentValues();
 //        cv.put(TASK_LIST_ID, task.getListId());

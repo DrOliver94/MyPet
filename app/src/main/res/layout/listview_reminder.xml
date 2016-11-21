@@ -15,10 +15,17 @@
         android:layout_margin="10dp">
 
         <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center">
+
+        <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp">
+            android:layout_margin="10dp"
+            android:layout_weight="1">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -62,6 +69,19 @@
                 <!--android:layout_height="wrap_content"-->
                 <!--android:textSize="24sp"-->
                 <!--android:text="DataEvento"/>-->
+
+
+        </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/reminderDeleteBtn"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/ic_mode_edit_black_24dp"/>
+
+
+
+
 
 
         </LinearLayout>

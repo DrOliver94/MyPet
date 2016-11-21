@@ -477,7 +477,7 @@ public class LoginActivity extends AppCompatActivity {
             Log.d("MyPet", "dbPairing is on");
 
             pDialog.setTitle("Richiesta ai Server");
-            pDialog.setMessage("Prima sincronizzazione col Database...");
+            pDialog.setMessage("Sincronizzazione col Database...");
             pDialog.setIndeterminate(false);
             pDialog.setCancelable(false);
             pDialog.show();
