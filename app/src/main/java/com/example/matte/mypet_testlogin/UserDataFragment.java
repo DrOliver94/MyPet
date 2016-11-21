@@ -527,7 +527,7 @@ public class UserDataFragment extends Fragment {
         String nameTxt = uNameEditTxt.getText().toString();
         String surnameTxt = uSurnameEditTxt.getText().toString();
 //        String genderTxt = uGenderEditTxt.getText().toString();
-        String birthdateTxt = uBirthdateTextView.getText().toString();   //TODO gestire data
+        String birthdateTxt = newDate;
         String passwordTxt = uPasswordEditTxt.getText().toString();
 
         //Gender
@@ -705,7 +705,7 @@ public class UserDataFragment extends Fragment {
         if(newBirthDate != null){
             c.setTime(newBirthDate);
         } else {
-            c = Calendar.getInstance();
+//            c = Calendar.getInstance();
         }
         year = c.get(Calendar.YEAR);
         month = c.get(Calendar.MONTH);

@@ -399,7 +399,7 @@ public class ReminderDataFragment extends Fragment {
         if(newTime != null){
             c.setTime(newTime);
         } else {
-            c = Calendar.getInstance();
+//            c = Calendar.getInstance();
         }
         int hour = c.get(Calendar.HOUR_OF_DAY);
         int min = c.get(Calendar.MINUTE);
