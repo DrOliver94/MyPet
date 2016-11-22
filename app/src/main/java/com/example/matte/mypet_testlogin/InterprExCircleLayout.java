@@ -45,7 +45,7 @@ public class InterprExCircleLayout extends LinearLayout {
     }
 
     public void setPicture(String img){
-        Picasso.with(getContext()).setIndicatorsEnabled(true);
+//        Picasso.with(getContext()).setIndicatorsEnabled(true);
         Picasso.with(getContext())
                 .load(img)
                 .resize(150, 150)   //Limita dimensione

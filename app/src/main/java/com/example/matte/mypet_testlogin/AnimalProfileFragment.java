@@ -109,7 +109,7 @@ public class AnimalProfileFragment extends Fragment {
         SimpleDateFormat format = new SimpleDateFormat("dd MMMM y");
         animalBirthDateText.setText(format.format(currAnim.birthdate));
 
-        Picasso.with(view.getContext()).setIndicatorsEnabled(true);
+//        Picasso.with(view.getContext()).setIndicatorsEnabled(true);
         Picasso.with(view.getContext())
                 .load(currAnim.profilepic)
                 .transform(new CropCircleTransformation())
