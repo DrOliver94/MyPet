@@ -16,6 +16,7 @@ import android.provider.MediaStore;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Base64;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,8 +60,6 @@ import jp.wasabeef.picasso.transformations.CropCircleTransformation;
  * create an instance of this fragment.
  */
 public class UserDataFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "idUser";
     private static final String ARG_PARAM2 = "isEdit";
 
@@ -76,7 +75,7 @@ public class UserDataFragment extends Fragment {
     private EditText uUsernameEditTxt;
     private EditText uNameEditTxt;
     private EditText uSurnameEditTxt;
-    private EditText uGenderEditTxt;
+//    private EditText uGenderEditTxt;
     private TextView uBirthdateTextView;
     private Button sendData;
     private Button uploadImg;
@@ -260,6 +259,21 @@ public class UserDataFragment extends Fragment {
     public void onResume() {
         super.onResume();
         String loadingImg = "";
+
+        getView().setFocusableInTouchMode(true);
+        getView().requestFocus();
+        getView().setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
+                    startActivity(new Intent(getActivity(), LoginActivity.class));
+                    return true;
+                }
+                return false;
+            }
+        });
+
+
 
         //TODO ripristina uri nell'imageView
         if(chosenImgUri != null){
