@@ -21,6 +21,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -43,20 +44,13 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.io.StringWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Hashtable;
-import java.util.List;
 import java.util.Map;
-
-import jp.wasabeef.picasso.transformations.CropCircleTransformation;
-
-import static java.lang.System.out;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -78,7 +72,7 @@ public class PostDataFragment extends Fragment {
     private String idUser;
 
     private EditText pTextEditTxt;
-    private EditText pPlaceEditTxt;
+    private TextView pPlaceTextView;
     private Button sendData;
     private Button uploadImg;
     private ImageView imgPostData;
@@ -143,7 +137,7 @@ public class PostDataFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_post_data, container, false);
 
         pTextEditTxt = (EditText) view.findViewById(R.id.postTextEditText);
-        pPlaceEditTxt = (EditText) view.findViewById(R.id.postPlaceEditText);
+        pPlaceTextView = (TextView) view.findViewById(R.id.postPlaceTextView);
 
         sendData = (Button) view.findViewById(R.id.buttonInsertPost);
         sendData.setOnClickListener(new View.OnClickListener() {
@@ -185,7 +179,6 @@ public class PostDataFragment extends Fragment {
                 } catch (GooglePlayServicesNotAvailableException e) {
                     e.printStackTrace();
                 }
-
             }
         });
 
@@ -265,7 +258,7 @@ public class PostDataFragment extends Fragment {
         } else if(requestCode == PLACE_PICKER_REQUEST && resultCode == Activity.RESULT_OK){
             //Se si è scelto un luogo, memorizzarne la posizione
             chosenPlace = PlacePicker.getPlace(getActivity(), data);
-            //TODO si può raccogliere un nome, un testo, qualcosa? Salvarlo in db?
+            pPlaceTextView.setText(chosenPlace.getName());
             chosenLocation = chosenPlace.getLatLng();
         }
 
