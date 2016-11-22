@@ -261,7 +261,6 @@ public class PostDataFragment extends Fragment {
             pPlaceTextView.setText(chosenPlace.getName());
             chosenLocation = chosenPlace.getLatLng();
         }
-
     }
 
     private void uploadImage(){

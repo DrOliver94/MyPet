@@ -200,7 +200,12 @@ public class UserDataFragment extends Fragment {
             getActivity().setTitle("Modifica utente");
         } else {
             //Cancella token
-            shPref.edit().remove("Token").apply();
+            shPref.edit().remove("Token")
+                        .remove("IdUser")
+                        .remove("Username")
+                        .remove("Name")
+                        .remove("Surname")
+                        .apply();
 
             //Tenere chiuso drawer
             drawer = ((HomeActivity)view.getContext()).drawer;
