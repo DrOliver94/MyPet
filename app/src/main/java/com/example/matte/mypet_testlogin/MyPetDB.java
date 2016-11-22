@@ -373,8 +373,8 @@ public class MyPetDB {
         } else {
             ContentValues cv = new ContentValues();
             cv.put(USERS_ID, u.id);
-            cv.put(USERS_NAME, u.name);
             cv.put(USERS_USERNAME, u.username);
+            cv.put(USERS_NAME, u.name);
             cv.put(USERS_SURNAME, u.surname);
             cv.put(USERS_GENDER, u.gender);
             cv.put(USERS_PROFILEPIC, u.profilepic);
@@ -430,6 +430,7 @@ public class MyPetDB {
     public int updateUser(User user) {
         ContentValues cv = new ContentValues();
         cv.put(USERS_ID, user.id);
+        cv.put(USERS_USERNAME, user.username);
         cv.put(USERS_NAME, user.name);
         cv.put(USERS_SURNAME, user.surname);
         cv.put(USERS_GENDER, user.gender);

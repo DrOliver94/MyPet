@@ -71,6 +71,9 @@ public class UserDataFragment extends Fragment {
     private String idUser;
     private Boolean isEdit;
 
+    public String newDate;
+    public Date newBirthDate;
+
     private SharedPreferences shPref;
 
     private EditText uUsernameEditTxt;
@@ -85,7 +88,7 @@ public class UserDataFragment extends Fragment {
     private EditText uPasswordEditTxt;
     private TextView uPasswordLbl;
     private EditText uPasswordConfirmEditTxt;
-    private TextView uPasswordCOnfirmLbl;
+    private TextView uPasswordConfirmLbl;
     private RadioButton uGenderMaleRadioBtn;
     private RadioButton uGenderFemaleRadioBtn;
 
@@ -146,7 +149,7 @@ public class UserDataFragment extends Fragment {
         uPasswordEditTxt = (EditText) view.findViewById(R.id.userPasswordEditText);
         uPasswordLbl = (TextView) view.findViewById(R.id.textViewPassword);
         uPasswordConfirmEditTxt = (EditText) view.findViewById(R.id.userPasswordConfirmEditText);
-        uPasswordCOnfirmLbl = (TextView) view.findViewById(R.id.textViewPasswordConfirm);
+        uPasswordConfirmLbl = (TextView) view.findViewById(R.id.textViewPasswordConfirm);
 
         //Due button
         sendData = (Button) view.findViewById(R.id.buttonSendUserData);
@@ -165,17 +168,20 @@ public class UserDataFragment extends Fragment {
                 uGenderFemaleRadioBtn.setChecked(true);
             }
 
-            SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM y");
+            //Gestione data
             newBirthDate = u.birthdate;
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM y");
+            uBirthdateTextView.setText(dateFormat.format(u.birthdate));
+            dateFormat = new SimpleDateFormat("y-MM-dd");
             newDate = dateFormat.format(u.birthdate);
-            uBirthdateTextView.setText(newDate);
 
             //Si nascondono i campi delle pw
             uPasswordEditTxt.setVisibility(View.GONE);
             uPasswordLbl.setVisibility(View.GONE);
             uPasswordConfirmEditTxt.setVisibility(View.GONE);
-            uPasswordCOnfirmLbl.setVisibility(View.GONE);
+            uPasswordConfirmLbl.setVisibility(View.GONE);
 
+            //Memorizzo percorso ultima img usata
             oldImgPath = u.profilepic;
 
             //All'avvio, si carica l'img che si ha nel profilo
@@ -385,150 +391,57 @@ public class UserDataFragment extends Fragment {
         return encodedImage;
     }
 
-    private void updateUser(String serverPicPath) {
-        //Recuperare dati
-        //TODO fare controlli. usare TextView.setError()
-        String usernameTxt = uUsernameEditTxt.getText().toString();
-        String nameTxt = uNameEditTxt.getText().toString();
-        String surnameTxt = uSurnameEditTxt.getText().toString();
-//        String genderTxt = uGenderEditTxt.getText().toString();
-        String birthdateTxt = newDate;
-
-        //Gender
-        String genderTxt;
-        if(uGenderFemaleRadioBtn.isChecked()){
-            genderTxt = "female";
-        } else {
-            genderTxt = "male";
-        }
-
-        String clientImgPath = "";
-        if(chosenImgUri != null)
-             clientImgPath = chosenImgUri.toString();
-        else
-            clientImgPath = oldImgPath;
-
-        //Inviare richiesta al server per l'update
-        UpdateUserTask updateUser = new UpdateUserTask(shPref.getString("Token", ""), idUser);
-        updateUser.execute(usernameTxt, nameTxt, surnameTxt, genderTxt,
-                birthdateTxt, clientImgPath, serverPicPath);
-    }
-
-
-    /**
-     * AsyncTask che aggiorna l'utente inviato
-     */
-    public class UpdateUserTask extends AsyncTask<String, Integer, JSONObject> {
-        private final String uToken;
-        private final User user;
-
-        private ServerComm serverComm;
-
-        private ProgressDialog pDialog;
-
-        UpdateUserTask(String token, String idUser) {
-            user = new User();
-            user.id = idUser;
-
-            this.uToken = token;
-
-            pDialog = new ProgressDialog(getActivity());
-            serverComm = new ServerComm();
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-
-            Log.d("MyPet", "updateUser start");
-
-            pDialog.setTitle("Update utente");
-            pDialog.setMessage("Richiesta al server...");
-            pDialog.setIndeterminate(false);
-            pDialog.setCancelable(false);
-            pDialog.show();
-        }
-
-        @Override
-        protected JSONObject doInBackground(String... p) {
-            try {
-                user.username = p[0];
-                user.name = p[1];
-                user.surname = p[2];
-                user.gender = p[3];
-                String birthdate = p[4];
-                user.profilepic = p[5];
-                String serverPic = p[6];
-
-                SimpleDateFormat format = new SimpleDateFormat("y-MM-dd");
-                try {
-                    user.birthdate = format.parse(birthdate);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-
-                String postArgs = "updateUser=" + user.id +
-                        "&token=" + uToken +
-                        "&username=" + user.username +
-                        "&name=" + user.name +
-                        "&surname=" + user.surname +
-                        "&gender=" + user.gender +
-                        "&birthdate=" + birthdate +
-                        "&profilepic=" + serverPic;
-
-                Log.d("MyPet", postArgs);
-
-                return serverComm.makePostRequest(postArgs);
-            } catch (IOException e) {
-                return null;
-            }
-        }
-
-        @Override
-        protected void onPostExecute(final JSONObject jObj) {
-            try {
-                if(!jObj.isNull("success") && jObj.getBoolean("success")) {
-                    //Se va a buon fine, update nel DB locale
-                    long numRows = HomeActivity.dbManager.updateUser(user);
-
-                    //Aggiorna token nelle SharedPref
-                    shPref.edit().putString("Token", jObj.getString("token")).apply();
-
-                    if (pDialog.isShowing()) {
-                        pDialog.dismiss();
-                    }
-                    //Torna al fragment precedente
-                    getFragmentManager().popBackStack();
-
-                } else {
-
-                    //TODO Altrimenti indicare l'errore all'utente
-                }
-            } catch(Exception e) {
-                e.fillInStackTrace();
-            }
-        }
-
-        @Override
-        protected void onCancelled() {
-
-            //TODO Indicare l'errore all'utente
-
-            if (pDialog.isShowing()) {
-                pDialog.dismiss();
-            }
-        }
-    }
-
     private void insertUser(String serverPicPath) {
-        //Recuperare dati
-        //TODO fare controlli. usare TextView.setError()
-        String usernameTxt = uUsernameEditTxt.getText().toString();
+        //Controllo mancato inserimento
+        if(uNameEditTxt.getText().toString().isEmpty()){
+            uNameEditTxt.setError("Inserire nome");
+            uNameEditTxt.requestFocus();
+            return;
+        }
         String nameTxt = uNameEditTxt.getText().toString();
+
+        if(uSurnameEditTxt.getText().toString().isEmpty()){
+            uSurnameEditTxt.setError("Inserire cognome");
+            uSurnameEditTxt.requestFocus();
+            return;
+        }
         String surnameTxt = uSurnameEditTxt.getText().toString();
-//        String genderTxt = uGenderEditTxt.getText().toString();
-        String birthdateTxt = newDate;
+
+        if(uUsernameEditTxt.getText().toString().isEmpty()){
+            uUsernameEditTxt.setError("Inserire nickname");
+            uUsernameEditTxt.requestFocus();
+            return;
+        }
+        String usernameTxt = uUsernameEditTxt.getText().toString();
+
+        if(uPasswordEditTxt.getText().toString().isEmpty() || uPasswordEditTxt.getText().toString().length()<8){
+            uPasswordEditTxt.setError("Password non valida");
+            uPasswordEditTxt.requestFocus();
+            return;
+        }
         String passwordTxt = uPasswordEditTxt.getText().toString();
+
+        if(uPasswordConfirmEditTxt.getText().toString().isEmpty() || uPasswordConfirmEditTxt.getText().toString().length()<8){
+            uPasswordConfirmEditTxt.setError("Conferma non valida");
+            uPasswordConfirmEditTxt.requestFocus();
+            return;
+        }
+        String passwordConfirmTxt = uPasswordConfirmEditTxt.getText().toString();
+
+        if(!passwordTxt.equals(passwordConfirmTxt)) {
+            uPasswordConfirmEditTxt.setError("Password diverse");
+            uPasswordConfirmEditTxt.requestFocus();
+            return;
+        }
+
+        if(newDate == null || newDate.isEmpty()){
+            uBirthdateTextView.requestFocus();
+            uBirthdateTextView.setError("Data di nascita mancante");
+            return;
+        } else {
+            uBirthdateTextView.setError(null);   //Ripulisce errori
+        }
+        String birthdateTxt = newDate;
 
         //Gender
         String genderTxt;
@@ -670,11 +583,167 @@ public class UserDataFragment extends Fragment {
         }
     }
 
+    private void updateUser(String serverPicPath) {
+        //Controllo mancato aggirnamento
+        if(uNameEditTxt.getText().toString().isEmpty()){
+            uNameEditTxt.setError("Inserire nome");
+            uNameEditTxt.requestFocus();
+            return;
+        }
+        String nameTxt = uNameEditTxt.getText().toString();
+
+        if(uSurnameEditTxt.getText().toString().isEmpty()){
+            uSurnameEditTxt.setError("Inserire cognome");
+            uSurnameEditTxt.requestFocus();
+            return;
+        }
+        String surnameTxt = uSurnameEditTxt.getText().toString();
+
+        if(uUsernameEditTxt.getText().toString().isEmpty()){
+            uUsernameEditTxt.setError("Inserire nickname");
+            uUsernameEditTxt.requestFocus();
+            return;
+        }
+        String usernameTxt = uUsernameEditTxt.getText().toString();
+
+        if(newDate == null || newDate.isEmpty()){
+            uBirthdateTextView.requestFocus();
+            uBirthdateTextView.setError("Data di nascita mancante");
+            return;
+        } else {
+            uBirthdateTextView.setError(null);   //Ripulisce errori
+        }
+        String birthdateTxt = newDate;
+
+        //Gender
+        String genderTxt;
+        if(uGenderFemaleRadioBtn.isChecked()){
+            genderTxt = "female";
+        } else {
+            genderTxt = "male";
+        }
+
+        String clientImgPath = "";
+        if(chosenImgUri != null)
+             clientImgPath = chosenImgUri.toString();
+        else
+            clientImgPath = oldImgPath;
+
+        //Inviare richiesta al server per l'update
+        UpdateUserTask updateUser = new UpdateUserTask(shPref.getString("Token", ""), idUser);
+        updateUser.execute(usernameTxt, nameTxt, surnameTxt, genderTxt,
+                birthdateTxt, clientImgPath, serverPicPath);
+    }
+
+
+    /**
+     * AsyncTask che aggiorna l'utente inviato
+     */
+    public class UpdateUserTask extends AsyncTask<String, Integer, JSONObject> {
+        private final String uToken;
+        private final User user;
+
+        private ServerComm serverComm;
+
+        private ProgressDialog pDialog;
+
+        UpdateUserTask(String token, String idUser) {
+            user = new User();
+            user.id = idUser;
+
+            this.uToken = token;
+
+            pDialog = new ProgressDialog(getActivity());
+            serverComm = new ServerComm();
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            Log.d("MyPet", "updateUser start");
+
+            pDialog.setTitle("Update utente");
+            pDialog.setMessage("Richiesta al server...");
+            pDialog.setIndeterminate(false);
+            pDialog.setCancelable(false);
+            pDialog.show();
+        }
+
+        @Override
+        protected JSONObject doInBackground(String... p) {
+            try {
+                user.username = p[0];
+                user.name = p[1];
+                user.surname = p[2];
+                user.gender = p[3];
+                String birthdate = p[4];
+                user.profilepic = p[5];
+                String serverPic = p[6];
+
+                SimpleDateFormat format = new SimpleDateFormat("y-MM-dd");
+                try {
+                    user.birthdate = format.parse(birthdate);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                String postArgs = "updateUser=" + user.id +
+                        "&token=" + uToken +
+                        "&username=" + user.username +
+                        "&name=" + user.name +
+                        "&surname=" + user.surname +
+                        "&gender=" + user.gender +
+                        "&birthdate=" + birthdate +
+                        "&profilepic=" + serverPic;
+
+                Log.d("MyPet", postArgs);
+
+                return serverComm.makePostRequest(postArgs);
+            } catch (IOException e) {
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(final JSONObject jObj) {
+            try {
+                if(!jObj.isNull("success") && jObj.getBoolean("success")) {
+                    //Se va a buon fine, update nel DB locale
+                    long numRows = HomeActivity.dbManager.updateUser(user);
+
+                    //Aggiorna token nelle SharedPref
+                    shPref.edit().putString("Token", jObj.getString("token")).apply();
+
+                    if (pDialog.isShowing()) {
+                        pDialog.dismiss();
+                    }
+                    //Torna al fragment precedente
+                    getFragmentManager().popBackStack();
+
+                } else {
+
+                    //TODO Altrimenti indicare l'errore all'utente
+                }
+            } catch(Exception e) {
+                e.fillInStackTrace();
+            }
+        }
+
+        @Override
+        protected void onCancelled() {
+
+            //TODO Indicare l'errore all'utente
+
+            if (pDialog.isShowing()) {
+                pDialog.dismiss();
+            }
+        }
+    }
+
     public int year;
     public int month;
     public int day;
-    public String newDate;
-    public Date newBirthDate;
 
     public DatePickerDialog.OnDateSetListener datePickerListener
             = new DatePickerDialog.OnDateSetListener(){
@@ -695,7 +764,6 @@ public class UserDataFragment extends Fragment {
 
             format = new SimpleDateFormat("dd MMMM y");
             uBirthdateTextView.setText(format.format(newBirthDate));
-
         }
     };
 

@@ -171,7 +171,7 @@ public class ReminderDataFragment extends Fragment {
     }
 
     private void insertReminder() {
-        //Recuperare dati
+        //Controllo mancato inserimento
         if(rNameEditText.getText().toString().isEmpty()){
             rNameEditText.setError("Nome evento mancante");
             rNameEditText.requestFocus();

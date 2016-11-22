@@ -68,6 +68,9 @@ public class AnimalDataFragment extends Fragment {
     private String idAnim;
     private String idUser;
 
+    public String newDate;
+    public Date newBirthDate;
+
     private Boolean isEdit;
 
     private EditText aNameEditTxt;
@@ -153,8 +156,9 @@ public class AnimalDataFragment extends Fragment {
             //Gestione data
             newBirthDate = a.birthdate;     //Memorizza obj Date
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM y");
+            aBirthdateTextView.setText(dateFormat.format(a.birthdate));    //imposta il testo
+            dateFormat = new SimpleDateFormat("y-MM-dd");
             newDate = dateFormat.format(a.birthdate);   //Ricorda data in formato String
-            aBirthdateTextView.setText(newDate);    //imposta il testo
 
             //Memorizzo percorso ultima img usata
             oldImgPath = a.profilepic;
@@ -346,18 +350,29 @@ public class AnimalDataFragment extends Fragment {
     }
 
     private void insertAnimal(String serverPicPath){
-        //Recuperare dati, fare controlli se necessario
-
-        //TODO fare controlli. usare TextView.setError()
+        //Controllo mancato inserimento
+        if(aNameEditTxt.getText().toString().isEmpty()){
+            aNameEditTxt.setError("Inserire nome animale");
+            aNameEditTxt.requestFocus();
+            return;
+        }
         String nameTxt = aNameEditTxt.getText().toString();
+
+        if(aSpeciesEditTxt.getText().toString().isEmpty()){
+            aSpeciesEditTxt.setError("Inserire specie dell'animale");
+            aSpeciesEditTxt.requestFocus();
+            return;
+        }
         String speciesTxt = aSpeciesEditTxt.getText().toString();
 
         if(newBirthDate == null){
+            aBirthdateTextView.requestFocus();
             aBirthdateTextView.setError("Data di nascita non inserita");
             return;
+        } else {
+            aBirthdateTextView.setError(null);   //Ripulisce errori
         }
-        SimpleDateFormat dateFormat = new SimpleDateFormat("y-MM-dd");
-        String birthdateTxt = dateFormat.format(newBirthDate);
+        String birthdateTxt = newDate;
 
         String genderTxt = "";
         if(aGenderMale.isChecked()){
@@ -490,10 +505,29 @@ public class AnimalDataFragment extends Fragment {
     }
 
     private void updateAnimal(String serverPicPath){
-        //Recuperare dati
-        //TODO fai controlli
+        //Controllo mancato aggiornamento
+        if(aNameEditTxt.getText().toString().isEmpty()){
+            aNameEditTxt.setError("Inserire nome animale");
+            aNameEditTxt.requestFocus();
+            return;
+        }
         String nameTxt = aNameEditTxt.getText().toString();
+
+        if(aSpeciesEditTxt.getText().toString().isEmpty()){
+            aSpeciesEditTxt.setError("Inserire specie dell'animale");
+            aSpeciesEditTxt.requestFocus();
+            return;
+        }
         String speciesTxt = aSpeciesEditTxt.getText().toString();
+
+        if(newBirthDate == null){
+            aBirthdateTextView.requestFocus();
+            aBirthdateTextView.setError("Data di nascita non inserita");
+            return;
+        } else {
+            aBirthdateTextView.setError(null);   //Ripulisce errori
+        }
+        String birthdateTxt = newDate;
 
         String genderTxt = "";
         if(aGenderMale.isChecked()){
@@ -501,13 +535,6 @@ public class AnimalDataFragment extends Fragment {
         } else {
             genderTxt = "female";
         }
-
-        if(newBirthDate == null){
-            aBirthdateTextView.setError("Data di nascita non inserita");
-            return;
-        }
-        SimpleDateFormat dateFormat = new SimpleDateFormat("y-MM-dd");
-        String birthdateTxt = dateFormat.format(newBirthDate);
 
         String clientImgPath = "";
         if(chosenImgUri != null)
@@ -629,8 +656,6 @@ public class AnimalDataFragment extends Fragment {
     public int year;
     public int month;
     public int day;
-    public String newDate;
-    public Date newBirthDate;
 
     public DatePickerDialog.OnDateSetListener datePickerListener
             = new DatePickerDialog.OnDateSetListener(){
