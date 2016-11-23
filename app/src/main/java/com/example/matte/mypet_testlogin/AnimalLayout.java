@@ -55,12 +55,23 @@ public class AnimalLayout extends LinearLayout {
         aName.setText(animal.name);
 
 //        Picasso.with(getContext()).setIndicatorsEnabled(true);
-        Picasso.with(getContext())
-                .load(animal.profilepic)
-                .resize(150, 150)   //Aggiusta le dimensioni per non pesare troppo
-                .centerInside()     //Non distorce img non quadrate
-                .transform(new CropCircleTransformation())
-                .into(aImageView);
+        if(animal.profilepic != null && !animal.profilepic.isEmpty()) {
+            Picasso.with(getContext())
+                    .load(animal.profilepic)
+                    .placeholder(R.drawable.defaultpet)
+                    .resize(150, 150)   //Aggiusta le dimensioni per non pesare troppo
+                    .centerInside()     //Non distorce img non quadrate
+                    .transform(new CropCircleTransformation())
+                    .into(aImageView);
+        } else {
+            Picasso.with(getContext())
+                    .load(R.drawable.defaultpet)
+                    .placeholder(R.drawable.defaultpet)
+                    .resize(150, 150)   //Aggiusta le dimensioni per non pesare troppo
+                    .centerInside()     //Non distorce img non quadrate
+                    .transform(new CropCircleTransformation())
+                    .into(aImageView);
+        }
 
     }
 

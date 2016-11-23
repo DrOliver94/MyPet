@@ -65,7 +65,7 @@ public class PostLayout extends LinearLayout {
     public void setPost(Post post){
 
         //Caricamento dati
-        if(post.text != null) {
+        if(post.text != null && !post.text.isEmpty()) {
             pText.setText(post.text);
             pText.setVisibility(VISIBLE);
         } else {
@@ -99,8 +99,10 @@ public class PostLayout extends LinearLayout {
 
         if(post.picture != null && !post.picture.isEmpty()) {
 //            Picasso.with(getContext()).setIndicatorsEnabled(true);
+            pImageView.setVisibility(VISIBLE);
             Picasso.with(getContext())
                     .load(post.picture)
+                    .placeholder(R.drawable.defaultimg)
                     .resize(750, 750)   //Aggiusta le dimensioni per non pesare troppo
                     .centerInside()
                     .into(pImageView);

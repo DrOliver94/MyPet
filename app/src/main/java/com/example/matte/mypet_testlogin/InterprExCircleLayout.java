@@ -15,7 +15,7 @@ import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 public class InterprExCircleLayout extends LinearLayout {
 
     private ImageView picture;
-    public String id;
+//    public String id;
 
     public InterprExCircleLayout(Context context) {
         super(context);
@@ -46,12 +46,22 @@ public class InterprExCircleLayout extends LinearLayout {
 
     public void setPicture(String img){
 //        Picasso.with(getContext()).setIndicatorsEnabled(true);
-        Picasso.with(getContext())
-                .load(img)
-                .resize(150, 150)   //Limita dimensione
-                .onlyScaleDown()    //Scala solo se più grande
-                .centerInside()     //Non distorce img non quadrate
-                .transform(new CropCircleTransformation())
-                .into(picture);
+        if(img != null && !img.isEmpty()) {
+            Picasso.with(getContext())
+                    .load(img)
+                    .resize(150, 150)   //Limita dimensione
+                    .onlyScaleDown()    //Scala solo se più grande
+                    .centerInside()     //Non distorce img non quadrate
+                    .transform(new CropCircleTransformation())
+                    .into(picture);
+        } else {
+            Picasso.with(getContext())
+                    .load(R.drawable.defaultuser)
+                    .resize(150, 150)   //Limita dimensione
+                    .onlyScaleDown()    //Scala solo se più grande
+                    .centerInside()     //Non distorce img non quadrate
+                    .transform(new CropCircleTransformation())
+                    .into(picture);
+        }
     }
 }

@@ -110,13 +110,21 @@ public class AnimalProfileFragment extends Fragment {
         animalBirthDateText.setText(format.format(currAnim.birthdate));
 
 //        Picasso.with(view.getContext()).setIndicatorsEnabled(true);
-        Picasso.with(view.getContext())
-                .load(currAnim.profilepic)
-                .transform(new CropCircleTransformation())
-                .resize(512, 512)
-                .centerCrop()
-                .into((ImageView) view.findViewById(R.id.imageViewAnimalProfile));
-
+        if(currAnim.profilepic != null && !currAnim.profilepic.isEmpty()) {
+            Picasso.with(view.getContext())
+                    .load(currAnim.profilepic)
+                    .transform(new CropCircleTransformation())
+                    .resize(512, 512)
+                    .centerCrop()
+                    .into((ImageView) view.findViewById(R.id.imageViewAnimalProfile));
+        } else {
+            Picasso.with(view.getContext())
+                    .load(R.drawable.defaultpet)
+                    .transform(new CropCircleTransformation())
+                    .resize(512, 512)
+                    .centerCrop()
+                    .into((ImageView) view.findViewById(R.id.imageViewAnimalProfile));
+        }
         showPostsByAnimal(idAnim);
 
         getActivity().setTitle(currAnim.name);

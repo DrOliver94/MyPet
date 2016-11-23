@@ -183,7 +183,7 @@ public class PostDataFragment extends Fragment {
         });
 
         Picasso.with(view.getContext())
-                .load(R.drawable.img)
+                .load(R.drawable.defaultimg)
                 .resize(750, 750)
                 .centerInside()
                 .into((ImageView) view.findViewById(R.id.imageViewPostData));
@@ -251,10 +251,11 @@ public class PostDataFragment extends Fragment {
             //La mostro nell'ImageView
             Picasso.with(getActivity().getBaseContext())
                     .load(chosenImgUri)
-                    .placeholder(R.drawable.img)
+                    .placeholder(R.drawable.defaultimg)
                     .resize(750, 750)
                     .centerInside()
                     .into((ImageView) getActivity().findViewById(R.id.imageViewPostData));
+
         } else if(requestCode == PLACE_PICKER_REQUEST && resultCode == Activity.RESULT_OK){
             //Se si è scelto un luogo, memorizzarne la posizione
             chosenPlace = PlacePicker.getPlace(getActivity(), data);

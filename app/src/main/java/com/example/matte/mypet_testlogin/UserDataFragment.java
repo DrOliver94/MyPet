@@ -183,12 +183,20 @@ public class UserDataFragment extends Fragment {
             //Memorizzo percorso ultima img usata
             oldImgPath = u.profilepic;
 
-            //All'avvio, si carica l'img che si ha nel profilo
-            Picasso.with(view.getContext())
-                    .load(oldImgPath)
-                    .placeholder(R.drawable.img)
-                    .transform(new CropCircleTransformation())
-                    .into(imgUserData);
+//            //All'avvio, si carica l'img che si ha nel profilo
+//            if(oldImgPath != null && !oldImgPath.isEmpty()) {
+//                Picasso.with(view.getContext())
+//                        .load(oldImgPath)
+//                        .placeholder(R.drawable.img)
+//                        .transform(new CropCircleTransformation())
+//                        .into(imgUserData);
+//            } else {
+//                Picasso.with(view.getContext())
+//                        .load(R.drawable.defaultuser)
+//                        .placeholder(R.drawable.img)
+//                        .transform(new CropCircleTransformation())
+//                        .into(imgUserData);
+//            }
 
             //Richiama la sequenza di azioni per aggiornare l'user
             sendData.setOnClickListener(new View.OnClickListener() {
@@ -271,33 +279,41 @@ public class UserDataFragment extends Fragment {
         super.onResume();
         String loadingImg = "";
 
-        getView().setFocusableInTouchMode(true);
-        getView().requestFocus();
-        getView().setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
-                    startActivity(new Intent(getActivity(), LoginActivity.class));
-                    return true;
+        if(!isEdit) {   //Se si sta creando un nuovo utente, Back riporta al login
+            getView().setFocusableInTouchMode(true);
+            getView().requestFocus();
+            getView().setOnKeyListener(new View.OnKeyListener() {
+                @Override
+                public boolean onKey(View v, int keyCode, KeyEvent event) {
+                    if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
+                        startActivity(new Intent(getActivity(), LoginActivity.class));
+                        return true;
+                    }
+                    return false;
                 }
-                return false;
-            }
-        });
+            });
+        }
 
-
-
-        //TODO ripristina uri nell'imageView
+        //ripristina uri nell'imageView
         if(chosenImgUri != null){
             loadingImg = chosenImgUri.toString();
         } else {
             loadingImg = oldImgPath;
         }
 
-        Picasso.with(getActivity().getBaseContext())
-                .load(loadingImg)
-                .placeholder(R.drawable.img)
-                .transform(new CropCircleTransformation())
-                .into((ImageView) getActivity().findViewById(R.id.imageViewUserData));
+        if(oldImgPath != null && !oldImgPath.isEmpty()) {
+            Picasso.with(getActivity().getBaseContext())
+                    .load(loadingImg)
+                    .placeholder(R.drawable.defaultuser)
+                    .transform(new CropCircleTransformation())
+                    .into(imgUserData);
+        } else {
+            Picasso.with(getActivity().getBaseContext())
+                    .load(R.drawable.defaultuser)
+                    .placeholder(R.drawable.defaultuser)
+                    .transform(new CropCircleTransformation())
+                    .into(imgUserData);
+        }
     }
 
     /**
@@ -316,7 +332,7 @@ public class UserDataFragment extends Fragment {
 
             Picasso.with(getActivity().getBaseContext())
                     .load(chosenImgUri)
-                    .placeholder(R.drawable.img)
+                    .placeholder(R.drawable.defaultuser)
                     .transform(new CropCircleTransformation())
                     .into((ImageView) getActivity().findViewById(R.id.imageViewUserData));
         }
@@ -441,14 +457,14 @@ public class UserDataFragment extends Fragment {
         String passwordTxt = uPasswordEditTxt.getText().toString();
 
         if(uPasswordConfirmEditTxt.getText().toString().isEmpty() || uPasswordConfirmEditTxt.getText().toString().length()<8){
-            uPasswordConfirmEditTxt.setError("Conferma non valida");
+            uPasswordConfirmEditTxt.setError("Password non valida");
             uPasswordConfirmEditTxt.requestFocus();
             return;
         }
         String passwordConfirmTxt = uPasswordConfirmEditTxt.getText().toString();
 
         if(!passwordTxt.equals(passwordConfirmTxt)) {
-            uPasswordConfirmEditTxt.setError("Password diverse");
+            uPasswordConfirmEditTxt.setError("Le password non corrispondono");
             uPasswordConfirmEditTxt.requestFocus();
             return;
         }

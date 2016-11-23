@@ -101,9 +101,11 @@ public class ReminderFragment extends Fragment {
         //recupero elenco dei post dal DB
         ArrayList<Reminder> reminders = HomeActivity.dbManager.getRemindersByUser(idUser);
 
-        ReminderListAdapter adapter = new ReminderListAdapter(getActivity(), reminders);
+        if(reminders != null && !reminders.isEmpty()) {
+            ReminderListAdapter adapter = new ReminderListAdapter(getActivity(), reminders);
 
-        remindersListView.setAdapter(adapter);
+            remindersListView.setAdapter(adapter);
+        }
     }
 
     @Override

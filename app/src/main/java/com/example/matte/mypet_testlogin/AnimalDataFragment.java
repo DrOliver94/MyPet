@@ -164,13 +164,23 @@ public class AnimalDataFragment extends Fragment {
             oldImgPath = a.profilepic;
 
             //All'avvio, si carica l'img che si ha nel profilo
-            Picasso.with(view.getContext())
-                    .load(oldImgPath)
-                    .placeholder(R.drawable.img)
-                    .transform(new CropCircleTransformation())
-                    .resize(512, 512)
-                    .centerCrop()
-                    .into(imgAnimalData);
+            if(oldImgPath != null && !oldImgPath.isEmpty()) {
+                Picasso.with(view.getContext())
+                        .load(oldImgPath)
+                        .placeholder(R.drawable.defaultpet)
+                        .transform(new CropCircleTransformation())
+                        .resize(512, 512)
+                        .centerCrop()
+                        .into(imgAnimalData);
+            } else {
+                Picasso.with(view.getContext())
+                        .load(R.drawable.defaultpet)
+                        .placeholder(R.drawable.defaultpet)
+                        .transform(new CropCircleTransformation())
+                        .resize(512, 512)
+                        .centerCrop()
+                        .into(imgAnimalData);
+            }
 
             sendData.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -199,7 +209,8 @@ public class AnimalDataFragment extends Fragment {
             });
 
             Picasso.with(view.getContext())
-                    .load(R.drawable.img)
+                    .load(R.drawable.defaultpet)
+                    .placeholder(R.drawable.defaultpet)
                     .transform(new CropCircleTransformation())
                     .resize(512, 512)
                     .centerCrop()
@@ -252,7 +263,7 @@ public class AnimalDataFragment extends Fragment {
             //La mostro nell'ImageView
             Picasso.with(getActivity().getBaseContext())
                     .load(chosenImgUri)
-                    .placeholder(R.drawable.img)
+                    .placeholder(R.drawable.defaultpet)
                     .transform(new CropCircleTransformation())
                     .resize(512, 512)
                     .centerCrop()
@@ -385,7 +396,8 @@ public class AnimalDataFragment extends Fragment {
         if(chosenImgUri != null) {
             clientImgPath = chosenImgUri.toString();
         } else {
-            clientImgPath = HomeActivity.IMG_BASEURL + "img/default.png";
+//            clientImgPath = HomeActivity.IMG_BASEURL + "img/default.png";
+            clientImgPath = String.valueOf(R.drawable.defaultpet);
         }
 
         //Inviare richiesta al server per l'update

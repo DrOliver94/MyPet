@@ -110,12 +110,24 @@ public class ProfileFragment extends Fragment {
 
         //Immagine
 //        Picasso.with(view.getContext()).setIndicatorsEnabled(true);
-        Picasso.with(view.getContext())
-                .load(currUser.profilepic)
-                .transform(new CropCircleTransformation())
-                .resize(512, 512)
-                .centerCrop()
-                .into((ImageView) view.findViewById(R.id.imageViewUserProfile));
+
+        if(currUser.profilepic != null && !currUser.profilepic.isEmpty()) {
+            Picasso.with(view.getContext())
+                    .load(currUser.profilepic)
+                    .placeholder(R.drawable.defaultuser)
+                    .transform(new CropCircleTransformation())
+                    .resize(512, 512)
+                    .centerCrop()
+                    .into((ImageView) view.findViewById(R.id.imageViewUserProfile));
+        } else {
+            Picasso.with(view.getContext())
+                    .load(R.drawable.defaultuser)
+                    .placeholder(R.drawable.defaultuser)
+                    .transform(new CropCircleTransformation())
+                    .resize(512, 512)
+                    .centerCrop()
+                    .into((ImageView) view.findViewById(R.id.imageViewUserProfile));
+        }
 
         showPostsByAuthor(idUser);
 
