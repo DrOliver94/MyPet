@@ -18,7 +18,6 @@
 
     <string name="action_settings">Impostazioni</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">InterprException!</string>
     <string name="title_activity_maps">Mappa</string>
 

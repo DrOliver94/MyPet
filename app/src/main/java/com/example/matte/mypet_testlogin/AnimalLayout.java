@@ -43,8 +43,6 @@ public class AnimalLayout extends LinearLayout {
         aName = (TextView) findViewById(R.id.animal_name);
         aImageView = (ImageView) findViewById(R.id.animal_imageView);
 
-        //TODO sistemare click Listener
-
         //Imposta dati del post nel layout
         setAnimal(a);
     }

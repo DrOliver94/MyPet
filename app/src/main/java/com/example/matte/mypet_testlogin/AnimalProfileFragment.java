@@ -32,11 +32,7 @@ import jp.wasabeef.picasso.transformations.CropCircleTransformation;
  * create an instance of this fragment.
  */
 public class AnimalProfileFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "IdAnim";
-
-    // TODO: Rename and change types of parameters
     private String idAnim;
 
     private MyPetDB dbHandler2;
@@ -56,7 +52,6 @@ public class AnimalProfileFragment extends Fragment {
      * @param idAnim ID dell'animale da visualizzare.
      * @return A new instance of fragment AnimalProfileFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static AnimalProfileFragment newInstance(String idAnim) {
         AnimalProfileFragment fragment = new AnimalProfileFragment();
         Bundle args = new Bundle();
