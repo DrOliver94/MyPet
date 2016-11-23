@@ -691,7 +691,7 @@ public class MyPetDB {
 //        while (cursor.moveToNext()) {
 //            Animal animal = new Animal();
 //
-//            //TODO fare il resto
+
 //            animal.name = cursor.getString(cursor.getColumnIndex(ANIMALS_NAME));
 //            animal.id = cursor.getString(cursor.getColumnIndex(ANIMALS_TABLE+"."+ANIMALS_ID)) + " " +
 //                        cursor.getString(cursor.getColumnIndex(USERSANIMALS_TABLE+"."+USERSANIMALS_IDANIMAL)) + ", " +
@@ -983,7 +983,6 @@ public class MyPetDB {
         while (cursor.moveToNext()) {
             Post post = new Post();
 
-            //TODO fare il resto
             post.id = cursor.getString(cursor.getColumnIndex(POSTS_ID));
             post.text = cursor.getString(cursor.getColumnIndex(POSTS_TEXT));
             post.idauthor = cursor.getString(cursor.getColumnIndex(POSTS_IDAUTHOR));

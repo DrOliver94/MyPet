@@ -30,23 +30,15 @@ import java.util.HashMap;
  * create an instance of this fragment.
  */
 public class AnimalsListFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
-    //private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
     private String idUser;
 
     private ArrayList<Animal> animals;
 
     private ListView animalsListView;
 
-//    private OnFragmentInteractionListener mListener;
-
-    public AnimalsListFragment() {
-        // Required empty public constructor
-    }
+    public AnimalsListFragment() { }
 
     /**
      * Use this factory method to create a new instance of
@@ -55,7 +47,6 @@ public class AnimalsListFragment extends Fragment {
      * @param param1 Parameter 1.
      * @return A new instance of fragment AnimalsListFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static AnimalsListFragment newInstance(String param1) {
         AnimalsListFragment fragment = new AnimalsListFragment();
         Bundle args = new Bundle();
@@ -90,9 +81,8 @@ public class AnimalsListFragment extends Fragment {
         animalsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                //adapterView.getItemAtPosition(i); //TODO si casta a Animal e funziona? Testare
-
-                Animal a = animals.get(i);
+                Animal a = (Animal) adapterView.getItemAtPosition(i);
+//                Animal a = animals.get(i);
 
                 getFragmentManager()
                         .beginTransaction()
@@ -143,26 +133,9 @@ public class AnimalsListFragment extends Fragment {
         return false;
     }
 
-
-//    /**
-//     * This interface must be implemented by activities that contain this
-//     * fragment to allow an interaction in this fragment to be communicated
-//     * to the activity and potentially other fragments contained in that
-//     * activity.
-//     * <p>
-//     * See the Android Training lesson <a href=
-//     * "http://developer.android.com/training/basics/fragments/communicating.html"
-//     * >Communicating with Other Fragments</a> for more information.
-//     */
-//    public interface OnFragmentInteractionListener {
-//        void onFragmentInteraction(String name);
-//    }
-
     public void showAnimalsByUser(String idUser) {
-
         AnimalListAdapter ala = new AnimalListAdapter(getActivity(), animals);
         animalsListView.setAdapter(ala);
-
     }
 
 }

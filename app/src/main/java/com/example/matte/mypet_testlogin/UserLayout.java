@@ -41,8 +41,6 @@ public class UserLayout extends LinearLayout {
         uName = (TextView) findViewById(R.id.user_name);
         uSurname = (TextView) findViewById(R.id.user_surname);
 
-        //TODO sistemare click Listener
-
         //Imposta dati del post nel layout
         setUser(u);
     }

@@ -50,7 +50,6 @@ public class PostLayout extends LinearLayout {
         pPicLayout = (LinearLayout) findViewById(R.id.picListView);
         pTime = (TextView) findViewById(R.id.post_time);
 
-        //TODO sistemare click Listener
         this.setOnTouchListener(new OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -72,13 +71,15 @@ public class PostLayout extends LinearLayout {
             pText.setVisibility(GONE);
         }
 
-        //TODO leggere latlng
         if(post.place != null) {
             if(!post.placeAddress.equals("")) {
                 pPlace.setText(post.placeAddress);
                 pPlace.setVisibility(VISIBLE);
             } else if(!post.placeName.equals("")){
                 pPlace.setText(post.placeName);
+                pPlace.setVisibility(VISIBLE);
+            } else if(!post.placeLatLon.equals("")) {
+                pPlace.setText(post.placeLatLon.toString());
                 pPlace.setVisibility(VISIBLE);
             } else {
                 pPlace.setVisibility(GONE);
@@ -107,7 +108,6 @@ public class PostLayout extends LinearLayout {
                     .centerInside()
                     .into(pImageView);
         } else {
-            //TODO pulire img
             pImageView.setVisibility(GONE);
         }
 

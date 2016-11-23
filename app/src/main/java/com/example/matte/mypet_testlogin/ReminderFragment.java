@@ -27,19 +27,15 @@ import java.util.HashMap;
  * create an instance of this fragment.
  */
 public class ReminderFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
     private ListView remindersListView;
 
     private SharedPreferences shPref;
-    private MyPetDB dbHandler;
 
     public ReminderFragment() { }
 
@@ -51,7 +47,6 @@ public class ReminderFragment extends Fragment {
      * @param param2 Parameter 2.
      * @return A new instance of fragment ReminderFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static ReminderFragment newInstance(String param1, String param2) {
         ReminderFragment fragment = new ReminderFragment();
         Bundle args = new Bundle();
@@ -72,7 +67,7 @@ public class ReminderFragment extends Fragment {
         //Recupero delle SharedPreferences
         shPref = getActivity().getSharedPreferences("MyPetPrefs", Context.MODE_PRIVATE);
 
-        dbHandler = new MyPetDB(getActivity());
+//        dbHandler = new MyPetDB(getActivity());
 
         //Mostra il menu
         setHasOptionsMenu(true);

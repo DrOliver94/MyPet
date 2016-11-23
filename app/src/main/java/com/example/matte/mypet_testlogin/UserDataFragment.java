@@ -305,12 +305,14 @@ public class UserDataFragment extends Fragment {
             Picasso.with(getActivity().getBaseContext())
                     .load(loadingImg)
                     .placeholder(R.drawable.defaultuser)
+                    .resize(512, 512)
                     .transform(new CropCircleTransformation())
                     .into(imgUserData);
         } else {
             Picasso.with(getActivity().getBaseContext())
                     .load(R.drawable.defaultuser)
                     .placeholder(R.drawable.defaultuser)
+                    .resize(512, 512)
                     .transform(new CropCircleTransformation())
                     .into(imgUserData);
         }
@@ -334,6 +336,7 @@ public class UserDataFragment extends Fragment {
                     .load(chosenImgUri)
                     .placeholder(R.drawable.defaultuser)
                     .transform(new CropCircleTransformation())
+                    .resize(512, 512)
                     .into((ImageView) getActivity().findViewById(R.id.imageViewUserData));
         }
     }
