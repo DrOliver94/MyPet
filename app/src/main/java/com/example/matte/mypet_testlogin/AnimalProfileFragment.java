@@ -94,15 +94,17 @@ public class AnimalProfileFragment extends Fragment {
         animalSpeciesText.setText(currAnim.species);
 
         String gender = "";
-        if(currAnim.gender.equals("male")){
+        if(currAnim.gender != null && currAnim.gender.equals("male")){
             gender = "Maschio";
-        } else if(currAnim.gender.equals("female")) {
+        } else if(currAnim.gender != null && currAnim.gender.equals("female")) {
             gender = "Femmina";
         }
         animalGenderText.setText(gender);
 
-        SimpleDateFormat format = new SimpleDateFormat("dd MMMM y");
-        animalBirthDateText.setText(format.format(currAnim.birthdate));
+        if(currAnim.birthdate != null) {
+            SimpleDateFormat format = new SimpleDateFormat("dd MMMM y");
+            animalBirthDateText.setText(format.format(currAnim.birthdate));
+        }
 
 //        Picasso.with(view.getContext()).setIndicatorsEnabled(true);
         if(currAnim.profilepic != null && !currAnim.profilepic.isEmpty()) {

@@ -121,7 +121,7 @@
                     android:textColor="@android:color/holo_green_dark" />
 
                 <TextView
-                    android:text="Data_nascita_utente"
+                    android:text=""
                     android:layout_width="match_parent"
                     android:layout_height="35sp"
                     android:id="@+id/userBirthDateTextView"

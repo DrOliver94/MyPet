@@ -411,11 +411,13 @@ public class MyPetDB {
         user.gender = cursor.getString(USERS_GENDER_COL);
         user.profilepic = cursor.getString(USERS_PROFILEPIC_COL);
 
-        SimpleDateFormat format = new SimpleDateFormat("y-MM-dd");
-        try {
-            user.birthdate = format.parse(cursor.getString(USERS_BIRTHDATE_COL));
-        } catch (ParseException e) {
-            e.printStackTrace();
+        if(cursor.getString(USERS_BIRTHDATE_COL) != null) {
+            SimpleDateFormat format = new SimpleDateFormat("y-MM-dd");
+            try {
+                user.birthdate = format.parse(cursor.getString(USERS_BIRTHDATE_COL));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
 
         //TODO controllare per errori
@@ -643,11 +645,13 @@ public class MyPetDB {
             animal.gender = cursor.getString(ANIMALS_GENDER_COL);
             animal.profilepic = cursor.getString(ANIMALS_PROFILEPIC_COL);
 
-            SimpleDateFormat format = new SimpleDateFormat("y-MM-dd");
-            try {
-                animal.birthdate = format.parse(cursor.getString(ANIMALS_BIRTHDATE_COL));
-            } catch (ParseException e) {
-                e.printStackTrace();
+            if(cursor.getString(ANIMALS_BIRTHDATE_COL) != null) {
+                SimpleDateFormat format = new SimpleDateFormat("y-MM-dd");
+                try {
+                    animal.birthdate = format.parse(cursor.getString(ANIMALS_BIRTHDATE_COL));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
             }
 
             cursor.close();

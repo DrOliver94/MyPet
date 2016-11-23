@@ -105,9 +105,10 @@ public class ProfileFragment extends Fragment {
         }
         userGenderText.setText(gender);
 
-        SimpleDateFormat format = new SimpleDateFormat("dd MMMM y");
-        userBirthDateText.setText(format.format(currUser.birthdate));
-
+        if(currUser.birthdate != null) {
+            SimpleDateFormat format = new SimpleDateFormat("dd MMMM y");
+            userBirthDateText.setText(format.format(currUser.birthdate));
+        }
         //Immagine
 //        Picasso.with(view.getContext()).setIndicatorsEnabled(true);
 
