@@ -97,7 +97,7 @@ public class PostLayout extends LinearLayout {
             pTime.setVisibility(GONE);
         }
 
-        if(post.picture != null && !post.picture.isEmpty()) {
+        if(post.picture != null && !post.picture.isEmpty() && !post.picture.equals("https://webdev.dibris.unige.it/~S3951060/null")) {
 //            Picasso.with(getContext()).setIndicatorsEnabled(true);
             pImageView.setVisibility(VISIBLE);
             Picasso.with(getContext())

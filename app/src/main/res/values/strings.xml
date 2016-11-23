@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MyPet_TestLogin</string>
+    <string name="app_name">MyPet</string>
     <string name="username_hint">Username</string>
     <string name="password_hint">Password</string>
     <string name="login_button">Login</string>
@@ -20,7 +20,7 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">InterprException!</string>
-    <string name="title_activity_maps">Map</string>
+    <string name="title_activity_maps">Mappa</string>
 
 
 </resources>
