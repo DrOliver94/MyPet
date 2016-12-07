@@ -656,3 +656,19 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 }
+
+
+//#################################################################################################
+//###################################### Ringraziamenti ###########################################
+//#################################################################################################
+//#                                                                                               #
+//#         Un enorme grazie ai miei genitori, amici, colleghi e professori, che hanno            #
+//#         creduto in me e mi hanno dato forza, coraggio, determinazione nel proseguire          #
+//#         i miei studi. Un insieme di insostituibili persone a cui vorrò sempre bene e          #
+//#         che non dimenticherò mai.                                                             #
+//#                                                                                               #
+//#                                                                       Matteo Oliveri          #
+//#                                                                     07 dicembre 2016          #
+//#                                                                                               #
+//#################################################################################################
+//#################################################################################################
